@@ -17,6 +17,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone')->unique()->nullable();
+            $table->text('address')->nullable();
+            $table->string('government_id')->nullable()->unique();
+            $table->string('blood_group')->nullable();
+            $table->boolean('eligible_donor')->default(false);
+            $table->enum('communication_preference', ['email', 'sms', 'app'])->default('email');
+            $table->enum('role', ['consumer', 'provider', 'biker', 'admin'])->default('consumer');
             $table->rememberToken();
             $table->timestamps();
         });

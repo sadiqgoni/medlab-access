@@ -147,23 +147,32 @@
         <div class="mt-20 px-4" data-aos="fade-up" data-aos-delay="300">
             <p class="text-center text-gray-500 font-medium mb-8">Trusted by Nigeria's Leading Healthcare Institutions</p>
             <div class="scrolling-marquee bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-sm">
-                <div class="scrolling-marquee-content">
-                    <!-- Partner logos -->
-                    @for ($i = 1; $i <= 8; $i++)
-                        <div class="inline-block mx-8">
-                            <div class="h-12 w-32 bg-white rounded-lg shadow-sm flex items-center justify-center">
-                                <div class="text-gray-400 font-medium">Partner {{ $i }}</div>
-                            </div>
+                <div class="scrolling-marquee-content flex items-center">
+                    @php
+                        $logos = [
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaGrv6ramRNb8GP4vQpodMeE51oe1nnMeSbYQDKNRPNOJWgj-05uWH3iSL7JfqUHQBDwM&usqp=CAU', 
+                            'https://upload.wikimedia.org/wikipedia/en/7/74/LASUTH_Logo.jpg',
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKE4lU8YIgSCH4s6sMRmQzRrU_OuieJlPYJQ&s',
+                            'https://www.atbuth.gov.ng/assets/img/logo.png',
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_mgnUO9thiS0lYmKnsnr6yMhazQ0eZ9PnMQ&s',
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjZGwzvw0nxX2W9bYep6ujyc0KbxzySxUDpg&s', 
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYFa9960Sf9Jnoe67tJyqjC_ekUNNPq4vVSA&s', 
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzO6FuLkYvEY24knpwm4GJF6xySiabdMOziA&s',
+                           ];
+                    @endphp
+
+                    @foreach ($logos as $logoUrl)
+                        <div class="inline-block mx-8 flex-shrink-0">
+                            <img src="{{ $logoUrl }}" alt="Partner Logo" class="h-10 md:h-12 max-w-[150px] object-contain filter grayscale hover:grayscale-0 transition-all duration-200">
                         </div>
-                    @endfor
+                    @endforeach
+
                     <!-- Duplicate for infinite scroll -->
-                    @for ($i = 1; $i <= 8; $i++)
-                        <div class="inline-block mx-8">
-                            <div class="h-12 w-32 bg-white rounded-lg shadow-sm flex items-center justify-center">
-                                <div class="text-gray-400 font-medium">Partner {{ $i }}</div>
-                            </div>
+                    @foreach ($logos as $logoUrl)
+                        <div class="inline-block mx-8 flex-shrink-0">
+                            <img src="{{ $logoUrl }}" alt="Partner Logo" class="h-10 md:h-12 max-w-[150px] object-contain filter grayscale hover:grayscale-0 transition-all duration-200">
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
             </div>
         </div>
