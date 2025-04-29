@@ -12,6 +12,10 @@
     </div>
 </div>
 
+<!-- Custom Cursor -->
+<div class="custom-cursor hidden md:block"></div>
+<div class="cursor-dot hidden md:block"></div>
+
 <!-- Hero Section with Animated Elements -->
 <section id="home" class="relative min-h-screen pt-32 pb-20 flex items-center overflow-hidden">
     <!-- Background and decorative elements -->
@@ -41,7 +45,7 @@
         <div class="flex flex-col lg:flex-row items-center">
             <!-- Hero content -->
             <div class="w-full lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0" data-aos="fade-right">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 text-neutral-dark leading-tight">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 text-neutral-dark leading-tight typing-animation">
                     <span class="relative inline-block">
                         <span class="relative z-10">Revolutionary</span>
                         <span class="absolute bottom-0 left-0 w-full h-3 bg-secondary-200 -z-10 transform -rotate-1"></span>
@@ -52,7 +56,7 @@
                     Connecting labs, blood banks, and patients through a sophisticated technology platform for seamless lab tests and blood donations.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <a href="#services" class="group relative px-8 py-4 bg-primary-500 text-white rounded-xl text-lg font-medium overflow-hidden shadow-lg shadow-primary-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/30 hover:scale-105">
+                    <a href="#services" class="group relative px-8 py-4 bg-primary-500 text-white rounded-xl text-lg font-medium overflow-hidden shadow-lg shadow-primary-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/30 hover:scale-105 pulse-element">
                         <span class="relative z-10">Get Started</span>
                         <span class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 group-hover:scale-110 transition-transform duration-500"></span>
                     </a>
@@ -100,7 +104,7 @@
                         </div>
                         
                         <div class="absolute -bottom-8 left-10 w-24 h-24 bg-primary-100 rounded-full shadow-lg animate-float-slow flex items-center justify-center">
-                            <i class="fas fa-heartbeat text-3xl text-primary-500"></i>
+                            <i class="fas fa-heartbeat text-3xl text-primary-500 heartbeat"></i>
                         </div>
                         
                         <div class="absolute top-1/3 -left-12 w-28 h-28 bg-accent/10 rounded-lg shadow-lg animate-float transform -rotate-6 flex items-center justify-center">
@@ -114,7 +118,7 @@
                         <div class="absolute top-10 right-1/4 bg-white/90 backdrop-blur-sm shadow-lg rounded-xl p-3 transform rotate-3 animate-float-slow">
                             <div class="flex items-center gap-3">
                                 <div class="bg-red-100 p-2 rounded-lg">
-                                    <i class="fas fa-heartbeat text-red-500"></i>
+                                    <i class="fas fa-heartbeat text-red-500 heartbeat"></i>
                                 </div>
                                 <div>
                                     <p class="text-xs text-gray-500">Blood Donations</p>
@@ -198,7 +202,7 @@
             <!-- Stat 3 -->
             <div class="stat-item bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl transition-shadow duration-300" data-aos="fade-up" data-aos-delay="300">
                 <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-heartbeat text-red-600 text-2xl"></i>
+                    <i class="fas fa-heartbeat text-red-600 text-2xl heartbeat"></i>
                 </div>
                 <h3 class="text-4xl font-bold mb-2 text-neutral-dark stat-counter" data-target="25000">0</h3>
                 <p class="text-gray-500">Blood Donations</p>
@@ -216,31 +220,461 @@
     </div>
 </section>
 
-<!-- CTA Section with Enhanced Design -->
-<section class="py-16 md:py-24 bg-cover bg-center relative" style="background-image: linear-gradient(rgba(30, 136, 229, 0.9), rgba(30, 136, 229, 0.9)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
-    <!-- Animated Particles -->
-    <div class="particles-container"></div>
+<!-- Enhanced Services Section -->
+<section id="services" class="py-20 bg-neutral-light relative overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-0 right-0 w-1/3 h-full bg-primary-50 opacity-50 skew-x-12 -mr-20 z-0"></div>
+        <div class="absolute bottom-0 left-0 w-1/4 h-1/2 bg-secondary-50 opacity-30 rounded-full -ml-20 -mb-20 z-0"></div>
+        
+        <!-- Animated particles -->
+        <div class="particles-container"></div>
+    </div>
     
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="max-w-4xl mx-auto text-center fade-in-section">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-white">Ready to Transform Medical Logistics?</h2>
-            <p class="text-lg mb-8 text-white">
-                Join MedLab-Access today and experience seamless lab test requests and blood donations.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#" class="bg-white text-primary hover:bg-gray-100 px-6 py-3 rounded-full text-lg font-medium inline-block transition-transform hover:scale-105 pulse cta-button">
-                    Register Now
-                </a>
-                <a href="#contact" class="bg-transparent border-2 border-white hover:bg-white/10 px-6 py-3 rounded-full text-lg font-medium inline-block transition-transform hover:scale-105">
-                    Contact Us
-                </a>
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="inline-block">
+                <span class="text-sm uppercase tracking-wider text-primary-600 font-semibold bg-primary-50 px-3 py-1 rounded-full">Our Services</span>
             </div>
+            <h2 class="text-3xl md:text-4xl font-display font-bold mt-4 mb-6">
+                Innovative Medical Logistics Solutions
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Our cutting-edge platform connects patients, labs, and blood banks for streamlined medical logistics in Nigeria.
+            </p>
+        </div>
+        
+        <!-- Enhanced Service Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
+            <!-- eMedSample Card -->
+            <div class="feature-card group relative bg-white rounded-2xl shadow-xl p-8 transition-all duration-500 overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                <!-- Background decoration -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary-50 rounded-bl-full opacity-60 transition-all duration-500 group-hover:bg-primary-100"></div>
+                <div class="absolute -bottom-16 -left-16 w-32 h-32 bg-primary-50/30 rounded-full transition-all duration-500 group-hover:bg-primary-100/30"></div>
+                
+                <div class="relative z-10">
+                    <div class="w-20 h-20 rounded-2xl bg-primary-100 flex items-center justify-center mb-8 transform transition-transform duration-500 group-hover:rotate-6">
+                        <i class="fas fa-flask text-4xl text-primary-600"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-display font-bold mb-4 transition-colors duration-300 group-hover:text-primary-600">eMedSample</h3>
+                    
+                    <p class="text-gray-600 mb-6 text-lg">
+                        Order lab tests, track samples, and receive results seamlessly through our innovative platform.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start">
+                            <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-secondary-100 flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-secondary-600"></i>
+                            </div>
+                            <p class="text-gray-600">Schedule lab tests from the comfort of your home</p>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-secondary-100 flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-secondary-600"></i>
+                            </div>
+                            <p class="text-gray-600">Professional sample collection by trained personnel</p>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-secondary-100 flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-secondary-600"></i>
+                            </div>
+                            <p class="text-gray-600">Real-time tracking of your sample's journey</p>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-secondary-100 flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-secondary-600"></i>
+                            </div>
+                            <p class="text-gray-600">Secure digital results delivery with expert interpretation</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <a href="#" class="group inline-flex items-center font-medium text-primary-600 hover:text-primary-800 transition-colors">
+                            Explore eMedSample
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        
+                        <span class="bg-primary-50 text-primary-700 text-sm font-medium px-3 py-1 rounded-full">
+                            From ₦2,500
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SharedBlood Card -->
+            <div class="feature-card group relative bg-white rounded-2xl shadow-xl p-8 transition-all duration-500 overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                <!-- Background decoration -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full opacity-60 transition-all duration-500 group-hover:bg-red-100"></div>
+                <div class="absolute -bottom-16 -left-16 w-32 h-32 bg-red-50/30 rounded-full transition-all duration-500 group-hover:bg-red-100/30"></div>
+                
+                <div class="relative z-10">
+                    <div class="w-20 h-20 rounded-2xl bg-red-100 flex items-center justify-center mb-8 transform transition-transform duration-500 group-hover:rotate-6">
+                        <i class="fas fa-heartbeat text-4xl text-red-600 heartbeat"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-display font-bold mb-4 transition-colors duration-300 group-hover:text-red-600">SharedBlood</h3>
+                    
+                    <p class="text-gray-600 mb-6 text-lg">
+                        Donate or request blood with real-time tracking and delivery through our life-saving network.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start">
+                            <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-secondary-100 flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-secondary-600"></i>
+                            </div>
+                            <p class="text-gray-600">Quick blood type matching and compatibility checks</p>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-secondary-100 flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-secondary-600"></i>
+                            </div>
+                            <p class="text-gray-600">Emergency blood requests with priority handling</p>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-secondary-100 flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-secondary-600"></i>
+                            </div>
+                            <p class="text-gray-600">Secure transportation with temperature monitoring</p>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-secondary-100 flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-secondary-600"></i>
+                            </div>
+                            <p class="text-gray-600">Donor rewards program with health benefits</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <a href="#" class="group inline-flex items-center font-medium text-red-600 hover:text-red-800 transition-colors">
+                            Explore SharedBlood
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        
+                        <div class="flex items-center gap-2">
+                            <span class="bg-green-50 text-green-700 text-sm font-medium px-3 py-1 rounded-full">
+                                Save Lives
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Testimonial -->
+        <div class="mt-20 max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="300">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-8 flex flex-col justify-center">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4 ring-2 ring-primary-100">
+                                <img src="https://t4.ftcdn.net/jpg/06/48/70/47/360_F_648704734_moetXNlcFTUCE2YlAQf0neIXpROxXrQI.jpg" alt="Mrs. Okonkwo" class="w-full h-full object-cover" />
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Mrs. Okonkwo</h4>
+                                <p class="text-sm text-gray-500">Patient, Abuja</p>
+                            </div>
+                        </div>
+                        <div class="relative mb-6">
+                            <i class="fas fa-quote-left text-5xl text-primary-100 absolute -top-4 -left-2 opacity-50"></i>
+                            <p class="text-gray-600 relative z-10 italic">
+                                "The blood donation service saved my husband's life during an emergency surgery. We were able to quickly find a donor blood and track the delivery in real-time. The anxiety of waiting was lessened knowing exactly where the blood was in transit."
+                            </p>
+                        </div>
+                        <div class="text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="bg-primary-500 p-8 text-white flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4">Why Our Services Matter</h3>
+                        <p class="mb-6">
+                            In Nigeria, timely access to medical testing and blood donations can mean the difference between life and death. Our platform bridges critical gaps in the healthcare system.
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                                    <i class="fas fa-check text-xs text-white"></i>
+                                </div>
+                                <span>Reduced wait times by 75%</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                                    <i class="fas fa-check text-xs text-white"></i>
+                                </div>
+                                <span>98% successful delivery rate</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                                    <i class="fas fa-check text-xs text-white"></i>
+                                </div>
+                                <span>Serving key regions across Nigeria</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Service CTA -->
+        <div class="mt-16 text-center" data-aos="fade-up" data-aos-delay="400">
+            <a href="#" class="inline-flex items-center px-8 py-4 bg-primary-500 text-white rounded-xl font-medium text-lg hover:bg-primary-600 transition-colors shadow-lg shadow-primary-500/20 hover:shadow-xl hover:shadow-primary-500/30 pulse-element">
+                Explore All Services
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
         </div>
     </div>
 </section>
 
-<!-- Enhanced Contact Form Section -->
-<section id="contact" class="py-16 md:py-24">
+<!-- Enhanced How It Works Section -->
+<section id="how-it-works" class="py-20 bg-white relative overflow-hidden">
+    <!-- Decorative Elements -->
+    <div class="absolute inset-0 pointer-events-none">
+        <!-- Lab pattern background -->
+        <div class="absolute inset-0 opacity-5 bg-lab-pattern"></div>
+        
+        <!-- Animated morphing background -->
+        <div class="morphing-bg" style="top: 20%; left: 10%; opacity: 0.05;"></div>
+        <div class="morphing-bg" style="bottom: 20%; right: 10%; opacity: 0.05; animation-delay: -5s;"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="inline-block">
+                <span class="text-sm uppercase tracking-wider text-primary-600 font-semibold bg-primary-50 px-3 py-1 rounded-full">How It Works</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-display font-bold mt-4 mb-6">
+                Simple Process, Powerful Results
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Our intuitive platform makes medical logistics simple, efficient, and reliable through three easy steps.
+            </p>
+        </div>
+        
+        <div class="relative">
+            <!-- Connection line -->
+            <div class="hidden lg:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-primary-100 via-secondary-100 to-accent/20 transform -translate-y-1/2 z-0"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                <!-- Step 1: Place Order -->
+                <div class="step-item bg-white rounded-2xl shadow-xl p-8 text-center" data-aos="fade-right" data-aos-delay="100">
+                    <div class="relative w-20 h-20 mx-auto mb-6">
+                        <div class="absolute inset-0 bg-primary-100 rounded-2xl transform rotate-6"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-500 text-white font-bold text-xl">1</span>
+                        </div>
+                    </div>
+                    
+                    <div class="h-20 flex items-center justify-center">
+                        <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_vPnn3K.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+                    </div>
+                    
+                    <h3 class="text-xl font-display font-bold mb-4 mt-4">Place Your Order</h3>
+                    <p class="text-gray-600 mb-6">
+                        Select lab test or blood request through our user-friendly app. Provide necessary details and your preferred scheduling options.
+                    </p>
+                    
+                    <div class="bg-primary-50 rounded-lg p-4">
+                        <h4 class="font-medium text-primary-700 mb-2">What You'll Need:</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary-500 mr-2"></i>
+                                <span>Basic personal information</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary-500 mr-2"></i>
+                                <span>Test type or blood requirements</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-primary-500 mr-2"></i>
+                                <span>Preferred date and time</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Track Delivery -->
+                <div class="step-item bg-white rounded-2xl shadow-xl p-8 text-center transform lg:translate-y-10" data-aos="fade-up" data-aos-delay="200">
+                    <div class="relative w-20 h-20 mx-auto mb-6">
+                        <div class="absolute inset-0 bg-secondary-100 rounded-2xl transform rotate-6"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="w-10 h-10 flex items-center justify-center rounded-full bg-secondary-500 text-white font-bold text-xl">2</span>
+                        </div>
+                    </div>
+                    
+                    <div class="h-20 flex items-center justify-center">
+                        <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_ukjcyybw.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+                    </div>
+                    
+                    <h3 class="text-xl font-display font-bold mb-4 mt-4">Track in Real-Time</h3>
+                    <p class="text-gray-600 mb-6">
+                        Monitor your sample or blood delivery in real-time through our secure tracking system with live updates and notifications.
+                    </p>
+                    
+                    <div class="bg-secondary-50 rounded-lg p-4">
+                        <h4 class="font-medium text-secondary-700 mb-2">Tracking Features:</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-secondary-500 mr-2"></i>
+                                <span>GPS location tracking</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-secondary-500 mr-2"></i>
+                                <span>Status updates via SMS/app</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-secondary-500 mr-2"></i>
+                                <span>Estimated arrival times</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Get Results -->
+                <div class="step-item bg-white rounded-2xl shadow-xl p-8 text-center" data-aos="fade-left" data-aos-delay="300">
+                    <div class="relative w-20 h-20 mx-auto mb-6">
+                        <div class="absolute inset-0 bg-accent/10 rounded-2xl transform rotate-6"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="w-10 h-10 flex items-center justify-center rounded-full bg-accent text-white font-bold text-xl">3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="h-20 flex items-center justify-center">
+                        <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_touohxv0.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+                    </div>
+                    
+                    <h3 class="text-xl font-display font-bold mb-4 mt-4">Receive Results</h3>
+                    <p class="text-gray-600 mb-6">
+                        Get test results digitally through our secure platform or confirm blood donation completion with detailed reports.
+                    </p>
+                    
+                    <div class="bg-orange-50 rounded-lg p-4">
+                        <h4 class="font-medium text-orange-700 mb-2">Result Delivery:</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-orange-500 mr-2"></i>
+                                <span>Secure digital reports</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-orange-500 mr-2"></i>
+                                <span>Doctor consultation options</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-orange-500 mr-2"></i>
+                                <span>Historical data access</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Process Demo Video -->
+        <div class="mt-20 max-w-6xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-full md:w-1/2">
+                        <h3 class="text-2xl font-display font-bold mb-4">See How It Works</h3>
+                        <p class="text-gray-600 mb-6">
+                            Watch our short demo video to see exactly how MedLab-Access transforms medical logistics in Nigeria, from sample collection to result delivery.
+                        </p>
+                        
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
+                                    <i class="fas fa-shield-alt text-primary-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">Secure & Confidential</h4>
+                                    <p class="text-gray-500 text-sm">Your medical data is encrypted and protected</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
+                                    <i class="fas fa-clock text-primary-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">Fast Turnaround</h4>
+                                    <p class="text-gray-500 text-sm">Most results delivered within 24-48 hours</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
+                                    <i class="fas fa-medal text-primary-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">Quality Assured</h4>
+                                    <p class="text-gray-500 text-sm">All partner labs meet our strict quality standards</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors">
+                            Watch Demo
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <div class="w-full md:w-1/2">
+                        <div class="relative rounded-2xl overflow-hidden shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1581093199592-4ff39615a7d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Lab technician at work" class="w-full h-64 object-cover" />
+                            
+                            <!-- Play button -->
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+                                <button class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-110 pulse-element">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Interactive process points -->
+                            <div class="absolute top-1/4 left-1/4 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element">1</div>
+                            
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element">2</div>
+                            
+                            <div class="absolute bottom-1/4 right-1/4 w-8 h-8 bg-accent rounded-full flex items-center justify-center text-white cursor-pointer pulse-element">3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Join CTA -->
+        <div class="mt-16 text-center" data-aos="fade-up" data-aos-delay="500">
+            <a href="#" class="inline-flex items-center px-8 py-4 bg-secondary-500 text-white rounded-xl font-medium text-lg hover:bg-secondary-600 transition-colors shadow-lg shadow-secondary-500/20 hover:shadow-xl hover:shadow-secondary-500/30 pulse-element">
+                Join MedLab-Access Today
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-16 md:py-24 bg-neutral-light">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12 fade-in-section">
             <h2 class="text-2xl md:text-3xl font-bold mb-4">Get In Touch</h2>
@@ -297,7 +731,7 @@
                         </div>
                         
                         <div class="text-center">
-                            <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full text-lg font-medium transition-transform hover:scale-105 shadow-lg shadow-primary/20" id="contact-submit">
+                            <button type="submit" class="bg-primary hover:bg-primary/90 text-gray px-6 py-3 rounded-full text-lg font-medium transition-transform hover:scale-105 shadow-lg shadow-primary/20" id="contact-submit">
                                 <span class="flex items-center justify-center gap-2">
                                     <i class="fas fa-paper-plane"></i>
                                     Send Message
@@ -319,7 +753,7 @@
                                 </div>
                                 <div>
                                     <p class="font-medium mb-1">Our Location</p>
-                                    <p class="text-white/80">Lagos, Nigeria</p>
+                                    <p class="text-white/80">Bauchi, Nigeria</p>
                                 </div>
                             </div>
                             
@@ -374,223 +808,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- FAQ Section with Enhanced Accordion -->
-<section class="py-16 md:py-24 bg-neutral-light">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 fade-in-section">
-            <h2 class="text-2xl md:text-3xl font-bold mb-4">Frequently Asked Questions</h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                Find answers to common questions about our services.
-            </p>
-        </div>
-        
-        <div class="max-w-3xl mx-auto fade-in-section">
-            <!-- FAQ Item 1 -->
-            <div class="mb-6">
-                <button class="faq-question flex justify-between items-center w-full text-left font-bold p-5 rounded-xl bg-white hover:bg-white focus:outline-none transition-colors shadow-md" onclick="toggleFAQ(this)">
-                    <span>How does lab sample collection work?</span>
-                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center transform transition-transform duration-300">
-                        <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </div>
-                </button>
-                <div class="faq-answer hidden mt-2 p-5 rounded-xl bg-white shadow-md">
-                    <p class="text-gray-600">
-                        Our trained professionals will visit your location to collect samples. Alternatively, you can visit one of our partner labs. All samples are properly handled and transported under optimal conditions to ensure accurate results.
-                    </p>
-                    <div class="mt-4 p-3 bg-primary-50 rounded-lg border border-primary-100">
-                        <div class="flex items-start">
-                            <div class="text-primary-500 mr-3">
-                                <i class="fas fa-lightbulb"></i>
-                            </div>
-                            <p class="text-sm text-primary-700">
-                                <strong>Pro Tip:</strong> Schedule your sample collection early in the morning for faster results.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- FAQ Item 2 -->
-            <div class="mb-6">
-                <button class="faq-question flex justify-between items-center w-full text-left font-bold p-5 rounded-xl bg-white hover:bg-white focus:outline-none transition-colors shadow-md" onclick="toggleFAQ(this)">
-                    <span>How can I donate blood through SharedBlood?</span>
-                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center transform transition-transform duration-300">
-                        <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </div>
-                </button>
-                <div class="faq-answer hidden mt-2 p-5 rounded-xl bg-white shadow-md">
-                    <p class="text-gray-600">
-                        Register on our platform, complete a brief health questionnaire, and schedule a donation appointment. Our team will guide you through the process and ensure your donation reaches those in need.
-                    </p>
-                    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-primary-50 p-3 rounded-lg text-center">
-                            <div class="text-primary-500 text-xl mb-1">
-                                <i class="fas fa-clipboard-check"></i>
-                            </div>
-                            <h4 class="font-medium text-sm">Register</h4>
-                        </div>
-                        <div class="bg-primary-50 p-3 rounded-lg text-center">
-                            <div class="text-primary-500 text-xl mb-1">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <h4 class="font-medium text-sm">Schedule</h4>
-                        </div>
-                        <div class="bg-primary-50 p-3 rounded-lg text-center">
-                            <div class="text-primary-500 text-xl mb-1">
-                                <i class="fas fa-hand-holding-heart"></i>
-                            </div>
-                            <h4 class="font-medium text-sm">Donate</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- FAQ Item 3 -->
-            <div class="mb-6">
-                <button class="faq-question flex justify-between items-center w-full text-left font-bold p-5 rounded-xl bg-white hover:bg-white focus:outline-none transition-colors shadow-md" onclick="toggleFAQ(this)">
-                    <span>How long does it take to receive lab results?</span>
-                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center transform transition-transform duration-300">
-                        <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </div>
-                </button>
-                <div class="faq-answer hidden mt-2 p-5 rounded-xl bg-white shadow-md">
-                    <p class="text-gray-600">
-                        Turnaround times vary depending on the type of test. Routine tests typically take 24-48 hours, while specialized tests may take 3-5 business days. You'll receive notifications at each stage of the process.
-                    </p>
-                    <div class="mt-4 bg-primary-50 p-4 rounded-lg">
-                        <h5 class="font-medium mb-2">Typical Turnaround Times:</h5>
-                        <ul class="space-y-2">
-                            <li class="flex items-center">
-                                <span class="w-4 h-4 bg-green-500 rounded-full mr-2"></span>
-                                <span>Basic blood work: 24 hours</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="w-4 h-4 bg-yellow-500 rounded-full mr-2"></span>
-                                <span>Hormone panels: 48 hours</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="w-4 h-4 bg-orange-500 rounded-full mr-2"></span>
-                                <span>Specialized tests: 3-5 days</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- FAQ Item 4 -->
-            <div class="mb-6">
-                <button class="faq-question flex justify-between items-center w-full text-left font-bold p-5 rounded-xl bg-white hover:bg-white focus:outline-none transition-colors shadow-md" onclick="toggleFAQ(this)">
-                    <span>Is my medical information secure?</span>
-                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center transform transition-transform duration-300">
-                        <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </div>
-                </button>
-                <div class="faq-answer hidden mt-2 p-5 rounded-xl bg-white shadow-md">
-                    <p class="text-gray-600">
-                        Absolutely. We adhere to strict privacy policies and employ industry-standard encryption to protect your personal and medical information. Your data is only shared with authorized healthcare providers involved in your care.
-                    </p>
-                    <div class="mt-4 flex items-center p-3 bg-green-50 rounded-lg border border-green-100">
-                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                            <i class="fas fa-shield-alt text-green-600"></i>
-                        </div>
-                        <div>
-                            <h5 class="font-medium text-green-800">Bank-Level Security</h5>
-                            <p class="text-sm text-green-700">All your data is encrypted with 256-bit encryption and stored in secure servers.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- FAQ Item 5 -->
-            <div class="mb-6">
-                <button class="faq-question flex justify-between items-center w-full text-left font-bold p-5 rounded-xl bg-white hover:bg-white focus:outline-none transition-colors shadow-md" onclick="toggleFAQ(this)">
-                    <span>What payment methods do you accept?</span>
-                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center transform transition-transform duration-300">
-                        <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </div>
-                </button>
-                <div class="faq-answer hidden mt-2 p-5 rounded-xl bg-white shadow-md">
-                    <p class="text-gray-600">
-                        We accept various payment methods including credit/debit cards, bank transfers, mobile money, and cash payments. For corporate clients, we also offer invoice-based billing with flexible payment terms.
-                    </p>
-                    <div class="mt-4 grid grid-cols-5 gap-2">
-                        <div class="bg-gray-100 p-2 rounded flex items-center justify-center">
-                            <i class="fab fa-cc-visa text-2xl text-blue-700"></i>
-                        </div>
-                        <div class="bg-gray-100 p-2 rounded flex items-center justify-center">
-                            <i class="fab fa-cc-mastercard text-2xl text-red-600"></i>
-                        </div>
-                        <div class="bg-gray-100 p-2 rounded flex items-center justify-center">
-                            <i class="fas fa-university text-2xl text-gray-700"></i>
-                        </div>
-                        <div class="bg-gray-100 p-2 rounded flex items-center justify-center">
-                            <i class="fas fa-mobile-alt text-2xl text-green-600"></i>
-                        </div>
-                        <div class="bg-gray-100 p-2 rounded flex items-center justify-center">
-                            <i class="fas fa-money-bill-wave text-2xl text-green-700"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Still Have Questions -->
-        <div class="mt-12 max-w-3xl mx-auto text-center">
-            <h3 class="text-xl font-bold mb-4">Still Have Questions?</h3>
-            <p class="text-gray-600 mb-6">Our team is ready to assist you with any other questions you might have.</p>
-            <a href="#contact" class="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20">
-                <i class="fas fa-headset mr-2"></i>
-                Contact Support
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Partners Section with Enhanced Design -->
-<section class="py-16 md:py-20 bg-white">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 fade-in-section">
-            <h2 class="text-2xl md:text-3xl font-bold mb-4">Our Partners</h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                We collaborate with leading healthcare institutions across Nigeria.
-            </p>
-        </div>
-        
-        <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
-                <!-- Partner logos with hover effects -->
-                @for ($i = 1; $i <= 8; $i++)
-                    <div class="group bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center h-32">
-                        <div class="text-gray-400 font-bold group-hover:text-primary-500 transition-colors duration-300">Partner {{ $i }}</div>
-                    </div>
-                @endfor
-            </div>
-            
-            <!-- Partnership CTA -->
-            <div class="mt-12 text-center">
-                <h3 class="text-xl font-bold mb-4">Become a Partner</h3>
-                <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Join our network of healthcare providers and contribute to improving medical logistics in Nigeria.
-                </p>
-                <a href="#" class="inline-flex items-center px-6 py-3 bg-white border-2 border-primary-500 text-primary-600 rounded-xl font-medium hover:bg-primary-50 transition-colors">
-                    <i class="fas fa-handshake mr-2"></i>
-                    Partner With Us
-                </a>
             </div>
         </div>
     </div>

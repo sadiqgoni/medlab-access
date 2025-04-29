@@ -243,8 +243,84 @@ function initFAQ() {
   })
 }
 
+// Custom cursor
+function initCustomCursor() {
+  const cursor = document.querySelector(".custom-cursor")
+  const cursorDot = document.querySelector(".cursor-dot")
+
+  if (!cursor || !cursorDot || window.innerWidth <= 768) return
+
+  cursor.style.opacity = "1"
+  cursorDot.style.opacity = "1"
+
+  document.addEventListener("mousemove", (e) => {
+    cursor.style.left = e.clientX + "px"
+    cursor.style.top = e.clientY + "px"
+
+    cursorDot.style.left = e.clientX + "px"
+    cursorDot.style.top = e.clientY + "px"
+  })
+
+  // Change cursor size and style on hover over links and buttons
+  const interactiveElements = document.querySelectorAll("a, button, input, .interactive-element")
+  interactiveElements.forEach((element) => {
+    element.addEventListener("mouseenter", () => {
+      cursor.style.transform = "translate(-50%, -50%) scale(0.5)"
+      cursor.style.borderColor = "#4CAF50"
+      cursorDot.style.transform = "translate(-50%, -50%) scale(1.5)"
+      cursorDot.style.backgroundColor = "#4CAF50"
+    })
+
+    element.addEventListener("mouseleave", () => {
+      cursor.style.transform = "translate(-50%, -50%) scale(1)"
+      cursor.style.borderColor = "#1E88E5"
+      cursorDot.style.transform = "translate(-50%, -50%) scale(1)"
+      cursorDot.style.backgroundColor = "#1E88E5"
+    })
+  })
+}
+
+// Preloader
+function setupPreloader() {
+  const preloader = document.querySelector(".preloader")
+  if (!preloader) return
+
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      preloader.classList.add("hidden")
+      setTimeout(() => {
+        preloader.remove()
+      }, 500)
+    }, 1500)
+  })
+}
+
+// Fade in sections on scroll
+function initFadeInSections() {
+  const fadeInSections = document.querySelectorAll(".fade-in-section")
+
+  const options = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px",
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible")
+        observer.unobserve(entry.target)
+      }
+    })
+  }, options)
+
+  fadeInSections.forEach((section) => observer.observe(section))
+}
+
 // Initialize all animations
 document.addEventListener("DOMContentLoaded", () => {
+  // Setup preloader
+  setupPreloader()
+
   // Initialize AOS
   if (typeof AOS !== "undefined") {
     AOS.init({
@@ -255,6 +331,9 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.warn("AOS (Animate on Scroll) is not loaded. Ensure it is included in your HTML.")
   }
+
+  // Initialize custom cursor
+  initCustomCursor()
 
   // Initialize particles
   initParticles()
@@ -268,22 +347,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize FAQ
   initFAQ()
 
-  // Initialize testimonial slider
-  const testimonialSlider = document.querySelector(".testimonial-slider")
-  if (testimonialSlider) {
-    const track = testimonialSlider.querySelector(".testimonial-track")
-    const dots = document.querySelectorAll(".testimonial-dot")
+  // Initialize fade in sections
+  initFadeInSections()
 
-    dots.forEach((dot, index) => {
-      dot.addEventListener("click", () => {
-        // Update active dot
-        dots.forEach((d) => d.classList.remove("active", "bg-primary-500"))
-        dot.classList.add("active", "bg-primary-500")
+  // Add heartbeat animation to heart icons
+  document.querySelectorAll(".fa-heartbeat").forEach((icon) => {
+    if (!icon.classList.contains("heartbeat")) {
+      icon.classList.add("heartbeat")
+    }
+  })
 
-        // Move track
-        const slideWidth = testimonialSlider.clientWidth
-        track.style.transform = `translateX(-${index * slideWidth}px)`
-      })
-    })
-  }
+  // Add pulse animation to important buttons
+  document.querySelectorAll(".pulse-element").forEach((element) => {
+    if (!element.classList.contains("pulse-element")) {
+      element.classList.add("pulse-element")
+    }
+  })
 })

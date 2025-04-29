@@ -314,7 +314,7 @@
                             </div>
                             <div>
                                 <p class="text-white font-medium">Address</p>
-                                <span class="text-gray-300">Lagos, Nigeria</span>
+                                <span class="text-gray-300">Bauchi, Nigeria</span>
                             </div>
                         </li>
                     </ul>
