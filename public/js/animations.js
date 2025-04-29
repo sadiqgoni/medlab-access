@@ -250,12 +250,14 @@ function initCustomCursor() {
 
   if (!cursor || !cursorDot || window.innerWidth <= 768) return
 
-  cursor.style.opacity = "1"
+  // Keep the dot visible, remove the outer circle visibility logic
+  // cursor.style.opacity = "1"
   cursorDot.style.opacity = "1"
 
   document.addEventListener("mousemove", (e) => {
-    cursor.style.left = e.clientX + "px"
-    cursor.style.top = e.clientY + "px"
+    // Only update the dot's position
+    // cursor.style.left = e.clientX + "px"
+    // cursor.style.top = e.clientY + "px"
 
     cursorDot.style.left = e.clientX + "px"
     cursorDot.style.top = e.clientY + "px"
@@ -265,17 +267,19 @@ function initCustomCursor() {
   const interactiveElements = document.querySelectorAll("a, button, input, .interactive-element")
   interactiveElements.forEach((element) => {
     element.addEventListener("mouseenter", () => {
-      cursor.style.transform = "translate(-50%, -50%) scale(0.5)"
-      cursor.style.borderColor = "#4CAF50"
+      // Remove outer circle scaling
+      // cursor.style.transform = "translate(-50%, -50%) scale(0.5)"
+      // cursor.style.borderColor = "#4CAF50"
       cursorDot.style.transform = "translate(-50%, -50%) scale(1.5)"
-      cursorDot.style.backgroundColor = "#4CAF50"
+      cursorDot.style.backgroundColor = "#4CAF50" // Green color on hover
     })
 
     element.addEventListener("mouseleave", () => {
-      cursor.style.transform = "translate(-50%, -50%) scale(1)"
-      cursor.style.borderColor = "#1E88E5"
+      // Remove outer circle reset
+      // cursor.style.transform = "translate(-50%, -50%) scale(1)"
+      // cursor.style.borderColor = "#1E88E5"
       cursorDot.style.transform = "translate(-50%, -50%) scale(1)"
-      cursorDot.style.backgroundColor = "#1E88E5"
+      cursorDot.style.backgroundColor = "#4CAF50" // Keep green color for the dot
     })
   })
 }
@@ -316,6 +320,36 @@ function initFadeInSections() {
   fadeInSections.forEach((section) => observer.observe(section))
 }
 
+// How It Works Slider
+function initHowItWorksSlider() {
+  const sliderContainer = document.getElementById('how-it-works-slider');
+  if (!sliderContainer) return;
+
+  const images = sliderContainer.querySelectorAll('.slider-image');
+  const controls = sliderContainer.querySelectorAll('.slider-control');
+
+  controls.forEach(control => {
+    control.addEventListener('click', () => {
+      const targetSlide = control.getAttribute('data-target-slide');
+
+      // Update active control button
+      controls.forEach(c => c.classList.remove('active-slide', 'scale-125'));
+      control.classList.add('active-slide', 'scale-125');
+
+      // Show target image and hide others
+      images.forEach(image => {
+        if (image.getAttribute('data-slide') === targetSlide) {
+          image.classList.remove('opacity-0');
+          image.classList.add('opacity-100');
+        } else {
+          image.classList.remove('opacity-100');
+          image.classList.add('opacity-0');
+        }
+      });
+    });
+  });
+}
+
 // Initialize all animations
 document.addEventListener("DOMContentLoaded", () => {
   // Setup preloader
@@ -333,7 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Initialize custom cursor
-  initCustomCursor()
+  // initCustomCursor()
 
   // Initialize particles
   initParticles()
@@ -349,6 +383,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize fade in sections
   initFadeInSections()
+
+  // Initialize How It Works Slider
+  initHowItWorksSlider()
 
   // Add heartbeat animation to heart icons
   document.querySelectorAll(".fa-heartbeat").forEach((icon) => {

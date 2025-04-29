@@ -44,8 +44,8 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex flex-col lg:flex-row items-center">
             <!-- Hero content -->
-            <div class="w-full lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0" data-aos="fade-right">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 text-neutral-dark leading-tight typing-animation">
+            <div class="w-full lg:w-2/3 text-center lg:text-left mb-12 lg:mb-0" data-aos="fade-right">
+                <h1 class="text-2xl md:text-4xl lg:text-5xl font-display font-bold mb-6 text-neutral-dark leading-tight typing-animation">
                     <span class="relative inline-block">
                         <span class="relative z-10">Revolutionary</span>
                         <span class="absolute bottom-0 left-0 w-full h-3 bg-secondary-200 -z-10 transform -rotate-1"></span>
@@ -302,7 +302,7 @@
                         </a>
                         
                         <span class="bg-primary-50 text-primary-700 text-sm font-medium px-3 py-1 rounded-full">
-                            From ₦2,500
+                            From ₦1,000
                         </span>
                     </div>
                 </div>
@@ -637,8 +637,11 @@
                     </div>
                     
                     <div class="w-full md:w-1/2">
-                        <div class="relative rounded-2xl overflow-hidden shadow-lg">
-                            <img src="https://images.unsplash.com/photo-1581093199592-4ff39615a7d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Lab technician at work" class="w-full h-64 object-cover" />
+                        <div class="relative rounded-2xl overflow-hidden shadow-lg h-96" id="how-it-works-slider">
+                            <!-- Slider Images -->
+                            <img src="/images/labtechwoman.png" alt="Lab technician at work" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100" data-slide="1" />
+                            <img src="/images/deliveringmed.jpg" alt="Medical delivery" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0" data-slide="2" />
+                            <img src="/images/rideblood.jpg" alt="Blood delivery bike" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0" data-slide="3" />
                             
                             <!-- Play button -->
                             <div class="absolute inset-0 flex items-center justify-center bg-black/30">
@@ -649,12 +652,18 @@
                                 </button>
                             </div>
                             
-                            <!-- Interactive process points -->
-                            <div class="absolute top-1/4 left-1/4 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element">1</div>
+                            <!-- Interactive process points / Slider Controls -->
+                            <div class="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2">
+                                <button class="slider-control w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-primary-500 transition-all duration-300 active-slide" data-target-slide="1">1</button>
+                            </div>
                             
-                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element">2</div>
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <button class="slider-control w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-secondary-500 transition-all duration-300" data-target-slide="2">2</button>
+                            </div>
                             
-                            <div class="absolute bottom-1/4 right-1/4 w-8 h-8 bg-accent rounded-full flex items-center justify-center text-white cursor-pointer pulse-element">3</div>
+                            <div class="absolute bottom-1/4 right-1/4 transform translate-x-1/2 translate-y-1/2">
+                                <button class="slider-control w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-accent transition-all duration-300" data-target-slide="3">3</button>
+                            </div>
                         </div>
                     </div>
                 </div>
