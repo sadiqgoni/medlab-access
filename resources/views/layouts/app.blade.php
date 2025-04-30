@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MedLab-Access - Revolutionary Medical Logistics Platform in Nigeria | Seamless Lab Tests and Blood Donations">
-    <title>MedLab-Access - Advanced Medical Logistics Platform</title>
+    <meta name="description" content="D' Health Rides - Revolutionary Medical Logistics Platform in Nigeria | Seamless Lab Tests and Blood Donations">
+    <title>D' Health Rides - Advanced Medical Logistics Platform</title>
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -153,12 +153,9 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="/" class="group flex items-center gap-2 transition-all duration-300">
-                        <div class="relative h-10 w-10 bg-primary-500 rounded-full overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <div class="absolute h-6 w-6 bg-white rounded-full top-1 left-1 opacity-20"></div>
-                            <span class="relative text-white font-bold text-xl">M</span>
-                        </div>
-                        <span class="text-primary-600 font-display font-bold text-xl group-hover:text-primary-500 transition-colors">
-                            MedLab<span class="text-secondary-500">-Access</span>
+                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-10 w-auto group-hover:scale-110 transition-transform">
+                        <span class="text-primary-600 font-display font-bold text-xl group-hover:text-primary-500 transition-colors hidden sm:inline">
+                            D' Health<span class="text-secondary-500"> Rides</span>
                         </span>
                     </a>
                 </div>
@@ -233,12 +230,9 @@
                 <!-- Company Info -->
                 <div data-aos="fade-right" data-aos-delay="100">
                     <div class="group flex items-center gap-2 mb-4">
-                        <div class="relative h-10 w-10 bg-primary-500 rounded-full overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <div class="absolute h-6 w-6 bg-white rounded-full top-1 left-1 opacity-20"></div>
-                            <span class="relative text-white font-bold text-xl">M</span>
-                        </div>
+                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-10 w-auto">
                         <span class="text-white font-display font-bold text-xl">
-                            MedLab<span class="text-secondary-500">-Access</span>
+                            D' Health<span class="text-secondary-500"> Rides</span>
                         </span>
                     </div>
                     <p class="text-gray-300 mb-6">Revolutionizing Nigeria's medical logistics through cutting-edge technology and innovative solutions.</p>
@@ -336,7 +330,7 @@
             </div>
             
             <div class="border-t border-gray-700 mt-12 pt-8 text-center">
-                <p class="text-gray-400">© {{ date('Y') }} MedLab-Access. All rights reserved.</p>
+                <p class="text-gray-400">© {{ date('Y') }} D' Health Rides. All rights reserved.</p>
                 <p class="text-gray-500 text-sm mt-2">Transforming medical logistics in Nigeria through innovation.</p>
             </div>
         </div>

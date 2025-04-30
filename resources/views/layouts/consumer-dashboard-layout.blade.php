@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'MedLab Access') }}</title>
+    <title>{{ config('app.name', 'D\' Health Rides') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,8 +93,10 @@
             
             <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200">
                 <div class="flex items-center">
-                    <div class="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center text-white">M</div>
-                    <span class="ml-2 text-lg font-semibold text-gray-900">MedLab Access</span>
+                    <a href="{{ route('consumer.dashboard') }}" class="flex items-center gap-2">
+                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-8 w-auto">
+                        <span class="ml-2 text-lg font-semibold text-gray-900 hidden sm:inline">D' Health Rides</span>
+                    </a>
                 </div>
                 <button @click="sidebarOpen = false" class="text-gray-500 hover:text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,8 +145,10 @@
         <!-- Desktop sidebar -->
         <div class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:bg-white">
             <div class="flex items-center h-16 px-4 border-b border-gray-200">
-                <div class="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center text-white">M</div>
-                <span class="ml-2 text-lg font-semibold text-gray-900">MedLab Access</span>
+                <a href="{{ route('consumer.dashboard') }}" class="flex items-center gap-2">
+                    <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-8 w-auto">
+                    <span class="ml-2 text-lg font-semibold text-gray-900">D' Health Rides</span>
+                </a>
             </div>
             
             <!-- Desktop Navigation -->
@@ -201,7 +205,9 @@
                     </svg>
                 </button>
                 <div class="flex items-center justify-center flex-1 px-4">
-                    <div class="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center text-white">M</div>
+                    <a href="{{ route('consumer.dashboard') }}">
+                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-8 w-auto">
+                    </a>
                 </div>
                 <div class="flex items-center px-4">
                     <div class="relative" x-data="{ open: false }">

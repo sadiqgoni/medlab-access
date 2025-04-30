@@ -14,19 +14,19 @@ class DashboardController extends Controller
         $user = Auth::user();
         
         // Get order statistics
-        $totalOrders = Order::where('user_id', $user->id)->count();
-        $activeOrders = Order::where('user_id', $user->id)
+        $totalOrders = Order::where('consumer_id', $user->id)->count();
+        $activeOrders = Order::where('consumer_id', $user->id)
             ->whereIn('status', ['pending', 'accepted', 'processing', 'sample_collected', 'in_transit'])
             ->count();
-        $completedOrders = Order::where('user_id', $user->id)
+        $completedOrders = Order::where('consumer_id', $user->id)
             ->where('status', 'completed')
             ->count();
-        $resultsReadyOrders = Order::where('user_id', $user->id)
+        $resultsReadyOrders = Order::where('consumer_id', $user->id)
             ->where('status', 'results_ready')
             ->count();
             
         // Get recent orders
-        $recentOrders = Order::where('user_id', $user->id)
+        $recentOrders = Order::where('consumer_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();

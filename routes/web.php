@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\VerifyIsConsumer;
+use App\Http\Controllers\Api\FacilityServiceController;
 
 // Public routes
 Route::get('/', function () {
@@ -53,6 +54,11 @@ Route::middleware('auth')->group(function () {
 
         // Order Cancellation
         Route::patch('/orders/{order}/cancel', [App\Http\Controllers\ConsumerOrderController::class, 'cancel'])->name('orders.cancel');
+    });
+
+    // API Routes (for internal use like fetching services)
+    Route::prefix('api')->middleware('auth')->group(function () {
+        Route::get('/facilities/{facility}/services', [FacilityServiceController::class, 'index'])->name('api.facility.services');
     });
 });
 

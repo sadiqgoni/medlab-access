@@ -10,6 +10,7 @@ use App\Http\Requests\Consumer\StoreOrderRequest;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
+use App\Models\Service;
 
 class ConsumerOrderController extends Controller
 {
@@ -42,12 +43,19 @@ class ConsumerOrderController extends Controller
     public function store(StoreOrderRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        
+        $selectedServiceIds = $validated['services'];
+        $services = Service::whereIn('id', $selectedServiceIds)->get();
+
+        // Determine order type from the first service (assuming no mixing)
+        $orderType = $services->first()->type === 'test' ? 'test' : 'blood'; // Simplified logic
+        $isBloodRequest = $services->contains('type', 'blood_request');
+        $isDonation = $services->contains('type', 'blood_donation');
+
         // Basic Order Data
         $orderData = [
             'consumer_id' => Auth::id(),
             'facility_id' => $validated['facility_id'],
-            'order_type' => $validated['order_type'],
+            'order_type' => $orderType,
             'delivery_address' => $validated['delivery_address'],
             'scheduled_time' => $validated['scheduled_time'] ?? null,
             'status' => 'pending', // Initial status
@@ -57,49 +65,48 @@ class ConsumerOrderController extends Controller
             'details' => [], // Initialize details array
         ];
 
-        // Placeholder Costs
+        // Placeholder Costs & Calculation
         $baseDeliveryFee = 500;
-        $testCost = 1500; // Cost per test
-        $bloodRequestCost = 3000; // Base cost for blood request
-        $bloodDonateCost = 0; // Donating is free
+        $totalServiceCost = $services->sum('price');
+        $requiresDelivery = $services->contains(fn ($service) => $service->type === 'test' || $service->type === 'blood_request');
+        $deliveryFee = $requiresDelivery ? $baseDeliveryFee : 0;
+        $orderData['total_amount'] = $totalServiceCost + $deliveryFee;
 
-        // Add order-type specific details and calculate cost
-        if ($validated['order_type'] === 'test') {
-            $orderData['details']['tests'] = $validated['tests'];
+        // Add order details
+        $orderData['details']['service_ids'] = $selectedServiceIds;
+        if ($orderType === 'test') {
             $orderData['details']['notes'] = $validated['test_notes'] ?? null;
-            $orderData['total_amount'] = (count($validated['tests']) * $testCost) + $baseDeliveryFee;
-        } elseif ($validated['order_type'] === 'blood') {
-            $orderData['details']['service_type'] = $validated['blood_service'];
-            $orderData['details']['blood_group'] = $validated['blood_group'];
-            if ($validated['blood_service'] === 'request') {
+        } elseif ($orderType === 'blood') {
+             $orderData['details']['blood_group'] = $validated['blood_group'];
+             if ($isBloodRequest) {
                 $orderData['details']['units'] = $validated['blood_units'];
                 $orderData['details']['urgency'] = $validated['urgency'];
                 $orderData['details']['purpose'] = $validated['blood_purpose'];
-                $orderData['total_amount'] = $bloodRequestCost + $baseDeliveryFee; // Add per-unit cost later if needed
-            } else { // Donating
-                 $orderData['total_amount'] = $bloodDonateCost; // Free
-            }
+             } elseif ($isDonation) {
+                 $orderData['details']['service_type'] = 'donation'; // Explicitly mark donation
+             }
         }
 
         // Simulate Payment
         if ($orderData['payment_method'] === 'paystack') {
-            // In real scenario: redirect to Paystack, handle callback.
-            // For now: Simulate successful payment if amount > 0
              if ($orderData['total_amount'] > 0) {
                 $orderData['payment_status'] = 'paid';
                 $orderData['status'] = 'accepted'; // Move status forward if paid
                 $orderData['payment_gateway_ref'] = 'FAKE_PAYSTACK_'.Str::random(10);
              } else {
-                 // If it's free (like donation), mark as paid and accepted
                  $orderData['payment_status'] = 'paid'; 
                  $orderData['status'] = 'accepted';
              }
         } else { // Cash payment
              $orderData['payment_status'] = 'pending';
-             $orderData['status'] = 'pending'; // Remains pending until cash confirmed
+             $orderData['status'] = 'pending';
         }
         
         $order = Order::create($orderData);
+        
+        // Associate services with order (if using many-to-many relationship)
+        // Assuming an orders_services pivot table exists:
+        // $order->services()->attach($selectedServiceIds);
         
         return redirect()->route('consumer.orders.show', $order)->with('success', 'Order placed successfully!');
     }
