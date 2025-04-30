@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('facility_id')->constrained('facilities')->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->enum('type', ['test', 'blood_request', 'blood_donation']); // Categorize the service
-            $table->decimal('price', 10, 2)->default(0.00);
+            $table->decimal('price', 10, 2)->default(0.00)->comment('Base price for the service');
+            $table->json('attributes')->nullable()->comment('Defines required input fields: [{\"name\": \"field_name\", \"label\": \"Field Label\", \"type\": \"text|select|number|checkbox\", \"required\": true, \"options\": []}]');
             $table->boolean('is_active')->default(true); // Allow providers to toggle service availability
             $table->timestamps();
         });

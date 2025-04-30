@@ -31,35 +31,51 @@ class StoreOrderRequest extends FormRequest
             'payment_method' => ['required', 'string', Rule::in(['paystack', 'cash'])],
             'services' => ['required', 'array', 'min:1'],
             'services.*' => ['integer', 'exists:services,id'],
+            'details' => ['nullable', 'array'],
         ];
 
         $selectedServiceIds = $this->input('services', []);
         if (!empty($selectedServiceIds)) {
-            $selectedServiceTypes = Service::whereIn('id', $selectedServiceIds)->pluck('type')->unique();
-            
-            if ($selectedServiceTypes->contains('test')) {
-                $rules['test_notes'] = ['nullable', 'string', 'max:2000'];
-            }
-            
-            if ($selectedServiceTypes->contains('blood_donation') || $selectedServiceTypes->contains('blood_request')) {
-                 $rules['blood_group'] = ['required', 'string', Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])];
-            }
+            $services = Service::with('facility')->whereIn('id', $selectedServiceIds)->get();
 
-            if ($selectedServiceTypes->contains('blood_request')) {
-                 $rules['blood_units'] = ['required', 'integer', 'min:1'];
-                 $rules['urgency'] = ['required', 'string', Rule::in(['normal', 'urgent', 'emergency'])];
-                 $rules['blood_purpose'] = ['required', 'string', 'max:2000'];
+            // Prevent ordering from multiple facilities at once
+            if ($services->pluck('facility_id')->unique()->count() > 1) {
+                $rules['services'][] = fn ($attribute, $value, $fail) => $fail('Cannot order services from multiple facilities at once.');
             }
+            
+            // Validate dynamically defined attributes from services
+            foreach ($services as $service) {
+                if (is_array($service->attributes)) {
+                    foreach ($service->attributes as $attribute) {
+                        $fieldName = 'details.' . $attribute['name'];
+                        $fieldRules = [];
+                        if ($attribute['required'] ?? false) {
+                            $fieldRules[] = 'required';
+                        } else {
+                            $fieldRules[] = 'nullable';
+                        }
 
-            // Custom rule using closure to prevent mixing service types
-            $rules['services'][] = function ($attribute, $value, $fail) use ($selectedServiceTypes) {
-                $containsTest = $selectedServiceTypes->contains('test');
-                $containsBlood = $selectedServiceTypes->contains('blood_request') || $selectedServiceTypes->contains('blood_donation');
-                
-                if ($containsTest && $containsBlood) {
-                    $fail('Cannot mix Lab Tests and Blood Services in the same order.');
+                        switch ($attribute['type'] ?? 'text') {
+                            case 'text':
+                            case 'textarea':
+                                $fieldRules[] = 'string';
+                                $fieldRules[] = 'max:2000'; // Example max length
+                                break;
+                            case 'number':
+                                $fieldRules[] = 'numeric';
+                                break;
+                            case 'select':
+                                $fieldRules[] = Rule::in($attribute['options'] ?? []);
+                                break;
+                            case 'checkbox':
+                                $fieldRules[] = 'boolean'; // Handles 0/1 from hidden input
+                                break;
+                            // Add other type validations as needed
+                        }
+                        $rules[$fieldName] = $fieldRules;
+                    }
                 }
-            };
+            }
         }
         
         return $rules;

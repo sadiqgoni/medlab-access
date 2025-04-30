@@ -50,7 +50,7 @@ class ConsumerOrderController extends Controller
         $orderType = $services->first()->type === 'test' ? 'test' : 'blood'; // Simplified logic
         $isBloodRequest = $services->contains('type', 'blood_request');
         $isDonation = $services->contains('type', 'blood_donation');
-
+       
         // Basic Order Data
         $orderData = [
             'consumer_id' => Auth::id(),
@@ -93,7 +93,7 @@ class ConsumerOrderController extends Controller
                 $orderData['payment_status'] = 'paid';
                 $orderData['status'] = 'accepted'; // Move status forward if paid
                 $orderData['payment_gateway_ref'] = 'FAKE_PAYSTACK_'.Str::random(10);
-             } else {
+             } else { 
                  $orderData['payment_status'] = 'paid'; 
                  $orderData['status'] = 'accepted';
              }
@@ -103,12 +103,48 @@ class ConsumerOrderController extends Controller
         }
         
         $order = Order::create($orderData);
-        
-        // Associate services with order (if using many-to-many relationship)
-        // Assuming an orders_services pivot table exists:
-        // $order->services()->attach($selectedServiceIds);
-        
-        return redirect()->route('consumer.orders.show', $order)->with('success', 'Order placed successfully!');
+
+        // Handle Payment Redirection or Completion
+        if ($orderData['payment_method'] === 'paystack' && $orderData['total_amount'] > 0) {
+            // Redirect to simulated payment page
+            return redirect()->route('consumer.orders.payment.simulate', $order);
+        } else {
+             // For Cash or Free orders, go directly to show page
+            return redirect()->route('consumer.orders.show', $order)->with('success', 'Order placed successfully!');
+        }
+    }
+
+    /**
+     * Show the payment simulation page.
+     */
+    public function showPaymentSimulation(Order $order): View
+    {
+         // Ensure the authenticated user owns this order and it needs payment
+        if ($order->consumer_id !== Auth::id() || $order->payment_status !== 'pending' || $order->payment_method !== 'paystack') {
+            abort(403);
+        }
+        return view('consumer.orders.payment-simulation', compact('order'));
+    }
+
+    /**
+     * Confirm the simulated payment.
+     */
+    public function confirmPayment(Request $request, Order $order): RedirectResponse
+    {
+         // Ensure the authenticated user owns this order and it needs payment
+        if ($order->consumer_id !== Auth::id() || $order->payment_status !== 'pending' || $order->payment_method !== 'paystack') {
+            abort(403);
+        }
+
+        // Mark as paid
+        $order->payment_status = 'paid';
+        $order->status = 'accepted'; // Move status forward
+        $order->payment_gateway_ref = 'SIMULATED_PAY_'.Str::random(8);
+        $order->save();
+
+        // TODO: Trigger payment confirmation notification
+
+        return redirect()->route('consumer.orders.show', $order)->with('success', 'Payment Confirmed! Order is being processed.');
     }
 
     /**

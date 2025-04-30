@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Filament\Provider\Resources;
 
 use App\Filament\Provider\Resources\ServiceResource\Pages;
@@ -28,6 +26,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Forms\Components\Repeater;
 
 class ServiceResource extends Resource
 {
@@ -48,27 +47,66 @@ class ServiceResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Select::make('type')
-                    ->options([
-                        'test' => 'Lab Test',
-                        'blood_request' => 'Blood Request Service',
-                        'blood_donation' => 'Blood Donation Service',
-                    ])
-                    ->required(),
-                Textarea::make('description')
-                    ->columnSpanFull(),
-                TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->prefix('₦')
-                    ->default(0.00),
-                Toggle::make('is_active')
-                    ->required()
-                    ->default(true)
-                    ->label('Service is Active'),
+                Section::make('Service Details')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->columnSpanFull(),
+                        Textarea::make('description')
+                            ->columnSpanFull(),
+                        TextInput::make('price')
+                            ->required()
+                            ->numeric()
+                            ->prefix('₦')
+                            ->default(0.00),
+                        Toggle::make('is_active')
+                            ->required()
+                            ->default(true)
+                            ->label('Service is Active'),
+                    ]),
+                    
+                Section::make('Required Information Fields')
+                    ->description('Define the fields consumers need to fill when ordering this service.')
+                    ->schema([
+                        Repeater::make('attributes')
+                            ->label('Fields')
+                            ->addActionLabel('Add Field')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->label('Field Name (unique key, e.g., blood_group, sample_type)')
+                                    ->required()
+                                    ->distinct()
+                                    ->maxLength(50),
+                                TextInput::make('label')
+                                    ->label('Field Label (shown to consumer)')
+                                    ->required()
+                                    ->maxLength(255),
+                                Select::make('type')
+                                    ->options([
+                                        'text' => 'Text Input',
+                                        'number' => 'Number Input',
+                                        'select' => 'Dropdown Select',
+                                        'checkbox' => 'Checkbox',
+                                        'textarea' => 'Text Area',
+                                    ])
+                                    ->required()
+                                    ->reactive(),
+                                Forms\Components\TagsInput::make('options')
+                                    ->label('Dropdown Options (if type is Select)')
+                                    ->placeholder('Enter options and press Enter')
+                                    ->visible(fn (callable $get) => $get('type') === 'select'),
+                                Toggle::make('required')
+                                    ->default(true),
+                            ])
+                            ->columns(2)
+                            ->collapsible()
+                            ->defaultItems(0)
+                            ->columnSpanFull(),
+                    ]),
+
+                // Automatically set facility_id
                 Forms\Components\Hidden::make('facility_id')
                     ->default(fn () => Facility::where('user_id', Auth::id())->value('id')),
             ]);
@@ -81,41 +119,27 @@ class ServiceResource extends Resource
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('type')
-                    ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'test' => 'Lab Test',
-                        'blood_request' => 'Blood Request',
-                        'blood_donation' => 'Blood Donation',
-                        default => ucfirst($state),
-                    })
-                     ->color(fn (string $state): string => match ($state) {
-                         'test' => 'info',
-                         'blood_request' => 'danger',
-                         'blood_donation' => 'success',
-                         default => 'gray',
-                     })
-                    ->searchable(),
+                // TextColumn::make('description') 
+                //    ->limit(30)
+                //    ->tooltip(fn (?string $state): ?string => $state)
+                //    ->toggleable(),
                 TextColumn::make('price')
                     ->money('NGN')
                     ->sortable(),
                 IconColumn::make('is_active')
                     ->boolean()
                     ->label('Active'),
+                // TextColumn::make('attributes') 
+                //    ->label('# Fields')
+                //    ->getStateUsing(fn (?array $state) => count($state ?? [])),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('type')
-                    ->options([
-                        'test' => 'Lab Test',
-                        'blood_request' => 'Blood Request Service',
-                        'blood_donation' => 'Blood Donation Service',
-                    ]),
-                Tables\Filters\TernaryFilter::make('is_active')
-                    ->label('Status'),
+                 Tables\Filters\TernaryFilter::make('is_active')
+                     ->label('Status'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

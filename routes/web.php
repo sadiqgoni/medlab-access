@@ -54,12 +54,19 @@ Route::middleware('auth')->group(function () {
 
         // Order Cancellation
         Route::patch('/orders/{order}/cancel', [App\Http\Controllers\ConsumerOrderController::class, 'cancel'])->name('orders.cancel');
+
+        // Payment Simulation
+        Route::get('/orders/{order}/payment', [App\Http\Controllers\ConsumerOrderController::class, 'showPaymentSimulation'])->name('orders.payment.simulate'); // Show page
+        Route::post('/orders/{order}/confirm-payment', [App\Http\Controllers\ConsumerOrderController::class, 'confirmPayment'])->name('orders.confirm-payment'); // Handle confirmation
     });
 
-    // API Routes (for internal use like fetching services)
-    Route::prefix('api')->middleware('auth')->group(function () {
-        Route::get('/facilities/{facility}/services', [FacilityServiceController::class, 'index'])->name('api.facility.services');
-    });
+    // TODO: Add routes for Provider, Biker, Admin panels
+});
+
+// API Routes (for internal use like fetching services)
+// Moved outside the main 'auth' middleware group
+Route::prefix('api')->group(function () { 
+    Route::get('/facilities/{facility}/services', [App\Http\Controllers\Api\FacilityServiceController::class, 'index'])->name('api.facility.services');
 });
 
 require __DIR__.'/auth.php';

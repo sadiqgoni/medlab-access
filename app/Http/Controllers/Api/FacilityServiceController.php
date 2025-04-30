@@ -22,7 +22,7 @@ class FacilityServiceController extends Controller
         $services = $facility->services()
                               ->where('is_active', true)
                               ->orderBy('name')
-                              ->get(['id', 'name', 'description', 'price', 'type']); // Select only needed columns
+                              ->get(['id', 'name', 'description', 'price', 'attributes']); // Changed 'type' to 'attributes'
 
         return response()->json($services);
     }

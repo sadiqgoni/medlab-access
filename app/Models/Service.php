@@ -14,13 +14,14 @@ class Service extends Model
         'facility_id',
         'name',
         'description',
-        'type',
         'price',
+        'attributes',
         'is_active',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'attributes' => 'array',
         'is_active' => 'boolean',
     ];
 

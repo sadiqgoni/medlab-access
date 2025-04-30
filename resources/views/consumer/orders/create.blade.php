@@ -91,12 +91,11 @@
                         <div x-show="selectedFacility && availableServices.length > 0" x-transition>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Select Service(s)</label>
                             <div class="space-y-3 max-h-60 overflow-y-auto border rounded-md p-3 bg-gray-50">
-                                <template x-for="service in filteredServices" :key="service.id">
+                                <template x-for="service in availableServices" :key="service.id">
                                     <div class="relative flex items-start">
                                         <div class="flex items-center h-5">
-                                            <!-- Use service.id as the value, handle single/multiple selection logic if needed -->
                                             <input :id="'service_' + service.id" name="services[]" :value="service.id" type="checkbox" 
-                                                   @change="updateCost()" 
+                                                   x-model="selectedServices" 
                                                    class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500">
                                         </div>
                                         <div class="ml-3 text-sm">
@@ -118,6 +117,65 @@
                         </div>
                     </div>
                     
+                    <!-- Dynamically Rendered Attribute Fields -->
+                    <div class="space-y-6 pt-6 border-t border-gray-200" x-show="selectedServices.length > 0">
+                        <h3 class="text-lg font-medium text-gray-900">Service Details</h3>
+                        <template x-for="attribute in requiredAttributes" :key="attribute.name">
+                            <div class="mb-4">
+                                <label :for="'attribute_' + attribute.name" class="block text-sm font-medium text-gray-700" >
+                                    <span x-text="attribute.label"></span>
+                                    <span x-show="attribute.required" class="text-red-500">*</span>
+                                </label>
+                                
+                                <!-- Text Input -->
+                                <input x-show="attribute.type === 'text'" :type="attribute.type" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" :required="attribute.required"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                
+                                <!-- Number Input -->
+                                <input x-show="attribute.type === 'number'" :type="attribute.type" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" :required="attribute.required"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+
+                                <!-- Text Area -->
+                                <textarea x-show="attribute.type === 'textarea'" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" rows="3" :required="attribute.required"
+                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"></textarea>
+                                
+                                <!-- Select Dropdown -->
+                                <select x-show="attribute.type === 'select'" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" :required="attribute.required"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                    <option value="">-- Select <span x-text="attribute.label"></span> --</option>
+                                    <template x-for="option in attribute.options" :key="option">
+                                        <option :value="option" x-text="option"></option>
+                                    </template>
+                                </select>
+
+                                <!-- Checkbox -->
+                                <div x-show="attribute.type === 'checkbox'" class="flex items-center mt-1">
+                                    <input :type="attribute.type" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" value="1" 
+                                           class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+                                    <label :for="'attribute_' + attribute.name" class="ml-2 block text-sm text-gray-900">Yes</label> 
+                                    <!-- Add hidden input for unchecked state if needed -->
+                                    <input type="hidden" :name="'details[' + attribute.name + ']'" value="0" x-show="!document.getElementById('attribute_' + attribute.name)?.checked">
+                                </div>
+
+                                <!-- Add more types like radio, date etc. if needed -->
+
+                                <!-- Validation Error Display -->
+                                @php
+                                    // This is tricky because attribute names are dynamic. 
+                                    // A simple approach for now, might need improvement.
+                                    // We check errors for details.* keys - requires backend adjustment or different approach.
+                                    $errorKey = 'details.' . (isset($attribute['name']) ? $attribute['name'] : '__dynamic__'); 
+                                @endphp
+                                @error($errorKey) 
+                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                                 <span x-show="$store.errors && $store.errors['details.' + attribute.name]">
+                                     <p class="mt-2 text-sm text-red-600" x-text="$store.errors['details.' + attribute.name][0]"></p>
+                                </span>
+                            </div>
+                        </template>
+                    </div>
+                   
                     <!-- Lab Test Notes (Only show if a test service is selected) -->
                     <div id="test_notes_container" x-show="hasSelectedTestService" x-transition>
                          <h3 class="text-lg font-medium text-gray-900">Additional Test Notes</h3>
@@ -287,141 +345,126 @@
     <script>
         function orderForm() {
             return {
-                orderType: null, // Will be set based on selected service type
+                orderType: null,
+                selectedServiceType: null,
                 selectedFacility: '{{ old("facility_id") }}' || '',
                 availableServices: [],
-                selectedServices: [], // Store IDs of selected services
+                selectedServices: @json(old('services', [])) || [], // Initialize from old input or empty array
                 loadingServices: false,
                 serviceCost: 0,
-                deliveryFee: 0, // Delivery fee depends on service type
+                deliveryFee: 0, 
                 totalAmount: 0,
                 
                 init() {
                     if (this.selectedFacility) {
                         this.fetchServices();
+                    } else {
+                        // Ensure cost is calculated initially if there's old input
+                        this.updateCost(); 
                     }
+                    // Watch the selectedServices array directly
+                    this.$watch('selectedServices', () => this.updateCost()); 
                 },
 
-                get filteredServices() {
-                    // Determine the overall order type based on selected services
-                    let containsTest = false;
-                    let containsBlood = false;
-                    this.selectedServiceType = null; // Reset
+                get selectedServiceObjects() {
+                    // Ensure selectedServices are strings for comparison if needed, 
+                    // though x-model should handle values correctly.
+                    const selectedIds = this.selectedServices.map(id => id.toString());
+                    return this.availableServices.filter(s => selectedIds.includes(s.id.toString()));
+                },
 
-                    const selectedServiceObjects = this.availableServices.filter(s => this.selectedServices.includes(s.id.toString()));
-                    
-                    selectedServiceObjects.forEach(s => {
-                        if (s.type === 'test') containsTest = true;
-                        if (s.type === 'blood_request' || s.type === 'blood_donation') containsBlood = true;
+                // Computed property to get all unique attributes required by selected services
+                get requiredAttributes() {
+                    let attributes = {};
+                    this.selectedServiceObjects.forEach(service => {
+                        (service.attributes || []).forEach(attr => {
+                            if (!attributes[attr.name]) {
+                                attributes[attr.name] = { ...attr }; 
+                            }
+                        });
                     });
+                    // console.log('Computed requiredAttributes:', Object.values(attributes)); 
+                    return Object.values(attributes);
+                },
 
-                    if (containsTest && containsBlood) {
-                        // Handle mixed order? For now, let's assume one type per order
-                        // Maybe prioritize based on first selected? Or show error?
-                        // We'll implicitly set based on first selected service for now
-                        if (selectedServiceObjects.length > 0) {
-                             this.orderType = selectedServiceObjects[0].type === 'test' ? 'test' : 'blood';
-                             this.selectedServiceType = selectedServiceObjects[0].type; 
-                        }
-                       
-                    } else if (containsTest) {
-                        this.orderType = 'test';
-                        this.selectedServiceType = 'test'; 
-                    } else if (containsBlood) {
-                        this.orderType = 'blood';
-                         // Determine specific blood type (request/donate) if needed for UI
-                         if (selectedServiceObjects.length > 0) {
-                            this.selectedServiceType = selectedServiceObjects[0].type;
-                        }
-                    } else {
-                        this.orderType = null;
-                        this.selectedServiceType = null;
-                    }
-                    
-                    // Return all available services - filtering happens in the template if needed
-                     return this.availableServices;
+                 // Computed property to check if any selected service requires test notes (example logic)
+                 get hasSelectedTestService() {
+                     // Check based on selected service objects
+                    return this.selectedServiceObjects.some(service => (service.attributes || []).some(attr => attr.name === 'test_notes'));
+                 },
+
+                // Computed property to check if any selected service requires blood details
+                get hasSelectedBloodService() {
+                    // Check based on selected service objects
+                    return this.selectedServiceObjects.some(service => (service.attributes || []).some(attr => ['blood_group', 'blood_units', 'urgency', 'blood_purpose'].includes(attr.name)));
                 },
                 
-                get hasSelectedTestService() {
-                    return this.selectedServices.some(id => {
-                        const service = this.availableServices.find(s => s.id.toString() === id);
-                        return service && service.type === 'test';
-                    });
-                },
-
-                get hasSelectedBloodService() {
-                     return this.selectedServices.some(id => {
-                        const service = this.availableServices.find(s => s.id.toString() === id);
-                        return service && (service.type === 'blood_request' || service.type === 'blood_donation');
-                    });
+                // Computed property to determine the specific type of blood service selected (if any)
+                get selectedServiceType() {
+                    // Infer based on required attributes from selected services
+                    if (this.requiredAttributes.some(attr => attr.name === 'blood_units')) return 'blood_request';
+                    // Add logic for donation if needed (e.g., if a service named 'Blood Donation' is selected)
+                    if (this.selectedServiceObjects.some(service => service.name.toLowerCase().includes('donate') || (service.attributes || []).some(attr => attr.name === 'donor_consent'))) return 'blood_donation'; 
+                    return null;
                 },
 
                 fetchServices() {
-                    if (!this.selectedFacility) {
+                     if (!this.selectedFacility) {
                         this.availableServices = [];
                         this.selectedServices = [];
                         this.updateCost();
                         return;
                     }
                     this.loadingServices = true;
-                    this.availableServices = []; // Clear previous services
-                    this.selectedServices = [];
-                    console.log(`Fetching services for facility ID: ${this.selectedFacility}`); // Log: Facility ID
+                    this.availableServices = []; 
+                    this.selectedServices = []; // Clear selections when facility changes
+                    console.log(`Fetching services for facility ID: ${this.selectedFacility}`);
                     
-                    // Construct the URL correctly 
                     const url = `/api/facilities/${this.selectedFacility}/services`; 
-                    console.log(`API URL: ${url}`); // Log: URL
+                    console.log(`API URL: ${url}`);
                     
-                    fetch(url, {
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest', // Important for Laravel API routes
-                            // Add CSRF token if your API route requires it within the web middleware group
-                            // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
-                        }
-                    })
+                    fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
                         .then(response => {
-                            console.log('API Response Status:', response.status); // Log: Status
-                            if (!response.ok) {
-                                console.error('API response error:', response);
-                                throw new Error(`Network response was not ok (${response.status})`);
-                            }
+                            console.log('API Response Status:', response.status);
+                            if (!response.ok) { throw new Error(`Network response was not ok (${response.status})`); }
                             return response.json();
                         })
                         .then(data => {
-                            console.log('Received data:', data); // Log: Received Data
-                            this.availableServices = Array.isArray(data) ? data : []; // Ensure it's an array
-                            console.log('Assigned availableServices:', this.availableServices); // Log: Assigned Data
-                            this.updateCost(); // Recalculate cost after fetching
+                            console.log('Received data:', data);
+                            this.availableServices = Array.isArray(data) ? data : [];
+                            console.log('Assigned availableServices:', this.availableServices);
+                             // Don't call updateCost here, $watch will handle it when availableServices changes (implicitly via selectedServiceObjects)
                         })
                         .catch(error => {
                             console.error('Error fetching services:', error);
-                            this.availableServices = []; // Clear services on error
-                            this.updateCost(); 
+                            this.availableServices = []; 
+                            this.updateCost(); // Update cost to zero on error
                         })
-                        .finally(() => {
-                            this.loadingServices = false;
-                        });
+                        .finally(() => { this.loadingServices = false; });
                 },
 
                 updateCost() {
+                    console.log('updateCost triggered'); // Log when updateCost runs
                     let currentServiceCost = 0;
                     const baseDelivery = 500;
-                    this.deliveryFee = 0; // Reset delivery fee
+                    this.deliveryFee = 0; 
                     let requiresDelivery = false;
 
-                    // Re-query selected service checkboxes directly inside updateCost
-                    const selectedCheckboxes = document.querySelectorAll('input[name="services[]"]:checked');
-                    this.selectedServices = Array.from(selectedCheckboxes).map(cb => cb.value);
+                    // Remove DOM query - Use the reactive selectedServiceObjects getter
+                    // const selectedCheckboxes = document.querySelectorAll('input[name="services[]"]:checked');
+                    // this.selectedServices = Array.from(selectedCheckboxes).map(cb => cb.value);
+                    console.log('updateCost - Watched Selected Service IDs:', this.selectedServices);
 
-                    this.selectedServices.forEach(serviceId => {
-                        const service = this.availableServices.find(s => s.id.toString() === serviceId);
-                        if (service) {
+                    this.selectedServiceObjects.forEach(service => {
+                         if (service && service.price) { // Check if service and price exist
                             currentServiceCost += parseFloat(service.price);
-                            // Assume tests and blood requests require delivery, donations might not
-                            if (service.type === 'test' || service.type === 'blood_request') {
-                                requiresDelivery = true;
+                            // Refined delivery logic - check attributes if needed
+                            // For now, assume delivery if price > 0 or specific type
+                            if (parseFloat(service.price) > 0) { // Example: charge delivery for paid services
+                                requiresDelivery = true; 
                             }
+                        } else {
+                            console.warn('Service object or price missing for ID:', service?.id);
                         }
                     });
                     
@@ -431,20 +474,17 @@
 
                     this.serviceCost = currentServiceCost;
                     this.totalAmount = this.serviceCost + this.deliveryFee;
+                    console.log('updateCost - Calculated Costs:', { serviceCost: this.serviceCost, deliveryFee: this.deliveryFee, totalAmount: this.totalAmount }); 
                 },
                 
                 formatCurrency(amount) {
-                    // Handle potential non-numeric values gracefully
                     const numAmount = parseFloat(amount);
-                    if (isNaN(numAmount)) {
-                        return '₦--.--'; // Or some placeholder
-                    }
+                    if (isNaN(numAmount)) { return '₦--.--'; }
                     return '₦' + numAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
             }
         }
 
-        // Link the Alpine.js data function to the form section
         document.addEventListener('alpine:init', () => {
             Alpine.data('orderForm', orderForm);
         });
