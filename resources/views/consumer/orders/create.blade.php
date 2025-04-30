@@ -1,37 +1,26 @@
-@extends('layouts.app')
-
-@section('content')
-<!-- Create Order Page -->
-<div class="bg-neutral-light min-h-screen pt-20 pb-12">
-    <!-- Page Header -->
-    <div class="bg-gradient-to-r from-primary-600 to-primary-700 text-white">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                <div class="mb-4 md:mb-0">
-                    <div class="flex items-center">
-                        <a href="{{ route('consumer.dashboard') }}" class="mr-2 bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors">
-                            <i class="fas fa-arrow-left text-white"></i>
-                        </a>
-                        <div>
-                            <h1 class="text-2xl md:text-3xl font-display font-bold">Place New Order</h1>
-                            <p class="mt-1 text-primary-100">Request lab tests or blood services</p>
-                        </div>
-                    </div>
-                </div>
+<x-consumer-dashboard-layout>
+    <x-slot name="header">
+        <div class="flex items-center">
+            <a href="{{ route('consumer.dashboard') }}" class="mr-2 bg-primary-100 hover:bg-primary-200 rounded-full p-2 transition-colors">
+                <i class="fas fa-arrow-left text-primary-700"></i>
+            </a>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-display font-bold text-gray-800">Place New Order</h1>
+                <p class="mt-1 text-gray-500">Request lab tests or blood services</p>
             </div>
         </div>
-    </div>
+    </x-slot>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="max-w-4xl mx-auto">
+    <div class="py-6">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Order Type Selection -->
             <div class="bg-white rounded-xl shadow-md p-6 mb-8 border border-gray-100">
                 <h2 class="text-xl font-medium text-gray-900 mb-6">Select Service Type</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- eMedSample Option -->
                     <div class="relative">
-                        <input type="radio" id="order_type_test" name="order_type" value="test" class="peer absolute opacity-0">
+                        <input type="radio" id="order_type_test" name="order_type_selection" value="test" class="peer absolute opacity-0">
                         <label for="order_type_test" class="block p-6 bg-white border-2 border-gray-200 rounded-xl cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:ring-2 peer-checked:ring-primary-500/20">
                             <div class="flex items-center">
                                 <div class="h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center mr-4">
@@ -50,7 +39,7 @@
                     
                     <!-- SharedBlood Option -->
                     <div class="relative">
-                        <input type="radio" id="order_type_blood" name="order_type" value="blood" class="peer absolute opacity-0">
+                        <input type="radio" id="order_type_blood" name="order_type_selection" value="blood" class="peer absolute opacity-0">
                         <label for="order_type_blood" class="block p-6 bg-white border-2 border-gray-200 rounded-xl cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-accent peer-checked:ring-2 peer-checked:ring-accent/20">
                             <div class="flex items-center">
                                 <div class="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center mr-4">
@@ -76,7 +65,7 @@
                     <input type="hidden" id="order_type_input" name="order_type" value="{{ old('order_type', request('type')) }}">
                     
                     <!-- Lab Test Form (shown/hidden based on selection) -->
-                    <div id="test_form" class="space-y-6">
+                    <div id="test_form" class="space-y-6 hidden">
                         <h3 class="text-lg font-medium text-gray-900">Lab Test Details</h3>
                         
                         <!-- Test Selection -->
@@ -203,7 +192,7 @@
                         </div>
                         
                         <!-- Units Required (for request) -->
-                        <div id="blood_units_container">
+                        <div id="blood_units_container" class="hidden">
                             <label for="blood_units" class="block text-sm font-medium text-gray-700 mb-1">Units Required</label>
                             <select id="blood_units" name="blood_units" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent">
                                 <option value="1">1 Unit</option>
@@ -215,7 +204,7 @@
                         </div>
                         
                         <!-- Urgency Level (for request) -->
-                        <div id="blood_urgency_container">
+                        <div id="blood_urgency_container" class="hidden">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Urgency Level</label>
                             <div class="grid grid-cols-3 gap-3">
                                 <div class="relative">
@@ -240,7 +229,7 @@
                         </div>
                         
                         <!-- Purpose (for request) -->
-                        <div id="blood_purpose_container">
+                        <div id="blood_purpose_container" class="hidden">
                             <label for="blood_purpose" class="block text-sm font-medium text-gray-700 mb-1">Purpose</label>
                             <textarea id="blood_purpose" name="blood_purpose" rows="2" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent" placeholder="Brief description of why the blood is needed"></textarea>
                         </div>
@@ -251,186 +240,142 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Facility & Logistics</h3>
                         
                         <!-- Facility Selection -->
-                        <div class="mb-4">
+                        <div>
                             <label for="facility_id" class="block text-sm font-medium text-gray-700 mb-1">Select Facility</label>
                             <select id="facility_id" name="facility_id" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                                <option value="" disabled selected>-- Select Facility --</option>
-                                @foreach ($facilities as $facility)
-                                    <option value="{{ $facility->id }}" {{ old('facility_id') == $facility->id ? 'selected' : '' }}>
-                                        {{ $facility->name }} ({{ $facility->address }})
-                                    </option>
-                                @endforeach
+                                <option value="">Choose a lab or blood bank</option>
+                                <!-- Populate with available facilities based on location/service -->
+                                <option value="1">ATBUTH Laboratory</option>
+                                <option value="2">Bauchi Specialist Hospital Blood Bank</option>
+                                <option value="3">General Hospital Jos Lab</option>
                             </select>
                         </div>
                         
-                        <!-- Address -->
-                        <div class="mb-4">
-                            <label for="delivery_address" class="block text-sm font-medium text-gray-700 mb-1">Delivery/Service Address</label>
-                            <textarea id="delivery_address" name="delivery_address" rows="3" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" placeholder="Enter the address where the service/delivery is needed">{{ old('delivery_address', Auth::user()->address) }}</textarea>
-                            <p class="mt-1 text-xs text-gray-500">Your registered address will be used if left blank.</p>
+                        <!-- Delivery Address -->
+                        <div class="mt-4">
+                            <label for="delivery_address" class="block text-sm font-medium text-gray-700 mb-1">Delivery Address</label>
+                            <input type="text" id="delivery_address" name="delivery_address" value="{{ Auth::user()->address }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                         </div>
                         
-                        <!-- Scheduling -->
-                        <div class="mb-4">
-                            <label for="pickup_scheduled_time" class="block text-sm font-medium text-gray-700 mb-1">Preferred Date/Time (Optional)</label>
-                            <input type="datetime-local" id="pickup_scheduled_time" name="pickup_scheduled_time" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                        <!-- Scheduled Time -->
+                        <div class="mt-4">
+                            <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-1">Preferred Time</label>
+                            <input type="datetime-local" id="scheduled_time" name="scheduled_time" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            <p class="mt-1 text-xs text-gray-500">Optional: Schedule for a later date/time</p>
                         </div>
                     </div>
                     
                     <!-- Payment Section -->
                     <div class="pt-6 border-t border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Payment Details</h3>
-                        
-                        <!-- Order Summary -->
-                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                            <h4 class="text-sm font-medium text-gray-700 mb-3">Order Summary</h4>
-                            <div class="space-y-2 mb-4">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Service Fee</span>
-                                    <span class="text-gray-900">₦4,500.00</span>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Payment Summary</h3>
+                        <!-- Add estimated cost display here -->
+                        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                            <dl class="space-y-2">
+                                <div class="flex justify-between text-sm text-gray-600">
+                                    <dt>Service Cost:</dt>
+                                    <dd id="service_cost">₦0.00</dd>
                                 </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Logistics Fee</span>
-                                    <span class="text-gray-900">₦500.00</span>
+                                <div class="flex justify-between text-sm text-gray-600">
+                                    <dt>Delivery Fee:</dt>
+                                    <dd id="delivery_fee">₦500.00</dd>
                                 </div>
-                                <div class="border-t border-gray-200 my-2"></div>
-                                <div class="flex justify-between text-sm font-medium">
-                                    <span class="text-gray-900">Total Amount</span>
-                                    <span class="text-gray-900">₦5,000.00</span>
+                                <div class="flex justify-between text-lg font-medium text-gray-900 border-t pt-2 mt-2">
+                                    <dt>Total Amount:</dt>
+                                    <dd id="total_amount">₦500.00</dd>
                                 </div>
-                            </div>
-                            <input type="hidden" name="total_amount" value="5000">
+                            </dl>
                         </div>
                         
-                        <!-- Payment Method -->
-                        <div class="mb-6">
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="relative">
-                                    <input type="radio" id="payment_card" name="payment_method" value="card" class="peer absolute opacity-0" checked>
-                                    <label for="payment_card" class="block p-4 bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:ring-2 peer-checked:ring-primary-500/20">
-                                        <div class="flex items-center">
-                                            <div class="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center mr-3">
-                                                <i class="fas fa-credit-card text-primary-500"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-900">Card Payment</span>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="relative">
-                                    <input type="radio" id="payment_transfer" name="payment_method" value="transfer" class="peer absolute opacity-0">
-                                    <label for="payment_transfer" class="block p-4 bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:ring-2 peer-checked:ring-primary-500/20">
-                                        <div class="flex items-center">
-                                            <div class="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center mr-3">
-                                                <i class="fas fa-university text-primary-500"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-900">Bank Transfer</span>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="relative">
-                                    <input type="radio" id="payment_cash" name="payment_method" value="cash" class="peer absolute opacity-0">
-                                    <label for="payment_cash" class="block p-4 bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:ring-2 peer-checked:ring-primary-500/20">
-                                        <div class="flex items-center">
-                                            <div class="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center mr-3">
-                                                <i class="fas fa-money-bill-wave text-primary-500"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-900">Cash on Delivery</span>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                            <p class="mt-2 text-xs text-gray-500">Secure payments powered by Paystack</p>
-                        </div>
-                        
-                        <!-- Terms & Conditions -->
-                        <div class="mb-6">
-                            <div class="flex items-start">
-                                <div class="flex items-center h-5">
-                                    <input id="terms" name="terms" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" required>
-                                </div>
-                                <div class="ml-3 text-sm">
-                                    <label for="terms" class="font-medium text-gray-700">I agree to the terms and conditions</label>
-                                    <p class="text-gray-500">By placing this order, you agree to our <a href="#" class="text-primary-600 hover:text-primary-500">Terms of Service</a> and <a href="#" class="text-primary-600 hover:text-primary-500">Privacy Policy</a>.</p>
-                                </div>
+                            <div class="flex items-center space-x-4">
+                                <label for="payment_paystack" class="flex items-center border border-gray-300 rounded-lg p-3 cursor-pointer flex-1">
+                                    <input type="radio" id="payment_paystack" name="payment_method" value="paystack" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" checked>
+                                    <span class="ml-3 text-sm font-medium text-gray-700">Pay with Paystack (Card/Bank)</span>
+                                </label>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Submit Button -->
-                    <div class="pt-6 border-t border-gray-200 flex justify-end">
-                        <button type="submit" class="liquid-button inline-flex items-center px-6 py-3 bg-primary-500 border border-transparent rounded-full shadow-lg shadow-primary-500/20 text-base font-medium text-white hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                            <span>Place Order</span>
-                            <i class="fas fa-arrow-right ml-2"></i>
+                    <!-- Submission -->
+                    <div class="flex justify-end pt-6">
+                        <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Place Order
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderTypeRadios = document.querySelectorAll('input[name="order_type_selection"]');
+            const orderTypeInput = document.getElementById('order_type_input');
+            const testForm = document.getElementById('test_form');
+            const bloodForm = document.getElementById('blood_form');
+            
+            const bloodServiceRadios = document.querySelectorAll('input[name="blood_service"]');
+            const bloodUnitsContainer = document.getElementById('blood_units_container');
+            const bloodUrgencyContainer = document.getElementById('blood_urgency_container');
+            const bloodPurposeContainer = document.getElementById('blood_purpose_container');
 
-<!-- Custom JS for Order Form -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const orderTypeRadios = document.querySelectorAll('input[name="order_type"]');
-        const orderTypeInput = document.getElementById('order_type_input');
-        const testForm = document.getElementById('test_form');
-        const bloodForm = document.getElementById('blood_form');
-        const bloodServiceRadios = document.querySelectorAll('input[name="blood_service"]');
-        const bloodUnitsContainer = document.getElementById('blood_units_container');
-        const bloodUrgencyContainer = document.getElementById('blood_urgency_container');
-        const bloodPurposeContainer = document.getElementById('blood_purpose_container');
-        
-        // Set initial state based on URL parameter or previous selection
-        const initialType = orderTypeInput.value;
-        if (initialType === 'test') {
-            document.getElementById('order_type_test').checked = true;
-            testForm.classList.remove('hidden');
-            bloodForm.classList.add('hidden');
-        } else if (initialType === 'blood') {
-            document.getElementById('order_type_blood').checked = true;
-            bloodForm.classList.remove('hidden');
-            testForm.classList.add('hidden');
-        }
-        
-        // Handle order type change
-        orderTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                orderTypeInput.value = this.value;
-                
-                if (this.value === 'test') {
+            function toggleForms(selectedType) {
+                orderTypeInput.value = selectedType;
+                if (selectedType === 'test') {
                     testForm.classList.remove('hidden');
                     bloodForm.classList.add('hidden');
-                } else if (this.value === 'blood') {
-                    bloodForm.classList.remove('hidden');
+                } else if (selectedType === 'blood') {
                     testForm.classList.add('hidden');
+                    bloodForm.classList.remove('hidden');
+                } else {
+                    testForm.classList.add('hidden');
+                    bloodForm.classList.add('hidden');
                 }
-            });
-        });
-        
-        // Handle blood service type change
-        bloodServiceRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'donate') {
-                    bloodUnitsContainer.classList.add('hidden');
-                    bloodUrgencyContainer.classList.add('hidden');
-                    bloodPurposeContainer.classList.add('hidden');
-                } else if (this.value === 'request') {
+            }
+            
+            function toggleBloodRequestFields(selectedService) {
+                if (selectedService === 'request') {
                     bloodUnitsContainer.classList.remove('hidden');
                     bloodUrgencyContainer.classList.remove('hidden');
                     bloodPurposeContainer.classList.remove('hidden');
+                } else {
+                    bloodUnitsContainer.classList.add('hidden');
+                    bloodUrgencyContainer.classList.add('hidden');
+                    bloodPurposeContainer.classList.add('hidden');
                 }
+            }
+
+            // Initial setup based on old input or query param
+            const initialType = orderTypeInput.value;
+            if (initialType) {
+                toggleForms(initialType);
+                const typeRadio = document.getElementById(`order_type_${initialType}`);
+                if (typeRadio) typeRadio.checked = true;
+            }
+            
+            // Event listeners for order type selection
+            orderTypeRadios.forEach(radio => {
+                radio.addEventListener('change', (event) => {
+                    toggleForms(event.target.value);
+                });
             });
+            
+            // Event listeners for blood service type selection
+            bloodServiceRadios.forEach(radio => {
+                radio.addEventListener('change', (event) => {
+                    toggleBloodRequestFields(event.target.value);
+                });
+            });
+            
+             // Initial setup for blood request fields
+            const initialBloodService = document.querySelector('input[name="blood_service"]:checked');
+            if (initialBloodService) {
+                toggleBloodRequestFields(initialBloodService.value);
+            }
+            
+            // TODO: Implement dynamic cost calculation
         });
-        
-        // Set default blood service type
-        if (document.getElementById('blood_service_request')) {
-            document.getElementById('blood_service_request').checked = true;
-            bloodUnitsContainer.classList.remove('hidden');
-            bloodUrgencyContainer.classList.remove('hidden');
-            bloodPurposeContainer.classList.remove('hidden');
-        }
-    });
-</script>
-@endsection
+    </script>
+    
+</x-consumer-dashboard-layout>
