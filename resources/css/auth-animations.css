@@ -217,3 +217,66 @@
     }
   }
   
+  /* Add responsive styles for mobile */
+  @media (max-width: 640px) {
+    .auth-container {
+      padding: 1rem 0.5rem;
+    }
+  
+    .auth-card {
+      margin: 0.5rem;
+    }
+  
+    .btn-primary::after {
+      width: 200px;
+      height: 200px;
+    }
+  
+    .blood-drop {
+      width: 30px;
+      height: 30px;
+    }
+  
+    .test-tube {
+      width: 25px;
+      height: 50px;
+    }
+  }
+  
+  /* Fix form elements on small screens */
+  @media (max-width: 480px) {
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+  
+    .checkbox-wrapper label {
+      font-size: 14px;
+    }
+  
+    .auth-link {
+      display: inline-block;
+      padding: 0.5rem 0;
+    }
+  }
+  
+  /* Ensure buttons are properly sized on mobile */
+  @media (max-width: 640px) {
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  
+    .flex.items-center.justify-between {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+    }
+  
+    .flex.items-center.justify-between .auth-link {
+      text-align: center;
+      display: block;
+    }
+  }
+  

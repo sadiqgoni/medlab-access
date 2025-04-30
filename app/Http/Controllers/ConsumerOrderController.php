@@ -20,7 +20,7 @@ class ConsumerOrderController extends Controller
                        ->orderBy('created_at', 'desc')
                        ->paginate(10); // Paginate results
 
-        return view('consumer.orders-index', compact('orders'));
+        return view('consumer.orders.index', compact('orders'));
     }
 
     /**
@@ -31,7 +31,7 @@ class ConsumerOrderController extends Controller
         // Fetch only approved facilities for selection
         $facilities = Facility::where('status', 'approved')->orderBy('name')->get();
         
-        return view('consumer.order-create', compact('facilities'));
+        return view('consumer.orders.create', compact('facilities'));
     }
 
     /**
@@ -84,7 +84,7 @@ class ConsumerOrderController extends Controller
             abort(403);
         }
         // TODO: Implement order details view
-        return view('consumer.order-show', compact('order'));
+        return view('consumer.orders.show', compact('order'));
     }
 
     /**

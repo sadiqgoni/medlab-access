@@ -23,10 +23,10 @@
                 </div>
             @endif
 
-            <div class="flex items-center justify-between mt-6">
+            <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 sm:items-center sm:justify-between mt-6">
                 <form method="POST" action="{{ route('verification.send') }}">
                     @csrf
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary w-full">
                         <i class="fas fa-paper-plane btn-icon"></i>
                         {{ __('Resend Verification Email') }}
                     </button>
@@ -34,7 +34,7 @@
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="auth-link">
+                    <button type="submit" class="auth-link w-full text-center block mt-4 sm:mt-0">
                         {{ __('Log Out') }}
                     </button>
                 </form>

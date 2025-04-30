@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Consumer\DashboardController;
+use App\Http\Controllers\ConsumerOrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\VerifyIsConsumer;
 
 // Public routes
 Route::get('/', function () {
@@ -36,27 +39,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    // Consumer Routes - Directly apply the VerifyIsConsumer middleware to each route
-    Route::get('/consumer/dashboard', function () {
-        return view('consumer.dashboard');
-    })->middleware(['auth', \App\Http\Middleware\VerifyIsConsumer::class])->name('consumer.dashboard');
-    
-    // Consumer order routes
-    Route::get('/consumer/orders/create', [App\Http\Controllers\ConsumerOrderController::class, 'create'])
-        ->middleware(['auth', \App\Http\Middleware\VerifyIsConsumer::class])
-        ->name('consumer.orders.create');
+    // Consumer Routes
+    Route::middleware(VerifyIsConsumer::class)->prefix('consumer')->name('consumer.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         
-    Route::post('/consumer/orders', [App\Http\Controllers\ConsumerOrderController::class, 'store'])
-        ->middleware(['auth', \App\Http\Middleware\VerifyIsConsumer::class])
-        ->name('consumer.orders.store');
+        // Orders
+        Route::resource('orders', ConsumerOrderController::class);
         
-    Route::get('/consumer/orders', [App\Http\Controllers\ConsumerOrderController::class, 'index'])
-        ->middleware(['auth', \App\Http\Middleware\VerifyIsConsumer::class])
-        ->name('consumer.orders.index');
-        
-    Route::get('/consumer/orders/{order}', [App\Http\Controllers\ConsumerOrderController::class, 'show'])
-        ->middleware(['auth', \App\Http\Middleware\VerifyIsConsumer::class])
-        ->name('consumer.orders.show');
+        // Profile
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    });
 });
 
 require __DIR__.'/auth.php';

@@ -91,7 +91,7 @@
                 </div>
 
                 <!-- Blood Group & Donor Eligibility -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4">
                     <div class="form-group">
                         <label for="blood_group">Blood Group (Optional)</label>
                         <div class="input-wrapper">
@@ -116,8 +116,8 @@
                         @enderror
                     </div>
                     
-                    <div class="form-group flex items-center">
-                        <div class="checkbox-wrapper mt-6">
+                    <div class="form-group">
+                        <div class="checkbox-wrapper">
                             <input id="eligible_donor" type="checkbox" name="eligible_donor" value="1" @checked(old('eligible_donor'))>
                             <label for="eligible_donor">
                                 <i class="fas fa-heartbeat text-red-500 mr-1"></i>

@@ -286,13 +286,20 @@ function initCustomCursor() {
 
 // Preloader
 function setupPreloader() {
+  console.log("setupPreloader function called");
   const preloader = document.querySelector(".preloader")
-  if (!preloader) return
+  if (!preloader) {
+    console.error("Preloader element not found!");
+    return
+  }
 
   window.addEventListener("load", () => {
+    console.log("Window load event fired for preloader");
     setTimeout(() => {
+      console.log("Hiding preloader now...");
       preloader.classList.add("hidden")
       setTimeout(() => {
+        console.log("Removing preloader now...");
         preloader.remove()
       }, 500)
     }, 1500)
