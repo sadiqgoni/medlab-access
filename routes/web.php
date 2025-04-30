@@ -50,6 +50,9 @@ Route::middleware('auth')->group(function () {
         // Profile
         Route::get('/profile', [App\Http\Controllers\Consumer\ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [App\Http\Controllers\Consumer\ProfileController::class, 'update'])->name('profile.update');
+
+        // Order Cancellation
+        Route::patch('/orders/{order}/cancel', [App\Http\Controllers\ConsumerOrderController::class, 'cancel'])->name('orders.cancel');
     });
 });
 

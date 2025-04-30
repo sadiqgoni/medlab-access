@@ -22,6 +22,8 @@ use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\FileUpload;
 
 class OrderResource extends Resource
 {
@@ -167,7 +169,34 @@ class OrderResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(), // Allows status/biker updates
-                 // Add ViewAction later?
+                Action::make('enterResults')
+                    ->label('Enter Results')
+                    ->icon('heroicon-o-document-text')
+                    ->color('success')
+                    // Only show for test orders in processing status
+                    ->visible(fn (Order $record): bool => $record->order_type === 'test' && $record->status === 'processing') 
+                    ->action(function (Order $record, array $data): void {
+                        // Save results data (e.g., in details or a dedicated field/relation)
+                        $record->details = array_merge($record->details ?? [], ['results' => $data['result_notes'], 'result_file' => $data['result_file'] ?? null]);
+                        $record->status = 'results_ready';
+                        $record->save();
+                        // TODO: Trigger notification to consumer
+                    })
+                    ->modalHeading('Enter Test Results')
+                    ->modalSubmitActionLabel('Save Results & Notify Consumer')
+                    ->form([
+                        Textarea::make('result_notes')
+                            ->label('Result Notes / Summary')
+                            ->required()
+                            ->rows(10)
+                            ->placeholder('Enter detailed test results here...'),
+                        FileUpload::make('result_file')
+                            ->label('Upload Result PDF (Optional)')
+                            ->disk('public') // Ensure you have a 'public' disk configured in filesystems.php
+                            ->directory('order-results') 
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->maxSize(5120), // Max 5MB
+                    ])
             ])
             ->bulkActions([
                  // No bulk actions for provider

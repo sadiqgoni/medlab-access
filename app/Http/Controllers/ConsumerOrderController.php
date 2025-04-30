@@ -143,4 +143,34 @@ class ConsumerOrderController extends Controller
         // Add cancellation logic if needed
         abort(404);
     }
+
+    /**
+     * Cancel the specified order.
+     */
+    public function cancel(Order $order): RedirectResponse
+    {
+        // Ensure the authenticated user owns this order
+        if ($order->consumer_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Define cancellable statuses
+        $cancellableStatuses = ['pending', 'accepted'];
+
+        if (!in_array($order->status, $cancellableStatuses)) {
+            return redirect()->route('consumer.orders.show', $order)->with('error', 'Order cannot be cancelled at its current stage.');
+        }
+
+        // Update the order status
+        $order->status = 'cancelled';
+        // Optionally update payment status if applicable (e.g., trigger refund if paid)
+        // if ($order->payment_status === 'paid') {
+        //     $order->payment_status = 'refund_pending'; // Or trigger refund logic
+        // }
+        $order->save();
+
+        // TODO: Optionally notify facility/biker about cancellation
+
+        return redirect()->route('consumer.orders.show', $order)->with('success', 'Order cancelled successfully.');
+    }
 }

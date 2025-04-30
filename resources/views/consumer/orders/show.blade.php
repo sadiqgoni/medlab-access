@@ -23,6 +23,21 @@
                     <i class="fas fa-print mr-2"></i>
                     <span>Print Details</span>
                 </button>
+
+                <!-- Cancel Order Button -->
+                @php
+                    $cancellableStatuses = ['pending', 'accepted'];
+                @endphp
+                @if(in_array($order->status, $cancellableStatuses))
+                    <form action="{{ route('consumer.orders.cancel', $order) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <i class="fas fa-times-circle mr-2"></i>
+                            <span>Cancel Order</span>
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
     </x-slot>
