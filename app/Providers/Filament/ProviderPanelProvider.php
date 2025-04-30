@@ -54,6 +54,7 @@ class ProviderPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 VerifyIsProvider::class,
+                \App\Http\Middleware\RedirectUser::class,
             ]);
     }
 }

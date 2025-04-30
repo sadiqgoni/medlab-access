@@ -52,6 +52,7 @@ class RegisteredUserController extends Controller
             'eligible_donor' => $request->boolean('eligible_donor'),
             'communication_preference' => $request->communication_preference,
             'password' => Hash::make($request->password),
+            'role' => 'consumer',
         ]);
 
         event(new Registered($user));

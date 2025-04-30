@@ -439,7 +439,6 @@
                 </div>
             </div>
         </div>
-        
         <!-- Service CTA -->
         <div class="mt-16 text-center" data-aos="fade-up" data-aos-delay="400">
             <a href="#" class="inline-flex items-center px-8 py-4 bg-primary-500 text-white rounded-xl font-medium text-lg hover:bg-primary-600 transition-colors shadow-lg shadow-primary-500/20 hover:shadow-xl hover:shadow-primary-500/30 pulse-element">
@@ -595,90 +594,89 @@
             </div>
         </div>
         
-        <!-- Process Demo Video -->
-        <div class="mt-20 max-w-6xl mx-auto" data-aos="fade-up" data-aos-delay="400">
-            <div class="bg-white rounded-2xl shadow-xl p-8">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div class="w-full md:w-1/2">
-                        <h3 class="text-2xl font-display font-bold mb-4">See How It Works</h3>
-                        <p class="text-gray-600 mb-6">
-                            Watch our short demo video to see exactly how MedLab-Access transforms medical logistics in Nigeria, from sample collection to result delivery.
-                        </p>
-                        
-                        <div class="space-y-4 mb-8">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
-                                    <i class="fas fa-shield-alt text-primary-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Secure & Confidential</h4>
-                                    <p class="text-gray-500 text-sm">Your medical data is encrypted and protected</p>
-                                </div>
+     <!-- Process Demo Video -->
+     <div class="mt-20 max-w-6xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="w-full md:w-1/2">
+                    <h3 class="text-2xl font-display font-bold mb-4">See How It Works</h3>
+                    <p class="text-gray-600 mb-6">
+                        Watch our short demo video to see exactly how MedLab-Access transforms medical logistics in Nigeria, from sample collection to result delivery.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
+                                <i class="fas fa-shield-alt text-primary-600"></i>
                             </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
-                                    <i class="fas fa-clock text-primary-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Fast Turnaround</h4>
-                                    <p class="text-gray-500 text-sm">Most results delivered within 24-48 hours</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
-                                    <i class="fas fa-medal text-primary-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Quality Assured</h4>
-                                    <p class="text-gray-500 text-sm">All partner labs meet our strict quality standards</p>
-                                </div>
+                            <div>
+                                <h4 class="font-bold">Secure & Confidential</h4>
+                                <p class="text-gray-500 text-sm">Your medical data is encrypted and protected</p>
                             </div>
                         </div>
                         
-                        <a href="#" class="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors">
-                            Watch Demo
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
+                                <i class="fas fa-clock text-primary-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Fast Turnaround</h4>
+                                <p class="text-gray-500 text-sm">Most results delivered within 24-48 hours</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-4">
+                                <i class="fas fa-medal text-primary-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Quality Assured</h4>
+                                <p class="text-gray-500 text-sm">All partner labs meet our strict quality standards</p>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="w-full md:w-1/2">
-                        <div class="relative rounded-2xl overflow-hidden shadow-lg h-96" id="how-it-works-slider">
-                            <!-- Slider Images -->
-                            <img src="/images/labtechwoman.png" alt="Lab technician at work" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100" data-slide="1" />
-                            <img src="/images/deliveringmed.jpg" alt="Medical delivery" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0" data-slide="2" />
-                            <img src="/images/rideblood.jpg" alt="Blood delivery bike" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0" data-slide="3" />
-                            
-                            <!-- Play button -->
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/30">
-                                <button class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-110 pulse-element">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </div>
-                            
-                            <!-- Interactive process points / Slider Controls -->
-                            <div class="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2">
-                                <button class="slider-control w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-primary-500 transition-all duration-300 active-slide" data-target-slide="1">1</button>
-                            </div>
-                            
-                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                <button class="slider-control w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-secondary-500 transition-all duration-300" data-target-slide="2">2</button>
-                            </div>
-                            
-                            <div class="absolute bottom-1/4 right-1/4 transform translate-x-1/2 translate-y-1/2">
-                                <button class="slider-control w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-accent transition-all duration-300" data-target-slide="3">3</button>
-                            </div>
+                    <a href="#" class="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors">
+                        Watch Demo
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="w-full md:w-1/2">
+                    <div class="relative rounded-2xl overflow-hidden shadow-lg h-96" id="how-it-works-slider">
+                        <!-- Slider Images -->
+                        <img src="/images/labtechwoman.png" alt="Lab technician at work" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100" data-slide="1" />
+                        <img src="/images/deliveringmed.jpg" alt="Medical delivery" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0" data-slide="2" />
+                        <img src="/images/rideblood.jpg" alt="Blood delivery bike" class="slider-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0" data-slide="3" />
+                        
+                        <!-- Play button -->
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+                            <button class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-110 pulse-element">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Interactive process points / Slider Controls -->
+                        <div class="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2">
+                            <button class="slider-control w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-primary-500 transition-all duration-300 active-slide" data-target-slide="1">1</button>
+                        </div>
+                        
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                            <button class="slider-control w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-secondary-500 transition-all duration-300" data-target-slide="2">2</button>
+                        </div>
+                        
+                        <div class="absolute bottom-1/4 right-1/4 transform translate-x-1/2 translate-y-1/2">
+                            <button class="slider-control w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white cursor-pointer pulse-element shadow-lg text-lg font-bold ring-2 ring-white ring-offset-2 ring-offset-accent transition-all duration-300" data-target-slide="3">3</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+    </div>
         <!-- Join CTA -->
         <div class="mt-16 text-center" data-aos="fade-up" data-aos-delay="500">
             <a href="#" class="inline-flex items-center px-8 py-4 bg-secondary-500 text-white rounded-xl font-medium text-lg hover:bg-secondary-600 transition-colors shadow-lg shadow-secondary-500/20 hover:shadow-xl hover:shadow-secondary-500/30 pulse-element">

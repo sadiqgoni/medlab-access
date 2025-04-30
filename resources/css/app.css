@@ -1,3 +1,7 @@
+/* Import the animations CSS */
+@import './animations.css';
+
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities; 
