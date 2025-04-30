@@ -28,6 +28,7 @@ class User extends Authenticatable
         'eligible_donor',
         'communication_preference',
         'role',
+        'communication_preferences',
     ];
 
     /**
@@ -51,6 +52,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'eligible_donor' => 'boolean',
+            'communication_preferences' => 'array',
         ];
     }
 }

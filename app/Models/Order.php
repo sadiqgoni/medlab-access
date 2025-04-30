@@ -16,7 +16,7 @@ class Order extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
+        'consumer_id',
         'facility_id',
         'biker_id',
         'order_type',
@@ -51,9 +51,9 @@ class Order extends Model
     /**
      * Get the consumer associated with the order.
      */
-    public function user(): BelongsTo
+    public function consumer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'consumer_id');
     }
 
     /**

@@ -6,30 +6,32 @@ use App\Models\Order;
 use App\Models\Facility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
+use App\Http\Requests\Consumer\StoreOrderRequest;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 
 class ConsumerOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        // TODO: Implement order history view for consumer
-        $orders = Order::where('user_id', Auth::id())
+        $orders = Order::where('consumer_id', Auth::id())
                        ->orderBy('created_at', 'desc')
-                       ->paginate(10); // Paginate results
-
+                       ->paginate(10); // Example pagination
+                       
         return view('consumer.orders.index', compact('orders'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        // Fetch only approved facilities for selection
-        $facilities = Facility::where('status', 'approved')->orderBy('name')->get();
+        // Fetch available facilities (you might want to filter these later based on location/service)
+        $facilities = Facility::orderBy('name')->get(); 
         
         return view('consumer.orders.create', compact('facilities'));
     }
@@ -37,53 +39,80 @@ class ConsumerOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'order_type' => ['required', Rule::in(['test', 'blood'])],
-            'facility_id' => ['required', 'exists:facilities,id'],
-            'details' => ['required', 'string', 'max:5000'], // Specific tests, blood group info
-            'delivery_address' => ['nullable', 'string', 'max:1000'], // Use user default if null
-            'pickup_scheduled_time' => ['nullable', 'date'],
-            'total_amount' => ['required', 'numeric', 'min:0'], // From placeholder
-            'payment_method' => ['required', 'string'], // From placeholder
-        ]);
-
-        // Create the order
-        $order = Order::create([
-            'user_id' => Auth::id(),
+        $validated = $request->validated();
+        
+        // Basic Order Data
+        $orderData = [
+            'consumer_id' => Auth::id(),
             'facility_id' => $validated['facility_id'],
             'order_type' => $validated['order_type'],
-            'details' => json_decode($validated['details']) ?? ['info' => $validated['details'] ], // Basic JSON structure
+            'delivery_address' => $validated['delivery_address'],
+            'scheduled_time' => $validated['scheduled_time'] ?? null,
             'status' => 'pending', // Initial status
-            'pickup_address' => null, // Logic needed: For tests, pickup is often user's address. For blood, could be facility.
-            'delivery_address' => $validated['delivery_address'] ?? Auth::user()->address, // Use provided or user's default
-            'pickup_scheduled_time' => $validated['pickup_scheduled_time'] ?? null,
-            'delivery_scheduled_time' => null, // To be determined later
-            'payment_status' => 'pending', // Default until payment integration
             'payment_method' => $validated['payment_method'],
-            'total_amount' => $validated['total_amount'],
-        ]);
+            'payment_status' => 'pending', // Default payment status
+            'total_amount' => 0, // Initialize total amount
+            'details' => [], // Initialize details array
+        ];
 
-        // TODO: Implement matching logic (if needed, e.g., finding nearest facility if not selected)
-        // TODO: Trigger fake notification
+        // Placeholder Costs
+        $baseDeliveryFee = 500;
+        $testCost = 1500; // Cost per test
+        $bloodRequestCost = 3000; // Base cost for blood request
+        $bloodDonateCost = 0; // Donating is free
+
+        // Add order-type specific details and calculate cost
+        if ($validated['order_type'] === 'test') {
+            $orderData['details']['tests'] = $validated['tests'];
+            $orderData['details']['notes'] = $validated['test_notes'] ?? null;
+            $orderData['total_amount'] = (count($validated['tests']) * $testCost) + $baseDeliveryFee;
+        } elseif ($validated['order_type'] === 'blood') {
+            $orderData['details']['service_type'] = $validated['blood_service'];
+            $orderData['details']['blood_group'] = $validated['blood_group'];
+            if ($validated['blood_service'] === 'request') {
+                $orderData['details']['units'] = $validated['blood_units'];
+                $orderData['details']['urgency'] = $validated['urgency'];
+                $orderData['details']['purpose'] = $validated['blood_purpose'];
+                $orderData['total_amount'] = $bloodRequestCost + $baseDeliveryFee; // Add per-unit cost later if needed
+            } else { // Donating
+                 $orderData['total_amount'] = $bloodDonateCost; // Free
+            }
+        }
+
+        // Simulate Payment
+        if ($orderData['payment_method'] === 'paystack') {
+            // In real scenario: redirect to Paystack, handle callback.
+            // For now: Simulate successful payment if amount > 0
+             if ($orderData['total_amount'] > 0) {
+                $orderData['payment_status'] = 'paid';
+                $orderData['status'] = 'accepted'; // Move status forward if paid
+                $orderData['payment_gateway_ref'] = 'FAKE_PAYSTACK_'.Str::random(10);
+             } else {
+                 // If it's free (like donation), mark as paid and accepted
+                 $orderData['payment_status'] = 'paid'; 
+                 $orderData['status'] = 'accepted';
+             }
+        } else { // Cash payment
+             $orderData['payment_status'] = 'pending';
+             $orderData['status'] = 'pending'; // Remains pending until cash confirmed
+        }
         
-        // Redirect to order details page (or order history)
-        // return redirect()->route('consumer.orders.show', $order)->with('success', 'Order placed successfully!');
-        // For now, redirect back to consumer dashboard
-        return redirect()->route('consumer.dashboard')->with('success', 'Order placed successfully! (Payment & Notifications Pending)');
+        $order = Order::create($orderData);
+        
+        return redirect()->route('consumer.orders.show', $order)->with('success', 'Order placed successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show(Order $order): View
     {
-        // Ensure the consumer can only view their own orders
-        if ($order->user_id !== Auth::id()) {
+        // Ensure the authenticated user owns this order
+        if ($order->consumer_id !== Auth::id()) {
             abort(403);
         }
-        // TODO: Implement order details view
         return view('consumer.orders.show', compact('order'));
     }
 
@@ -92,8 +121,8 @@ class ConsumerOrderController extends Controller
      */
     public function edit(Order $order)
     {
-        // Consumers generally shouldn't edit orders after placement, maybe only cancel?
-        abort(404);
+        // Consumers likely won't edit orders, maybe cancel?
+        abort(404); 
     }
 
     /**
@@ -101,7 +130,7 @@ class ConsumerOrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        // Consumers generally shouldn't edit orders after placement, maybe only cancel?
+         // Consumers likely won't edit orders, maybe cancel?
          abort(404);
     }
 
@@ -110,7 +139,8 @@ class ConsumerOrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        // Maybe allow cancellation if status is 'pending'?
-         abort(404);
+        // Consumers likely won't delete orders directly, maybe cancel?
+        // Add cancellation logic if needed
+        abort(404);
     }
 }

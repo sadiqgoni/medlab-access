@@ -42,14 +42,14 @@ Route::middleware('auth')->group(function () {
     // Consumer Routes
     Route::middleware(VerifyIsConsumer::class)->prefix('consumer')->name('consumer.')->group(function () {
         // Dashboard
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [App\Http\Controllers\Consumer\DashboardController::class, 'index'])->name('dashboard');
         
         // Orders
-        Route::resource('orders', ConsumerOrderController::class);
+        Route::resource('orders', App\Http\Controllers\ConsumerOrderController::class);
         
         // Profile
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/profile', [App\Http\Controllers\Consumer\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [App\Http\Controllers\Consumer\ProfileController::class, 'update'])->name('profile.update');
     });
 });
 
