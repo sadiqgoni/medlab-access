@@ -83,7 +83,7 @@ class OrderResource extends Resource
                             ->searchable()
                             ->preload()
                             ->nullable()
-                            ->label('Assign Biker'), // Maybe only show available bikers?
+                            ->label('Assign Biker'), 
                         KeyValue::make('details')
                             ->columnSpanFull()
                             ->label('Order Details')
@@ -92,12 +92,12 @@ class OrderResource extends Resource
                 Section::make('Logistics')
                     ->columns(2)
                     ->schema([
-                        Textarea::make('pickup_address')->disabled(),
-                        Textarea::make('delivery_address')->disabled(),
-                        DateTimePicker::make('pickup_scheduled_time')->disabled(),
-                        DateTimePicker::make('delivery_scheduled_time')->disabled(),
-                        DateTimePicker::make('actual_pickup_time')->disabled(),
-                        DateTimePicker::make('actual_delivery_time')->disabled(),
+                        Textarea::make('pickup_address'),
+                        Textarea::make('delivery_address'),
+                        DateTimePicker::make('pickup_scheduled_time'),
+                        DateTimePicker::make('delivery_scheduled_time'),
+                        DateTimePicker::make('actual_pickup_time'),
+                        DateTimePicker::make('actual_delivery_time'),
                     ]),
                 Section::make('Payment')
                     ->columns(3)
@@ -108,8 +108,7 @@ class OrderResource extends Resource
                                  'paid' => 'Paid',
                                  'failed' => 'Failed',
                              ])
-                             ->disabled(),
-                        TextInput::make('payment_method')->disabled(),
+,                        TextInput::make('payment_method')->disabled(),
                         TextInput::make('total_amount')->numeric()->prefix('₦')->disabled(),
                         TextInput::make('payment_gateway_ref')->label('Payment Ref')->columnSpanFull()->disabled(),
                     ]),

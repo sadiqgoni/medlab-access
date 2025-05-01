@@ -59,8 +59,8 @@
             </div>
             
             <!-- Order Form -->
-            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
-                <form method="POST" action="{{ route('consumer.orders.store') }}" class="space-y-6" x-data="orderForm()">
+            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100" x-data="orderForm()">
+                <form id="order-form" method="POST" action="{{ route('consumer.orders.store') }}" class="space-y-6">
                     @csrf
                     <input type="hidden" id="order_type_input" name="order_type" x-model="orderType">
                     
@@ -105,7 +105,7 @@
                                     </div>
                                 </template>
                             </div>
-                             @error('services') <!-- Updated error key -->
+                             @error('services')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
@@ -153,30 +153,23 @@
                                     <input :type="attribute.type" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" value="1" 
                                            class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500">
                                     <label :for="'attribute_' + attribute.name" class="ml-2 block text-sm text-gray-900">Yes</label> 
-                                    <!-- Add hidden input for unchecked state if needed -->
                                     <input type="hidden" :name="'details[' + attribute.name + ']'" value="0" x-show="!document.getElementById('attribute_' + attribute.name)?.checked">
                                 </div>
 
-                                <!-- Add more types like radio, date etc. if needed -->
-
-                                <!-- Validation Error Display -->
                                 @php
-                                    // This is tricky because attribute names are dynamic. 
-                                    // A simple approach for now, might need improvement.
-                                    // We check errors for details.* keys - requires backend adjustment or different approach.
                                     $errorKey = 'details.' . (isset($attribute['name']) ? $attribute['name'] : '__dynamic__'); 
                                 @endphp
                                 @error($errorKey) 
                                      <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
-                                 <span x-show="errors && errors['details.' + attribute.name]"> <!-- Changed from $store.errors -->
-                                     <p class="mt-2 text-sm text-red-600" x-text="errors['details.' + attribute.name][0]"></p> <!-- Changed from $store.errors -->
+                                 <span x-show="errors && errors['details.' + attribute.name]">
+                                     <p class="mt-2 text-sm text-red-600" x-text="errors['details.' + attribute.name][0]"></p>
                                 </span>
                             </div>
                         </template>
                     </div>
                    
-                    <!-- Lab Test Notes (Only show if a test service is selected) -->
+                    <!-- Lab Test Notes -->
                     <div id="test_notes_container" x-show="hasSelectedTestService" x-transition>
                          <h3 class="text-lg font-medium text-gray-900">Additional Test Notes</h3>
                          <div>
@@ -188,15 +181,13 @@
                         </div>
                     </div>
                     
-                    <!-- Blood Service Details (Only show if a blood service is selected) -->
-                     <div id="blood_details_container" x-show="hasSelectedBloodService" x-transition class="space-y-6">
+                    <!-- Blood Service Details -->
+                     {{-- <div id="blood_details_container" x-show="hasSelectedBloodService" x-transition class="space-y-6">
                         <h3 class="text-lg font-medium text-gray-900">Blood Service Details</h3>
-                         <!-- Blood Group -->
                         <div>
                             <label for="blood_group" class="block text-sm font-medium text-gray-700 mb-1">Your Blood Group (if known/donating)</label>
                             <select id="blood_group" name="blood_group" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent">
                                 <option value="">Select Blood Group</option>
-                                <!-- Options -->
                                  <option value="A+" {{ old('blood_group') == 'A+' ? 'selected' : '' }}>A+</option>
                                 <option value="A-" {{ old('blood_group') == 'A-' ? 'selected' : '' }}>A-</option>
                                 <option value="B+" {{ old('blood_group') == 'B+' ? 'selected' : '' }}>B+</option>
@@ -211,9 +202,7 @@
                             @enderror
                         </div>
 
-                        <!-- Fields shown only for Blood Request -->
                         <div x-show="selectedServiceType === 'blood_request'" x-transition class="space-y-6">
-                             <!-- Units Required -->
                             <div id="blood_units_container">
                                 <label for="blood_units" class="block text-sm font-medium text-gray-700 mb-1">Units Required</label>
                                 <select id="blood_units" name="blood_units" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent">
@@ -228,12 +217,10 @@
                                 @enderror
                             </div>
                             
-                            <!-- Urgency Level -->
-                             <div id="blood_urgency_container">
+                            <div id="blood_urgency_container">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Urgency Level</label>
                                 <div class="grid grid-cols-3 gap-3">
-                                    <!-- Urgency Radios -->
-                                     <div class="relative">
+                                    <div class="relative">
                                         <input type="radio" id="urgency_normal" name="urgency" value="normal" class="peer absolute opacity-0" {{ old('urgency', 'normal') == 'normal' ? 'checked' : '' }}>
                                         <label for="urgency_normal" class="block p-2 text-center bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50">
                                             <span class="text-sm font-medium text-gray-900">Normal</span>
@@ -257,7 +244,6 @@
                                 @enderror
                             </div>
                             
-                            <!-- Purpose -->
                             <div id="blood_purpose_container">
                                 <label for="blood_purpose" class="block text-sm font-medium text-gray-700 mb-1">Purpose</label>
                                 <textarea id="blood_purpose" name="blood_purpose" rows="2" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent" placeholder="Brief description of why the blood is needed">{{ old('blood_purpose') }}</textarea>
@@ -266,14 +252,11 @@
                                 @enderror
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                    
-
                     <!-- Logistics Fields -->
                     <div class="pt-6 border-t border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Logistics</h3>
-                        
-                        <!-- Delivery Address -->
                         <div class="mt-4">
                             <label for="delivery_address" class="block text-sm font-medium text-gray-700 mb-1">Delivery Address</label>
                             <input type="text" id="delivery_address" name="delivery_address" value="{{ old('delivery_address', Auth::user()->address) }}" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
@@ -282,7 +265,6 @@
                             @enderror
                         </div>
                         
-                        <!-- Scheduled Time -->
                         <div class="mt-4">
                             <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-1">Preferred Time</label>
                             <input type="datetime-local" id="scheduled_time" name="scheduled_time" value="{{ old('scheduled_time') }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
@@ -316,25 +298,92 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
                             <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                                <label for="payment_paystack" class="flex items-center border border-gray-300 rounded-lg p-3 cursor-pointer flex-1 peer-checked:border-primary-500">
-                                    <input type="radio" id="payment_paystack" name="payment_method" value="paystack" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" checked>
-                                    <span class="ml-3 text-sm font-medium text-gray-700">Pay with Paystack (Card/Bank)</span>
+                                <label for="payment_card" class="flex items-center border border-gray-300 rounded-lg p-3 cursor-pointer flex-1 peer-checked:border-primary-500">
+                                    <input type="radio" id="payment_card" name="payment_method" value="card" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" x-model="paymentMethod" checked>
+                                    <span class="ml-3 text-sm font-medium text-gray-700">Pay with Card</span>
+                                </label>
+                                <label for="payment_bank" class="flex items-center border border-gray-300 rounded-lg p-3 cursor-pointer flex-1 peer-checked:border-primary-500">
+                                    <input type="radio" id="payment_bank" name="payment_method" value="bank" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" x-model="paymentMethod">
+                                    <span class="ml-3 text-sm font-medium text-gray-700">Pay with Bank Transfer</span>
                                 </label>
                                 <label for="payment_cash" class="flex items-center border border-gray-300 rounded-lg p-3 cursor-pointer flex-1 peer-checked:border-primary-500">
-                                    <input type="radio" id="payment_cash" name="payment_method" value="cash" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300">
-                                    <span class="ml-3 text-sm font-medium text-gray-700">Pay with Cash (on Delivery/Service)</span>
+                                    <input type="radio" id="payment_cash" name="payment_method" value="cash" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" x-model="paymentMethod">
+                                    <span class="ml-3 text-sm font-medium text-gray-700">Cash on Delivery</span>
                                 </label>
                             </div>
                             @error('payment_method')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
+
+                        <!-- Card Payment Fields -->
+                        <div x-show="paymentMethod === 'card'" x-transition class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">Enter Card Details</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="card_number" class="block text-sm font-medium text-gray-700">Card Number</label>
+                                    <input type="text" id="card_number" name="card_number" x-model="cardDetails.number" @input="validateCardNumber" placeholder="1234 5678 9012 3456" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                    <p x-show="cardErrors.number" class="mt-1 text-sm text-red-600" x-text="cardErrors.number"></p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="card_expiry" class="block text-sm font-medium text-gray-700">Expiry Date (MM/YY)</label>
+                                        <input type="text" id="card_expiry" name="card_expiry" x-model="cardDetails.expiry" @input="validateCardExpiry" placeholder="MM/YY" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                        <p x-show="cardErrors.expiry" class="mt-1 text-sm text-red-600" x-text="cardErrors.expiry"></p>
+                                    </div>
+                                    <div>
+                                        <label for="card_cvv" class="block text-sm font-medium text-gray-700">CVV</label>
+                                        <input type="text" id="card_cvv" name="card_cvv" x-model="cardDetails.cvv" @input="validateCardCvv" placeholder="123" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                        <p x-show="cardErrors.cvv" class="mt-1 text-sm text-red-600" x-text="cardErrors.cvv"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bank Transfer Fields -->
+                        <div x-show="paymentMethod === 'bank'" x-transition class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">Bank Transfer Details</h4>
+                            <div x-show="!waitingForTransfer" class="space-y-4">
+                                <p class="text-sm text-gray-600">Please transfer the total amount to the following bank account:</p>
+                                <div class="bg-white p-4 rounded-md border border-gray-200">
+                                    <p><strong>Bank:</strong> GTB Bank</p>
+                                    <p><strong>Account Name:</strong> D' Health Rides</p>
+                                    <p><strong>Account Number:</strong> 1234567890</p>
+                                    <p><strong>Amount:</strong> <span x-text="formatCurrency(totalAmount)"></span></p>
+                                </div>
+                                <button type="button" @click="initiateBankTransfer" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                    I Have Initiated the Transfer
+                                </button>
+                            </div>
+                            <div x-show="waitingForTransfer" class="flex items-center space-x-3">
+                                <svg class="animate-spin h-5 w-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <p class="text-sm text-gray-600">Waiting for your confirmation...</p>
+                                <button type="button" @click="confirmBankTransfer" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    I Have Paid
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Cash on Delivery Info -->
+                        <div x-show="paymentMethod === 'cash'" x-transition class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <p class="text-sm text-gray-600">You will pay <span x-text="formatCurrency(totalAmount)"></span> in cash upon delivery or service completion.</p>
+                        </div>
                     </div>
                     
                     <!-- Submission -->
                     <div class="flex justify-end pt-6">
-                        <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                            Place Order (<span x-text="formatCurrency(totalAmount)"></span>)
+                        <button type="submit" :disabled="isPaymentProcessing || !isPaymentValid" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            <span x-show="isPaymentProcessing" class="flex items-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Processing...
+                            </span>
+                            <span x-show="!isPaymentProcessing">Place Order (<span x-text="formatCurrency(totalAmount)"></span>)</span>
                         </button>
                     </div>
                 </form>
@@ -349,209 +398,208 @@
                 selectedServiceType: null,
                 selectedFacility: '{{ old("facility_id") }}' || '',
                 availableServices: [],
-                selectedServices: @json(old('services', [])) || [], // Initialize from old input or empty array
+                selectedServices: @json(old('services', [])) || [],
                 loadingServices: false,
                 serviceCost: 0,
-                deliveryFee: 0, 
+                deliveryFee: 0,
                 totalAmount: 0,
-                errors: {}, 
-
+                errors: {},
+                paymentMethod: 'card',
+                cardDetails: {
+                    number: '',
+                    expiry: '',
+                    cvv: ''
+                },
+                cardErrors: {
+                    number: '',
+                    expiry: '',
+                    cvv: ''
+                },
+                waitingForTransfer: false,
+                isPaymentProcessing: false,
+    
                 init() {
-                    // Initialize errors from Laravel's $errors bag
-                    this.errors = @json($errors->toArray()); 
-
+                    this.errors = @json($errors->toArray());
                     if (this.selectedFacility) {
                         this.fetchServices();
                     } else {
-                        // Ensure cost is calculated initially if there's old input
-                        this.updateCost(); 
+                        this.updateCost();
                     }
-                    // Watch the selectedServices array directly
-                    this.$watch('selectedServices', () => this.updateCost()); 
+                    this.$watch('selectedServices', () => this.updateCost());
+                    this.$watch('paymentMethod', () => this.resetPaymentState());
                 },
-
+    
                 get selectedServiceObjects() {
-                    // Ensure selectedServices are strings for comparison if needed, 
-                    // though x-model should handle values correctly.
                     const selectedIds = this.selectedServices.map(id => id.toString());
                     return this.availableServices.filter(s => selectedIds.includes(s.id.toString()));
                 },
-
-                // Computed property to get all unique attributes required by selected services
+    
                 get requiredAttributes() {
                     let attributes = {};
                     this.selectedServiceObjects.forEach(service => {
                         (service.attributes || []).forEach(attr => {
                             if (!attributes[attr.name]) {
-                                attributes[attr.name] = { ...attr }; 
+                                attributes[attr.name] = { ...attr };
                             }
                         });
                     });
-                    // console.log('Computed requiredAttributes:', Object.values(attributes)); 
                     return Object.values(attributes);
                 },
-
-                 // Computed property to check if any selected service requires test notes (example logic)
-                 get hasSelectedTestService() {
-                     // Check based on selected service objects
+    
+                get hasSelectedTestService() {
                     return this.selectedServiceObjects.some(service => (service.attributes || []).some(attr => attr.name === 'test_notes'));
-                 },
-
-                // Computed property to check if any selected service requires blood details
+                },
+    
                 get hasSelectedBloodService() {
-                    // Check based on selected service objects
                     return this.selectedServiceObjects.some(service => (service.attributes || []).some(attr => ['blood_group', 'blood_units', 'urgency', 'blood_purpose'].includes(attr.name)));
                 },
-                
-                // Computed property to determine the specific type of blood service selected (if any)
+    
                 get selectedServiceType() {
-                    // Infer based on required attributes from selected services
                     if (this.requiredAttributes.some(attr => attr.name === 'blood_units')) return 'blood_request';
-                    // Add logic for donation if needed (e.g., if a service named 'Blood Donation' is selected)
-                    if (this.selectedServiceObjects.some(service => service.name.toLowerCase().includes('donate') || (service.attributes || []).some(attr => attr.name === 'donor_consent'))) return 'blood_donation'; 
+                    if (this.selectedServiceObjects.some(service => service.name.toLowerCase().includes('donate') || (service.attributes || []).some(attr => attr.name === 'donor_consent'))) return 'blood_donation';
                     return null;
                 },
-
+    
+                get isPaymentValid() {
+                    if (this.paymentMethod === 'card') {
+                        return !this.cardErrors.number && !this.cardErrors.expiry && !this.cardErrors.cvv && 
+                               this.cardDetails.number && this.cardDetails.expiry && this.cardDetails.cvv;
+                    }
+                    if (this.paymentMethod === 'bank') {
+                        return this.waitingForTransfer;
+                    }
+                    return true;
+                },
+    
                 fetchServices() {
-                     if (!this.selectedFacility) {
+                    if (!this.selectedFacility) {
                         this.availableServices = [];
                         this.selectedServices = [];
                         this.updateCost();
                         return;
                     }
                     this.loadingServices = true;
-                    this.availableServices = []; 
-                    this.selectedServices = []; // Clear selections when facility changes
-                    console.log(`Fetching services for facility ID: ${this.selectedFacility}`);
-                    
-                    const url = `/api/facilities/${this.selectedFacility}/services`; 
-                    console.log(`API URL: ${url}`);
-                    
+                    this.availableServices = [];
+                    this.selectedServices = [];
+                    const url = `/api/facilities/${this.selectedFacility}/services`;
                     fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
                         .then(response => {
-                            console.log('API Response Status:', response.status);
                             if (!response.ok) { throw new Error(`Network response was not ok (${response.status})`); }
                             return response.json();
                         })
                         .then(data => {
-                            console.log('Received data:', data);
                             this.availableServices = Array.isArray(data) ? data : [];
-                            console.log('Assigned availableServices:', this.availableServices);
-                             // Don't call updateCost here, $watch will handle it when availableServices changes (implicitly via selectedServiceObjects)
                         })
                         .catch(error => {
                             console.error('Error fetching services:', error);
-                            this.availableServices = []; 
-                            this.updateCost(); // Update cost to zero on error
+                            this.availableServices = [];
+                            this.updateCost();
                         })
                         .finally(() => { this.loadingServices = false; });
                 },
-
+    
                 updateCost() {
-                    console.log('updateCost triggered');
                     let currentServiceCost = 0;
                     const baseDelivery = 500;
-                    this.deliveryFee = 0; 
+                    this.deliveryFee = 0;
                     let requiresDelivery = false;
-
-                    // Remove DOM query - Use the reactive selectedServiceObjects getter
-                    // const selectedCheckboxes = document.querySelectorAll('input[name="services[]"]:checked');
-                    // this.selectedServices = Array.from(selectedCheckboxes).map(cb => cb.value);
-                    console.log('updateCost - Watched Selected Service IDs:', this.selectedServices);
-
+    
                     this.selectedServiceObjects.forEach(service => {
-                         if (service && service.price) { // Check if service and price exist
+                        if (service && service.price) {
                             currentServiceCost += parseFloat(service.price);
-                            // Refined delivery logic - check attributes if needed
-                            // For now, assume delivery if price > 0 or specific type
-                            if (parseFloat(service.price) > 0) { // Example: charge delivery for paid services
-                                requiresDelivery = true; 
+                            if (parseFloat(service.price) > 0) {
+                                requiresDelivery = true;
                             }
-                        } else {
-                            console.warn('Service object or price missing for ID:', service?.id);
                         }
                     });
-                    
-                    if(requiresDelivery) {
+    
+                    if (requiresDelivery) {
                         this.deliveryFee = baseDelivery;
                     }
-
+    
                     this.serviceCost = currentServiceCost;
                     this.totalAmount = this.serviceCost + this.deliveryFee;
-                    console.log('updateCost - Calculated Costs:', { serviceCost: this.serviceCost, deliveryFee: this.deliveryFee, totalAmount: this.totalAmount }); 
                 },
-                
+    
                 formatCurrency(amount) {
                     const numAmount = parseFloat(amount);
                     if (isNaN(numAmount)) { return '₦--.--'; }
                     return '₦' + numAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                },
+    
+                resetPaymentState() {
+                    this.cardDetails = { number: '', expiry: '', cvv: '' };
+                    this.cardErrors = { number: '', expiry: '', cvv: '' };
+                    this.waitingForTransfer = false;
+                    this.isPaymentProcessing = false;
+                },
+    
+                validateCardNumber() {
+                    const number = this.cardDetails.number.replace(/\s/g, '');
+                    if (!number) {
+                        this.cardErrors.number = 'Card number is required';
+                    } else if (!/^\d{16}$/.test(number)) {
+                        this.cardErrors.number = 'Card number must be 16 digits';
+                    } else {
+                        this.cardErrors.number = '';
+                    }
+                },
+    
+                validateCardExpiry() {
+                    const expiry = this.cardDetails.expiry;
+                    if (!expiry) {
+                        this.cardErrors.expiry = 'Expiry date is required';
+                    } else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+                        this.cardErrors.expiry = 'Invalid format (MM/YY)';
+                    } else {
+                        const [month, year] = expiry.split('/').map(Number);
+                        const currentYear = new Date().getFullYear() % 100;
+                        const currentMonth = new Date().getMonth() + 1;
+                        if (year < currentYear || (year === currentYear && month < currentMonth)) {
+                            this.cardErrors.expiry = 'Card is expired';
+                        } else {
+                            this.cardErrors.expiry = '';
+                        }
+                    }
+                },
+    
+                validateCardCvv() {
+                    const cvv = this.cardDetails.cvv;
+                    if (!cvv) {
+                        this.cardErrors.cvv = 'CVV is required';
+                    } else if (!/^\d{3}$/.test(cvv)) {
+                        this.cardErrors.cvv = 'CVV must be 3 digits';
+                    } else {
+                        this.cardErrors.cvv = '';
+                    }
+                },
+    
+                initiateBankTransfer() {
+                    this.waitingForTransfer = true;
+                },
+    
+                confirmBankTransfer() {
+                    this.isPaymentProcessing = true;
+                    
+                    // Get the form and submit it
+                    const form = document.getElementById('order-form');
+                    if (form) {
+                        form.submit();
+                    } else {
+                        console.error("Order form not found!");
+                        this.isPaymentProcessing = false;
+                    }
+                    
+                  
+                    console.log('Bank transfer confirmed by user. Submitting order form...');
                 }
             }
         }
-
+    
         document.addEventListener('alpine:init', () => {
             Alpine.data('orderForm', orderForm);
         });
-
-        // Existing logic for showing/hiding form sections based on radio buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const orderTypeRadios = document.querySelectorAll('input[name="order_type_selection"]');
-            const orderTypeInput = document.getElementById('order_type_input');
-            const testForm = document.getElementById('test_form');
-            const bloodForm = document.getElementById('blood_form');
-            
-            const bloodServiceRadios = document.querySelectorAll('input[name="blood_service"]');
-            const bloodUnitsContainer = document.getElementById('blood_units_container');
-            const bloodUrgencyContainer = document.getElementById('blood_urgency_container');
-            const bloodPurposeContainer = document.getElementById('blood_purpose_container');
-
-            function toggleForms(selectedType) {
-                // This function is now handled by Alpine x-model and $watch
-                // Keeping it for potential future use if Alpine is removed
-                /*
-                orderTypeInput.value = selectedType;
-                if (selectedType === 'test') {
-                    testForm.style.display = 'block';
-                    bloodForm.style.display = 'none';
-                } else if (selectedType === 'blood') {
-                    testForm.style.display = 'none';
-                    bloodForm.style.display = 'block';
-                } else {
-                    testForm.style.display = 'none';
-                    bloodForm.style.display = 'none';
-                }
-                */
-            }
-            
-            function toggleBloodRequestFields(selectedService) {
-                 // This function is now handled by Alpine x-show
-                 /*
-                if (selectedService === 'request') {
-                    bloodUnitsContainer.style.display = 'block';
-                    bloodUrgencyContainer.style.display = 'block';
-                    bloodPurposeContainer.style.display = 'block';
-                } else {
-                    bloodUnitsContainer.style.display = 'none';
-                    bloodUrgencyContainer.style.display = 'none';
-                    bloodPurposeContainer.style.display = 'none';
-                }
-                */
-            }
-
-            // Event listeners for order type selection
-            orderTypeRadios.forEach(radio => {
-                radio.addEventListener('change', (event) => {
-                    // Handled by Alpine x-model and $watch
-                });
-            });
-            
-            // Event listeners for blood service type selection
-            bloodServiceRadios.forEach(radio => {
-                radio.addEventListener('change', (event) => {
-                   // Handled by Alpine x-model and $watch
-                });
-            });
-        });
+     
     </script>
     
 </x-consumer-dashboard-layout>

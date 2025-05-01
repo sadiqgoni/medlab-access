@@ -28,7 +28,7 @@ class StoreOrderRequest extends FormRequest
             'facility_id' => ['required', 'integer', 'exists:facilities,id'],
             'delivery_address' => ['required', 'string', 'max:1000'],
             'scheduled_time' => ['nullable', 'date', 'after_or_equal:now'],
-            'payment_method' => ['required', 'string', Rule::in(['paystack', 'cash'])],
+            'payment_method' => ['required', 'string', Rule::in(['card','bank','cash'])], 
             'services' => ['required', 'array', 'min:1'],
             'services.*' => ['integer', 'exists:services,id'],
             'details' => ['nullable', 'array'],

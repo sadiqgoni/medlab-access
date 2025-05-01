@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
         
         // Orders
         Route::resource('orders', App\Http\Controllers\ConsumerOrderController::class);
+        Route::get('orders/{order}/confirmation', [App\Http\Controllers\ConsumerOrderController::class, 'confirmation'])->name('orders.confirmation'); // Add this line
         
         // Profile
         Route::get('/profile', [App\Http\Controllers\Consumer\ProfileController::class, 'edit'])->name('profile.edit');
