@@ -60,20 +60,52 @@
                     @enderror
                 </div>
 
-                <!-- Address -->
-                <div class="form-group">
+               <!-- Address with Google Places Autocomplete -->
+<div class="form-group">
+    <label for="address">Address</label>
+    <div class="input-wrapper">
+        <i class="fas fa-map-marker-alt input-icon"></i>
+        <input id="address" type="text" name="address" value="{{ old('address') }}" required placeholder="Enter street address (e.g., No. 12 Zaria Road, Kano)" />
+    </div>
+    <p class="text-sm text-gray-500 mt-1">Start typing your street address and select a suggestion for accurate location.</p>
+    @error('address')
+        <div class="form-error">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ $message }}
+        </div>
+    @enderror
+</div>
+
+<!-- Hidden Fields for Coordinates -->
+<input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
+<input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
+                {{-- <div class="form-group">
                     <label for="address">Address</label>
                     <div class="input-wrapper">
                         <i class="fas fa-map-marker-alt input-icon"></i>
-                        <textarea id="address" name="address" rows="2" placeholder="Your full address" class="resize-none pt-3">{{ old('address') }}</textarea>
+                        <input id="address" type="text" name="address" value="{{ old('address') }}" required placeholder="Enter street address (e.g., No. 12 Zaria Road, Kano)" />
+                        <mapbox-search-box
+                            access-token="{{ env('MAPBOX_TOKEN') }}"
+                            options='{
+                                "country": "NG",
+                                "language": "en",
+                                "types": "address,street,neighborhood,locality",
+                                "limit": 10,
+                                "autocomplete": true,
+                                "fuzzyMatch": true
+                            }'
+                            placeholder="Search for a specific address"
+                            class="mt-2"
+                        ></mapbox-search-box>
                     </div>
+                    <p class="text-sm text-gray-500 mt-1">Start typing your street address, e.g., "Zaria Road, Kano". Select a suggestion for accurate location.</p>
                     @error('address')
                         <div class="form-error">
                             <i class="fas fa-exclamation-circle"></i>
                             {{ $message }}
                         </div>
                     @enderror
-                </div>
+                </div> --}}
 
                 <!-- Government ID -->
                 <div class="form-group">
@@ -203,3 +235,78 @@
         </div>
     </div>
 </x-auth-layout>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addressInput = document.querySelector('#address');
+        let autocomplete;
+
+        // Initialize Google Places Autocomplete with error handling
+        try {
+            autocomplete = new google.maps.places.Autocomplete(addressInput, {
+                componentRestrictions: { country: 'NG' }, // Restrict to Nigeria
+                types: ['geocode', 'establishment'], // Include addresses and establishments
+                fields: ['formatted_address', 'geometry', 'name', 'types'] // Include types for debugging
+            });
+
+            // Update input and hidden fields when a place is selected
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+                if (place.geometry) {
+                    addressInput.value = place.formatted_address || place.name;
+                    document.querySelector('#latitude').value = place.geometry.location.lat();
+                    document.querySelector('#longitude').value = place.geometry.location.lng();
+                    console.log('Selected address:', place.formatted_address || place.name, 'Coordinates:', {
+                        lat: place.geometry.location.lat(),
+                        lng: place.geometry.location.lng(),
+                        types: place.types
+                    });
+                    // Clear error state
+                    addressInput.classList.remove('border-red-500');
+                    const errorDiv = addressInput.closest('.form-group').querySelector('.form-error');
+                    if (errorDiv) errorDiv.classList.remove('show');
+                } else {
+                    console.warn('No geometry available for address:', place.formatted_address || place.name);
+                    addressInput.classList.add('border-red-500');
+                }
+            });
+        } catch (error) {
+            console.error('Failed to initialize Google Places Autocomplete:', error);
+            // Allow typing even if API fails
+            addressInput.removeAttribute('disabled');
+            addressInput.placeholder = 'Enter address manually (autocomplete unavailable)';
+        }
+
+        // Allow typing without restrictions
+        addressInput.addEventListener('input', function () {
+            addressInput.classList.remove('border-red-500');
+            const errorDiv = addressInput.closest('.form-group').querySelector('.form-error');
+            if (errorDiv) errorDiv.classList.remove('show');
+        });
+
+        // Validate address on form submission
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (event) => {
+            const address = addressInput.value.trim();
+            if (!address) {
+                event.preventDefault();
+                alert('Please enter and select a valid address from the suggestions.');
+                addressInput.classList.add('border-red-500');
+                addressInput.focus();
+                return;
+            }
+            // Check for overly broad addresses
+            const broadTerms = ['nigeria', 'kano', 'municipal', 'state', 'city'];
+            if (broadTerms.some(term => address.toLowerCase().includes(term)) && 
+                !address.toLowerCase().includes('road') && 
+                !address.toLowerCase().includes('street') && 
+                !address.toLowerCase().includes('avenue') && 
+                !address.toLowerCase().includes('layout') && 
+                !address.toLowerCase().includes('estate')) {
+                event.preventDefault();
+                alert('Please select a specific address, such as a street, avenue, or landmark (e.g., "No. 12 Zaria Road, Kano").');
+                addressInput.classList.add('border-red-500');
+                addressInput.focus();
+            }
+        });
+    });
+</script>

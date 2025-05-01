@@ -4,19 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany; // Import BelongsToMany
 
 class Service extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'facility_id',
         'name',
         'description',
         'price',
         'attributes',
         'is_active',
+        'type', // Added type based on previous controller logic
     ];
 
     protected $casts = [
@@ -26,10 +26,10 @@ class Service extends Model
     ];
 
     /**
-     * Get the facility that owns the service.
+     * The facilities that offer this service.
      */
-    public function facility(): BelongsTo
+    public function facilities(): BelongsToMany
     {
-        return $this->belongsTo(Facility::class);
+        return $this->belongsToMany(Facility::class, 'facility_service');
     }
 }

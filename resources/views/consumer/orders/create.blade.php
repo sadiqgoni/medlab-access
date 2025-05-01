@@ -20,7 +20,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- eMedSample Option -->
                     <div class="relative">
-                        <input type="radio" id="order_type_test" name="order_type_selection" value="test" class="peer absolute opacity-0">
+                        <input type="radio" id="order_type_test" name="order_type_selection" value="test" class="peer absolute opacity-0" x-model="orderType" @change="fetchNearbyFacilities">
                         <label for="order_type_test" class="block p-6 bg-white border-2 border-gray-200 rounded-xl cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:ring-2 peer-checked:ring-primary-500/20">
                             <div class="flex items-center">
                                 <div class="h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center mr-4">
@@ -39,7 +39,7 @@
                     
                     <!-- SharedBlood Option -->
                     <div class="relative">
-                        <input type="radio" id="order_type_blood" name="order_type_selection" value="blood" class="peer absolute opacity-0">
+                        <input type="radio" id="order_type_blood" name="order_type_selection" value="blood" class="peer absolute opacity-0" x-model="orderType" @change="fetchNearbyFacilities">
                         <label for="order_type_blood" class="block p-6 bg-white border-2 border-gray-200 rounded-xl cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-accent peer-checked:ring-2 peer-checked:ring-accent/20">
                             <div class="flex items-center">
                                 <div class="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center mr-4">
@@ -65,23 +65,27 @@
                     <input type="hidden" id="order_type_input" name="order_type" x-model="orderType">
                     
                     <!-- Common Fields First -->
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Select Facility & Service</h3>
+                    <div x-show="orderType" x-transition>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Select Nearby Facility & Service</h3>
                         
-                        <!-- Facility Selection -->
+                        <!-- Facility Selection (Dynamic based on Nearby) -->
                         <div class="mb-4">
                             <label for="facility_id" class="block text-sm font-medium text-gray-700 mb-1">Select Facility</label>
                             <select id="facility_id" name="facility_id" required 
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
-                                    x-model="selectedFacility" @change="fetchServices">
-                                <option value="">Choose a lab or blood bank...</option>
-                                @foreach($facilities as $facility)
-                                    <option value="{{ $facility->id }}" {{ old('facility_id') == $facility->id ? 'selected' : '' }}>
-                                        {{ $facility->name }} 
-                                        @if($facility->address) - {{ Str::limit($facility->address, 50) }} @endif
-                                    </option>
-                                @endforeach
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 disabled:bg-gray-100"
+                                    x-model="selectedFacility" @change="fetchServices" :disabled="loadingFacilities || nearbyFacilities.length === 0">
+                                <option value="" x-show="!loadingFacilities">-- Choose a nearby facility --</option>
+                                <option value="" x-show="loadingFacilities" disabled>Loading nearby facilities...</option>
+                                <template x-for="facility in nearbyFacilities" :key="facility.id">
+                                    <option :value="facility.id" x-text="`${facility.name} (${facility.distance.toFixed(1)} km) - ${facility.address.substring(0, 40)}...`"></option>
+                                </template>
                             </select>
+                            <div x-show="!loadingFacilities && orderType && nearbyFacilities.length === 0">
+                                <p class="mt-2 text-sm text-yellow-700">No approved facilities found offering <span x-text="orderType === 'test' ? 'lab services' : 'blood services'"></span> near your location. Please check your profile address or try again later.</p>
+                            </div>
+                             <div x-show="loadingFacilities">
+                                <p class="text-sm text-gray-500 mt-2 flex items-center"><svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Finding nearby facilities...</p>
+                            </div>
                             @error('facility_id')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -181,79 +185,6 @@
                         </div>
                     </div>
                     
-                    <!-- Blood Service Details -->
-                     {{-- <div id="blood_details_container" x-show="hasSelectedBloodService" x-transition class="space-y-6">
-                        <h3 class="text-lg font-medium text-gray-900">Blood Service Details</h3>
-                        <div>
-                            <label for="blood_group" class="block text-sm font-medium text-gray-700 mb-1">Your Blood Group (if known/donating)</label>
-                            <select id="blood_group" name="blood_group" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent">
-                                <option value="">Select Blood Group</option>
-                                 <option value="A+" {{ old('blood_group') == 'A+' ? 'selected' : '' }}>A+</option>
-                                <option value="A-" {{ old('blood_group') == 'A-' ? 'selected' : '' }}>A-</option>
-                                <option value="B+" {{ old('blood_group') == 'B+' ? 'selected' : '' }}>B+</option>
-                                <option value="B-" {{ old('blood_group') == 'B-' ? 'selected' : '' }}>B-</option>
-                                <option value="AB+" {{ old('blood_group') == 'AB+' ? 'selected' : '' }}>AB+</option>
-                                <option value="AB-" {{ old('blood_group') == 'AB-' ? 'selected' : '' }}>AB-</option>
-                                <option value="O+" {{ old('blood_group') == 'O+' ? 'selected' : '' }}>O+</option>
-                                <option value="O-" {{ old('blood_group') == 'O-' ? 'selected' : '' }}>O-</option>
-                            </select>
-                             @error('blood_group')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div x-show="selectedServiceType === 'blood_request'" x-transition class="space-y-6">
-                            <div id="blood_units_container">
-                                <label for="blood_units" class="block text-sm font-medium text-gray-700 mb-1">Units Required</label>
-                                <select id="blood_units" name="blood_units" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent">
-                                    <option value="1" {{ old('blood_units') == '1' ? 'selected' : '' }}>1 Unit</option>
-                                    <option value="2" {{ old('blood_units') == '2' ? 'selected' : '' }}>2 Units</option>
-                                    <option value="3" {{ old('blood_units') == '3' ? 'selected' : '' }}>3 Units</option>
-                                    <option value="4" {{ old('blood_units') == '4' ? 'selected' : '' }}>4 Units</option>
-                                    <option value="5" {{ old('blood_units') == '5' ? 'selected' : '' }}>5+ Units</option>
-                                </select>
-                                @error('blood_units')
-                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
-                            <div id="blood_urgency_container">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Urgency Level</label>
-                                <div class="grid grid-cols-3 gap-3">
-                                    <div class="relative">
-                                        <input type="radio" id="urgency_normal" name="urgency" value="normal" class="peer absolute opacity-0" {{ old('urgency', 'normal') == 'normal' ? 'checked' : '' }}>
-                                        <label for="urgency_normal" class="block p-2 text-center bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50">
-                                            <span class="text-sm font-medium text-gray-900">Normal</span>
-                                        </label>
-                                    </div>
-                                    <div class="relative">
-                                        <input type="radio" id="urgency_urgent" name="urgency" value="urgent" class="peer absolute opacity-0" {{ old('urgency') == 'urgent' ? 'checked' : '' }}>
-                                        <label for="urgency_urgent" class="block p-2 text-center bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-yellow-500 peer-checked:bg-yellow-50">
-                                            <span class="text-sm font-medium text-gray-900">Urgent</span>
-                                        </label>
-                                    </div>
-                                    <div class="relative">
-                                        <input type="radio" id="urgency_emergency" name="urgency" value="emergency" class="peer absolute opacity-0" {{ old('urgency') == 'emergency' ? 'checked' : '' }}>
-                                        <label for="urgency_emergency" class="block p-2 text-center bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-red-500 peer-checked:bg-red-50">
-                                            <span class="text-sm font-medium text-gray-900">Emergency</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                @error('urgency')
-                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
-                            <div id="blood_purpose_container">
-                                <label for="blood_purpose" class="block text-sm font-medium text-gray-700 mb-1">Purpose</label>
-                                <textarea id="blood_purpose" name="blood_purpose" rows="2" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent" placeholder="Brief description of why the blood is needed">{{ old('blood_purpose') }}</textarea>
-                                @error('blood_purpose')
-                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-                    </div> --}}
-                   
                     <!-- Logistics Fields -->
                     <div class="pt-6 border-t border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Logistics</h3>
@@ -394,8 +325,11 @@
     <script>
         function orderForm() {
             return {
-                orderType: null,
-                selectedServiceType: null,
+                orderType: null, // User selects 'test' or 'blood'
+                userLatitude: {{ Auth::user()->latitude ?? 'null' }},
+                userLongitude: {{ Auth::user()->longitude ?? 'null' }},
+                nearbyFacilities: [],
+                loadingFacilities: false,
                 selectedFacility: '{{ old("facility_id") }}' || '',
                 availableServices: [],
                 selectedServices: @json(old('services', [])) || [],
@@ -420,15 +354,85 @@
     
                 init() {
                     this.errors = @json($errors->toArray());
-                    if (this.selectedFacility) {
-                        this.fetchServices();
-                    } else {
-                        this.updateCost();
-                    }
+                    // Don't fetch services initially, wait for facility selection
+                    // If old facility ID exists, we might need to re-fetch nearby first to populate the list
+                    // For simplicity, let's require user interaction first.
+                    this.updateCost(); // Initialize cost calculation
                     this.$watch('selectedServices', () => this.updateCost());
                     this.$watch('paymentMethod', () => this.resetPaymentState());
+                    // Watch orderType to clear dependent selections
+                    this.$watch('orderType', () => {
+                        this.selectedFacility = '';
+                        this.availableServices = [];
+                        this.selectedServices = [];
+                        this.nearbyFacilities = []; // Clear previous nearby list
+                    });
+                },
+
+                fetchNearbyFacilities() {
+                    if (!this.orderType || this.userLatitude === null || this.userLongitude === null) {
+                        if (this.userLatitude === null || this.userLongitude === null) {
+                            console.warn('User location not available. Cannot fetch nearby facilities.');
+                            // Optionally, show a message to the user to update their profile address.
+                        }
+                        this.nearbyFacilities = [];
+                        return;
+                    }
+
+                    this.loadingFacilities = true;
+                    this.nearbyFacilities = [];
+                    this.selectedFacility = ''; // Reset selected facility
+
+                    const url = `{{ route('api.facilities.nearby') }}?latitude=${this.userLatitude}&longitude=${this.userLongitude}&order_type=${this.orderType}`;
+                    
+                    fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(response => {
+                            if (!response.ok) { throw new Error(`Network response was not ok (${response.status})`); }
+                            return response.json();
+                        })
+                        .then(data => {
+                            this.nearbyFacilities = Array.isArray(data) ? data : [];
+                        })
+                        .catch(error => {
+                            console.error('Error fetching nearby facilities:', error);
+                            this.nearbyFacilities = [];
+                        })
+                        .finally(() => { this.loadingFacilities = false; });
                 },
     
+                fetchServices() {
+                    if (!this.selectedFacility) {
+                        this.availableServices = [];
+                        this.selectedServices = [];
+                        this.updateCost();
+                        return;
+                    }
+                    this.loadingServices = true;
+                    this.availableServices = [];
+                    this.selectedServices = []; // Reset selected services when facility changes
+                    // Use the correct API endpoint for facility services
+                    const url = `/api/facilities/${this.selectedFacility}/services`; 
+                    fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(response => {
+                            if (!response.ok) { throw new Error(`Network response was not ok (${response.status})`); }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Filter services based on the initially selected orderType
+                            this.availableServices = Array.isArray(data) ? data.filter(service => service.type === this.orderType && service.is_active) : [];
+                        })
+                        .catch(error => {
+                            console.error('Error fetching services:', error);
+                            this.availableServices = [];
+                        })
+                        .finally(() => { 
+                            this.loadingServices = false; 
+                            this.updateCost(); // Update cost after services are loaded/reset
+                        });
+                },
+
+                // ... existing methods (get selectedServiceObjects, requiredAttributes, updateCost, formatCurrency, payment logic, etc.) ...
+                // Ensure updateCost is called appropriately when selections change
                 get selectedServiceObjects() {
                     const selectedIds = this.selectedServices.map(id => id.toString());
                     return this.availableServices.filter(s => selectedIds.includes(s.id.toString()));
@@ -447,57 +451,15 @@
                 },
     
                 get hasSelectedTestService() {
-                    return this.selectedServiceObjects.some(service => (service.attributes || []).some(attr => attr.name === 'test_notes'));
+                    // Check based on the *currently available* services for the selected facility
+                    return this.availableServices.some(service => service.type === 'test') && this.selectedServices.length > 0;
                 },
     
                 get hasSelectedBloodService() {
-                    return this.selectedServiceObjects.some(service => (service.attributes || []).some(attr => ['blood_group', 'blood_units', 'urgency', 'blood_purpose'].includes(attr.name)));
+                    // Check based on the *currently available* services for the selected facility
+                    return this.availableServices.some(service => service.type === 'blood') && this.selectedServices.length > 0;
                 },
-    
-                get selectedServiceType() {
-                    if (this.requiredAttributes.some(attr => attr.name === 'blood_units')) return 'blood_request';
-                    if (this.selectedServiceObjects.some(service => service.name.toLowerCase().includes('donate') || (service.attributes || []).some(attr => attr.name === 'donor_consent'))) return 'blood_donation';
-                    return null;
-                },
-    
-                get isPaymentValid() {
-                    if (this.paymentMethod === 'card') {
-                        return !this.cardErrors.number && !this.cardErrors.expiry && !this.cardErrors.cvv && 
-                               this.cardDetails.number && this.cardDetails.expiry && this.cardDetails.cvv;
-                    }
-                    if (this.paymentMethod === 'bank') {
-                        return this.waitingForTransfer;
-                    }
-                    return true;
-                },
-    
-                fetchServices() {
-                    if (!this.selectedFacility) {
-                        this.availableServices = [];
-                        this.selectedServices = [];
-                        this.updateCost();
-                        return;
-                    }
-                    this.loadingServices = true;
-                    this.availableServices = [];
-                    this.selectedServices = [];
-                    const url = `/api/facilities/${this.selectedFacility}/services`;
-                    fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
-                        .then(response => {
-                            if (!response.ok) { throw new Error(`Network response was not ok (${response.status})`); }
-                            return response.json();
-                        })
-                        .then(data => {
-                            this.availableServices = Array.isArray(data) ? data : [];
-                        })
-                        .catch(error => {
-                            console.error('Error fetching services:', error);
-                            this.availableServices = [];
-                            this.updateCost();
-                        })
-                        .finally(() => { this.loadingServices = false; });
-                },
-    
+
                 updateCost() {
                     let currentServiceCost = 0;
                     const baseDelivery = 500;
@@ -507,12 +469,14 @@
                     this.selectedServiceObjects.forEach(service => {
                         if (service && service.price) {
                             currentServiceCost += parseFloat(service.price);
-                            if (parseFloat(service.price) > 0) {
+                            // Delivery required for any paid service (test or blood request)
+                            if (parseFloat(service.price) > 0) { 
                                 requiresDelivery = true;
                             }
                         }
                     });
     
+                    // Apply delivery fee if any selected service requires it
                     if (requiresDelivery) {
                         this.deliveryFee = baseDelivery;
                     }
@@ -520,7 +484,7 @@
                     this.serviceCost = currentServiceCost;
                     this.totalAmount = this.serviceCost + this.deliveryFee;
                 },
-    
+
                 formatCurrency(amount) {
                     const numAmount = parseFloat(amount);
                     if (isNaN(numAmount)) { return '₦--.--'; }

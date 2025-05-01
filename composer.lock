@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "27f92aed7cae6c2219df3eca9aa6119e",
+    "content-hash": "5aa68b1ce094979125dba2886a105d93",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2023,6 +2023,84 @@
                 "source": "https://github.com/kirschbaum-development/eloquent-power-joins/tree/4.2.3"
             },
             "time": "2025-04-01T14:41:56+00:00"
+        },
+        {
+            "name": "koossaayy/laravel-mapbox",
+            "version": "v0.4.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koossaayy/laravel-mapbox.git",
+                "reference": "345de44892bca435bb5db4cedcba756180e41a22"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koossaayy/laravel-mapbox/zipball/345de44892bca435bb5db4cedcba756180e41a22",
+                "reference": "345de44892bca435bb5db4cedcba756180e41a22",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^9.0|^10.0|^11.0|^12.0",
+                "php": "^8.1|^8.2|^8.3|^8.4",
+                "spatie/laravel-package-tools": "^1.14"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.4",
+                "nunomaduro/collision": "^7.0|^8.0",
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "pestphp/pest": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^10.0|^11.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "LaravelMapbox": "Koossaayy\\LaravelMapbox\\Facades\\LaravelMapbox"
+                    },
+                    "providers": [
+                        "Koossaayy\\LaravelMapbox\\LaravelMapboxServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Koossaayy\\LaravelMapbox\\": "src",
+                    "Koossaayy\\LaravelMapbox\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "koossaayy",
+                    "email": "tounessna.2010@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Easily Integration of Mapbox inside your Laravel application",
+            "homepage": "https://github.com/koossaayy/laravel-mapbox",
+            "keywords": [
+                "koossaayy",
+                "laravel",
+                "laravel-mapbox"
+            ],
+            "support": {
+                "issues": "https://github.com/koossaayy/laravel-mapbox/issues",
+                "source": "https://github.com/koossaayy/laravel-mapbox/tree/v0.4.9"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/koossaayy",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-04-02T20:46:20+00:00"
         },
         {
             "name": "laravel/framework",

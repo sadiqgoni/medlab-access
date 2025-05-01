@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Facility extends Model
 {
@@ -24,7 +24,6 @@ class Facility extends Model
         'contact_person',
         'phone',
         'email',
-        'services_offered',
         'status',
         'user_id',
     ];
@@ -35,9 +34,8 @@ class Facility extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'services_offered' => 'array',
-        'latitude' => 'decimal:7',
-        'longitude' => 'decimal:7',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
     ];
 
     /**
@@ -49,10 +47,10 @@ class Facility extends Model
     }
 
     /**
-     * Get the services offered by the facility.
+     * The services that belong to the facility.
      */
-    public function services(): HasMany
+    public function services(): BelongsToMany
     {
-        return $this->hasMany(Service::class);
+        return $this->belongsToMany(Service::class, 'facility_service');
     }
 }

@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\Consumer\DashboardController;
+use App\Http\Controllers\Consumer\ProfileController;
 use App\Http\Controllers\ConsumerOrderController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\VerifyIsConsumer;
 use App\Http\Controllers\Api\FacilityServiceController;
+use App\Http\Controllers\Api\NearbyFacilityController; // Import the new controller
 
 // Public routes
 Route::get('/', function () {
@@ -66,8 +67,9 @@ Route::middleware('auth')->group(function () {
 
 // API Routes (for internal use like fetching services)
 // Moved outside the main 'auth' middleware group
-Route::prefix('api')->group(function () { 
-    Route::get('/facilities/{facility}/services', [App\Http\Controllers\Api\FacilityServiceController::class, 'index'])->name('api.facility.services');
+Route::prefix('api')->middleware('auth:sanctum')->group(function () { // Added auth:sanctum middleware
+    Route::get('/facilities/{facility}/services', [FacilityServiceController::class, 'index'])->name('api.facility.services');
+    Route::get('/facilities/nearby', [NearbyFacilityController::class, 'index'])->name('api.facilities.nearby'); // Add route for nearby facilities
 });
 
 require __DIR__.'/auth.php';

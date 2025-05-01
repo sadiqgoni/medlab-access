@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -106,9 +104,14 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
+    <!-- Mapbox Search JS -->
+    {{-- <script src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+    <link href="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.css" rel="stylesheet" />
+     --}}
     <!-- Custom Auth CSS -->
     <link href="{{ asset('css/auth-animations.css') }}" rel="stylesheet">
-
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places"></script>
+ 
     <style>
         body {
             font-family: 'Outfit', sans-serif;
@@ -518,7 +521,87 @@
                 opacity: 1;
             }
         }
-    </style>
+    
+
+    /* Mapbox Search Box Styling */
+    mapbox-search-box {
+        width: 100%;
+        display: block;
+    }
+
+    mapbox-search-box input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f9fafb;
+    }
+
+    mapbox-search-box input:focus {
+        outline: none;
+        border-color: #1E88E5;
+        box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        background-color: white;
+    }
+
+    /* Suggestions Dropdown */
+    map-Authentication Errorbox-search-box .mapboxgl-ctrl-geocoder--suggestion {
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.95rem;
+    }
+
+    mapbox-search-box .mapboxgl-ctrl-geocoder--suggestion:hover {
+        background-color: #f9fafb;
+        cursor: pointer;
+    }
+  
+
+    /* Form Error Styling */
+    .form-error {
+        color: #ef4444;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        display: none; /* Hide by default */
+        align-items: center;
+    }
+    
+    .form-error.show {
+        display: flex; /* Show only when explicitly triggered */
+    }
+    
+    .form-error i {
+        margin-right: 0.25rem;
+    }
+
+    /* Input Error State */
+    input.border-red-500 {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    /* Suppress Google Maps default error icons */
+    .pac-container .pac-item::before,
+    .pac-container::before {
+        display: none !important; /* Hide any Google Maps error icons */
+    }
+
+    /* Ensure input remains responsive */
+    input#address {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f9fafb;
+    }
+</style>
 </head>
 <body>
     <!-- Preloader -->

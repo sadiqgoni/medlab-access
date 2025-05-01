@@ -25,6 +25,8 @@ class User extends Authenticatable
         'address',
         'government_id',
         'blood_group',
+        'latitude', 
+        'longitude',
         'eligible_donor',
         'communication_preference',
         'role',

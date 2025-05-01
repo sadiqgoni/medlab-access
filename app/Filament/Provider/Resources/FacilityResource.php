@@ -5,6 +5,7 @@ namespace App\Filament\Provider\Resources;
 use App\Filament\Provider\Resources\FacilityResource\Pages;
 use App\Filament\Provider\Resources\FacilityResource\RelationManagers;
 use App\Models\Facility;
+use App\Models\Service; // Import Service model
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,7 +16,10 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\CheckboxList; // Import CheckboxList
+use Illuminate\Support\Facades\Http; // Import Http facade
+use Illuminate\Support\Facades\Log; // Import Log facade
+use Illuminate\Support\Arr; // Import Arr facade
 
 class FacilityResource extends Resource
 {
@@ -34,62 +38,76 @@ class FacilityResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Facility Details')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('name')
-                            ->required()
-                            ->maxLength(255)
-                            ->columnSpan(1),
-                        TextInput::make('status')
-                            ->required()
-                            ->default('pending')
-                            ->disabled()
-                            ->columnSpan(1),
-                        TextInput::make('email')
-                            ->email()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255)
-                            ->columnSpan(1),
-                        TextInput::make('phone')
-                            ->tel()
-                            ->maxLength(20)
-                            ->columnSpan(1),
-                        TextInput::make('contact_person')
-                            ->maxLength(255)
-                            ->columnSpan(1),
-                        Textarea::make('address')
-                            ->required()
-                            ->rows(3)
-                            ->columnSpanFull(),
-                    ]),
-
-                Forms\Components\Section::make('Location & Services')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('latitude')
-                            ->numeric()
-                            ->columnSpan(1),
-                        TextInput::make('longitude')
-                            ->numeric()
-                            ->columnSpan(1),
-                        KeyValue::make('services_offered')
-                            ->keyLabel('Service Name')
-                            ->valueLabel('Description/Details')
-                            ->columnSpanFull(),
-                    ]),
                 Forms\Components\Hidden::make('user_id')->default(Auth::id()),
-            ]);
+                TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Textarea::make('address')
+                    ->required()
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
+                TextInput::make('contact_person')
+                    ->maxLength(255),
+                TextInput::make('phone')
+                    ->tel()
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->email()
+                    ->maxLength(255),
+                CheckboxList::make('services') // Use CheckboxList for many-to-many
+                    ->relationship('services', 'name') // Define relationship
+                    ->label('Services Offered')
+                    ->columns(2)
+                    ->columnSpanFull(),
+                // Latitude and Longitude will be set by the mutation
+                // Status is likely set by Admin, not Provider initially
+            ])
+            ->mutateFormDataUsing(function (array $data): array {
+                $mapboxToken = config('services.mapbox.token');
+                $address = Arr::get($data, 'address');
+
+                if (!empty($address) && $mapboxToken) {
+                    try {
+                        $response = Http::get("https://api.mapbox.com/geocoding/v5/mapbox.places/" . urlencode($address) . ".json", [
+                            'access_token' => $mapboxToken,
+                            'country' => 'NG',
+                            'limit' => 1
+                        ]);
+
+                        if ($response->successful() && !empty($response->json('features'))) {
+                            $coordinates = $response->json('features')[0]['center'];
+                            $data['longitude'] = $coordinates[0];
+                            $data['latitude'] = $coordinates[1];
+                        } else {
+                            Log::warning('Mapbox Geocoding failed for facility address:' . $address, ['response' => $response->body()]);
+                        }
+                    } catch (\Exception $e) {
+                        Log::error('Mapbox Geocoding exception for facility:' . $e->getMessage());
+                    }
+                }
+                
+                // Ensure user_id is always set
+                $data['user_id'] = Auth::id();
+                // Default status for new facilities
+                if (!isset($data['status'])) { // Only set default if not already set (e.g., during edit)
+                    $data['status'] = 'pending'; 
+                }
+
+                return $data;
+            });
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->where('user_id', Auth::id()))
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('address')
+                    ->limit(50)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -98,36 +116,32 @@ class FacilityResource extends Resource
                         'rejected' => 'danger',
                         default => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('phone')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('address')
-                    ->limit(30)
-                    ->tooltip(fn (Facility $record): string => $record->address)
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                // No filters needed if only showing one facility
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                // No bulk actions needed
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            // RelationManagers\ServicesRelationManager::class, // Commented out for now
         ];
     }
 
@@ -142,6 +156,7 @@ class FacilityResource extends Resource
 
     public static function canCreate(): bool
     {
+        // Allow creation only if the provider doesn't already have a facility
         return !Facility::where('user_id', Auth::id())->exists();
     }
 }

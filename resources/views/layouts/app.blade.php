@@ -8,7 +8,11 @@
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link
+    href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css"
+    rel="stylesheet"
+/>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
     <!-- Configure Tailwind with our color palette -->
     <script>
         tailwind.config = {

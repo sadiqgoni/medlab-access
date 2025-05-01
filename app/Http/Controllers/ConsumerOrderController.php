@@ -7,10 +7,11 @@ use App\Models\Facility;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Consumer\StoreOrderRequest;
+use App\Http\Requests\Consumer\StoreOrderRequest; // Use the updated request
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr; // Import Arr facade
 
 class ConsumerOrderController extends Controller
 {
@@ -42,67 +43,61 @@ class ConsumerOrderController extends Controller
     {
         $validated = $request->validated();
         $selectedServiceIds = $validated['services'];
-        $services = Service::whereIn('id', $selectedServiceIds)->get();
-
-        // Determine order type from the first service (assuming no mixing)
-        $orderType = $services->first()->type === 'test' ? 'test' : 'blood';
-        $isBloodRequest = $services->contains('type', 'blood_request');
-        $isDonation = $services->contains('type', 'blood_donation');
+        $services = Service::findMany($selectedServiceIds);
 
         // Calculate costs
-        $baseDeliveryFee = 500;
+        $baseDeliveryFee = 500; // Define base fee
         $totalServiceCost = $services->sum('price');
-        $requiresDelivery = $services->contains(fn ($service) => $service->type === 'test' || $service->type === 'blood_request');
+        // Delivery is required if any service has a price > 0 or is a test/blood request
+        $requiresDelivery = $services->contains(fn ($service) => $service->price > 0 || in_array($service->type, ['test', 'blood']));
         $deliveryFee = $requiresDelivery ? $baseDeliveryFee : 0;
         $totalAmount = $totalServiceCost + $deliveryFee;
 
-        // Prepare order data
+        // Prepare base order data
         $orderData = [
             'consumer_id' => Auth::id(),
             'facility_id' => $validated['facility_id'],
-            'order_type' => $orderType,
+            'order_type' => $validated['order_type'], // Get type directly from validated request
             'delivery_address' => $validated['delivery_address'],
             'scheduled_time' => $validated['scheduled_time'] ?? null,
-            'status' => 'pending',
             'payment_method' => $validated['payment_method'],
-            'payment_status' => 'pending',
             'total_amount' => $totalAmount,
-            'details' => [
-                'service_ids' => $selectedServiceIds,
-            ],
+            // Merge validated 'details' array and 'test_notes'
+            'details' => array_merge(
+                Arr::get($validated, 'details', []), // Get validated dynamic attributes
+                ['service_ids' => $selectedServiceIds], // Keep track of selected service IDs
+                // Add test_notes if order type is 'test' and notes are provided
+                ($validated['order_type'] === 'test' && !empty($validated['test_notes'])) ? ['test_notes' => $validated['test_notes']] : [] 
+            ),
         ];
-        // dd( $validated['payment_method']);
 
-        // Add service-specific details
-        // if ($orderType === 'test') {
-        //     $orderData['details']['notes'] = $validated['test_notes'] ?? null;
-        // } elseif ($orderType === 'blood') {
-        //     $orderData['details']['blood_group'] = $validated['blood_group'] ?? null;
-        //     if ($isBloodRequest) {
-        //         $orderData['details']['units'] = $validated['blood_units'] ?? null;
-        //         $orderData['details']['urgency'] = $validated['urgency'] ?? null;
-        //         $orderData['details']['purpose'] = $validated['blood_purpose'] ?? null;
-        //     } elseif ($isDonation) {
-        //         $orderData['details']['service_type'] = 'donation';
-        //     }
-        // }
-
-        // Handle payment method logic
-        // if ($orderData['payment_method'] === 'paystack') {
-        //     // For now, simulate successful card payment
-        //     $orderData['payment_status'] = 'paid';
-        //     $orderData['status'] = 'accepted';
-        //     $orderData['payment_gateway_ref'] = 'PAYSTACK_' . Str::random(10); // Changed prefix for clarity
-        // } else { // Assumes 'cash'
-        //     // Cash on delivery
-            $orderData['payment_status'] = 'pending';
-            $orderData['status'] = 'pending';
-       // }
+        // Set initial status based on payment method
+        switch ($validated['payment_method']) {
+            case 'card':
+                // Simulate successful card payment for now
+                $orderData['payment_status'] = 'paid';
+                $orderData['status'] = 'accepted'; // Move directly to accepted if paid
+                $orderData['payment_gateway_ref'] = 'SIM_CARD_' . Str::random(10);
+                break;
+            case 'bank':
+                $orderData['payment_status'] = 'pending'; // Requires manual confirmation
+                $orderData['status'] = 'pending_payment'; // Specific status for bank transfer
+                $orderData['payment_gateway_ref'] = 'SIM_BANK_' . Str::random(10); // Simulate a reference
+                break;
+            case 'cash':
+            default:
+                $orderData['payment_status'] = 'pending'; // To be paid on delivery
+                $orderData['status'] = 'pending'; // Standard pending status
+                break;
+        }
 
         // Create the order
         $order = Order::create($orderData);
 
-        // Always redirect to confirmation page after successful order creation
+        // Attach services to the order using the pivot table (if you created an Order-Service relationship)
+        // $order->services()->attach($selectedServiceIds); // Uncomment if you have this relationship
+
+        // Redirect to confirmation page
         return redirect()->route('consumer.orders.confirmation', ['order' => $order->id])->with('success', 'Order placed successfully!');
     }
 
