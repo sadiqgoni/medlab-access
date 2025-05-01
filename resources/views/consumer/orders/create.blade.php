@@ -169,8 +169,8 @@
                                 @error($errorKey) 
                                      <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
-                                 <span x-show="$store.errors && $store.errors['details.' + attribute.name]">
-                                     <p class="mt-2 text-sm text-red-600" x-text="$store.errors['details.' + attribute.name][0]"></p>
+                                 <span x-show="errors && errors['details.' + attribute.name]"> <!-- Changed from $store.errors -->
+                                     <p class="mt-2 text-sm text-red-600" x-text="errors['details.' + attribute.name][0]"></p> <!-- Changed from $store.errors -->
                                 </span>
                             </div>
                         </template>
@@ -354,8 +354,12 @@
                 serviceCost: 0,
                 deliveryFee: 0, 
                 totalAmount: 0,
-                
+                errors: {}, 
+
                 init() {
+                    // Initialize errors from Laravel's $errors bag
+                    this.errors = @json($errors->toArray()); 
+
                     if (this.selectedFacility) {
                         this.fetchServices();
                     } else {
@@ -444,7 +448,7 @@
                 },
 
                 updateCost() {
-                    console.log('updateCost triggered'); // Log when updateCost runs
+                    console.log('updateCost triggered');
                     let currentServiceCost = 0;
                     const baseDelivery = 500;
                     this.deliveryFee = 0; 

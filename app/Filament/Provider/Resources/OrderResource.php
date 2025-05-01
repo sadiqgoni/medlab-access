@@ -56,8 +56,8 @@ class OrderResource extends Resource
                  Section::make('Order Information')
                     ->columns(3)
                     ->schema([
-                        Select::make('user_id')
-                            ->relationship('user', 'name')
+                        Select::make('consumer_id')
+                            ->relationship('consumer', 'name')
                             ->label('Consumer')
                             ->disabled(),
                         // Facility is implicitly the provider's own, hide field
@@ -70,7 +70,7 @@ class OrderResource extends Resource
                             ->disabled(),
                         Select::make('status') // Editable by Provider (limited options maybe?)
                             ->options([
-                                // 'pending' => 'Pending', // Provider shouldn't set this
+                                'pending' => 'Pending', // Provider should see this option
                                 'accepted' => 'Accept Order', // Allow accepting
                                 'processing' => 'Processing',
                                 'results_ready' => 'Results Ready',
@@ -122,7 +122,7 @@ class OrderResource extends Resource
             // Query already scoped by getEloquentQuery
             ->columns([
                  TextColumn::make('id')->label('Order ID')->sortable(),
-                 TextColumn::make('user.name')->label('Consumer')->searchable()->sortable(),
+                 TextColumn::make('consumer.name')->label('Consumer')->searchable()->sortable(),
                  TextColumn::make('biker.name')->label('Biker')->searchable()->sortable()->placeholder('N/A'),
                  TextColumn::make('order_type')
                      ->badge()
