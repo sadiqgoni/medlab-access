@@ -1,296 +1,760 @@
 <x-consumer-dashboard-layout>
     <x-slot name="header">
-        <h1 class="text-2xl md:text-3xl font-display font-bold text-gray-800">My Profile</h1>
+        <div class="flex items-center">
+            <a href="{{ route('consumer.dashboard') }}" class="mr-4 p-2 bg-white rounded-lg shadow-sm border border-gray-200 hover:bg-gray-50 transition-colors">
+                <i class="fas fa-arrow-left text-gray-600"></i>
+            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">My Profile</h1>
+                <p class="mt-2 text-gray-600">Manage your personal information and preferences</p>
+                <div class="flex items-center mt-3 space-x-4">
+                    <div class="flex items-center text-sm text-green-600">
+                        <i class="fas fa-shield-alt mr-2"></i>
+                        <span>Secure & Private</span>
+                    </div>
+                    <div class="flex items-center text-sm text-blue-600">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        <span>Auto-saved</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </x-slot>
 
-    <div class="py-8" x-data="{ activeTab: 'profile' }">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+    <!-- Main Content -->
+    <div class="py-6" x-data="profileForm()">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
             <!-- Profile Header Card -->
-            <div class="bg-white shadow rounded-lg mb-8 overflow-hidden">
-                <div class="md:flex items-center">
-                    <div class="md:w-1/4 p-6 bg-gradient-to-r from-primary-50 to-primary-100 flex flex-col items-center justify-center">
-                         <!-- Profile Picture Placeholder -->
-                        <div class="w-24 h-24 rounded-full bg-primary-500 flex items-center justify-center text-white text-3xl font-semibold mb-3 relative group">
+            <div class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-xl p-8 mb-8 text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-blue-600/20"></div>
+                <div class="relative flex flex-col md:flex-row items-center md:items-start">
+                    <!-- Profile Picture -->
+                    <div class="relative mb-6 md:mb-0 md:mr-8">
+                        <div class="h-32 w-32 rounded-full bg-white/20 flex items-center justify-center text-6xl font-bold text-white shadow-2xl">
                             {{ substr(Auth::user()->name, 0, 1) }}
-                            <button class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <i class="fas fa-camera text-white"></i>
-                                <span class="sr-only">Change picture</span>
-                            </button>
                         </div>
-                        <button class="text-xs text-primary-600 hover:underline">Change Picture</button>
+                        <button @click="$refs.profilePicture.click()" class="absolute bottom-0 right-0 h-10 w-10 bg-white rounded-full flex items-center justify-center text-primary-600 hover:bg-gray-100 transition-colors shadow-lg">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                        <input type="file" x-ref="profilePicture" @change="handleProfilePictureChange" accept="image/*" class="hidden">
                     </div>
-                    <div class="p-6 flex-1">
-                        <h2 class="text-xl font-bold text-gray-900">{{ Auth::user()->name }}</h2>
-                        <p class="text-sm text-gray-500">{{ Auth::user()->email }}</p>
-                        <p class="text-sm text-gray-500 mt-1">Member since {{ Auth::user()->created_at->format('M Y') }}</p>
-                        <!-- Add more relevant info like last login if needed -->
+                    
+                    <!-- Profile Info -->
+                    <div class="text-center md:text-left flex-1">
+                        <h2 class="text-3xl font-bold mb-2">{{ Auth::user()->name }}</h2>
+                        <p class="text-primary-100 text-lg mb-4">{{ Auth::user()->email }}</p>
+                        
+                        <!-- Profile Stats -->
+                        <div class="grid grid-cols-3 gap-6 mt-6">
+                            <div class="text-center">
+                                {{-- <div class="text-2xl font-bold">{{ Auth::user()->orders()->count() }}</div> --}}
+                                <div class="text-sm text-primary-100">Total Orders</div>
+                            </div>
+                            <div class="text-center">
+                                {{-- <div class="text-2xl font-bold">{{ Auth::user()->orders()->where('status', 'completed')->count() }}</div> --}}
+                                <div class="text-sm text-primary-100">Completed</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold">{{ Auth::user()->created_at->diffInMonths() }}</div>
+                                <div class="text-sm text-primary-100">Months Active</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6 border-t md:border-t-0 md:border-l">
-                        <h3 class="text-sm font-medium text-gray-500 mb-2">Account Status</h3>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
-                                <circle cx="4" cy="4" r="3" />
-                            </svg>
-                            Active
-                        </span>
-                        <!-- Add other badges if needed -->
+                    
+                    <!-- Health Score -->
+                    <div class="mt-6 md:mt-0 text-center">
+                        <div class="bg-white/20 rounded-2xl p-6 backdrop-blur-sm">
+                            <div class="text-3xl font-bold mb-2">85</div>
+                            <div class="text-sm text-primary-100">Health Score</div>
+                            <div class="mt-3 h-2 bg-white/20 rounded-full overflow-hidden">
+                                <div class="h-full bg-white rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab Navigation -->
-            <div class="mb-6 border-b border-gray-200">
-                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button @click="activeTab = 'profile'" 
-                            :class="{ 'border-primary-500 text-primary-600': activeTab === 'profile', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'profile' }"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Edit Profile
-                    </button>
-                    <button @click="activeTab = 'password'" 
-                            :class="{ 'border-primary-500 text-primary-600': activeTab === 'password', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'password' }"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Update Password
-                    </button>
-                    <button @click="activeTab = 'settings'" 
-                            :class="{ 'border-primary-500 text-primary-600': activeTab === 'settings', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'settings' }"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Account Settings
-                    </button>
-                </nav>
-            </div>
+            <!-- Profile Form Tabs -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <!-- Tab Navigation -->
+                <div class="border-b border-gray-200">
+                    <nav class="flex space-x-8 px-6" aria-label="Tabs">
+                        <button @click="activeTab = 'personal'" :class="activeTab === 'personal' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                            <i class="fas fa-user mr-2"></i>
+                            Personal Information
+                        </button>
+                        <button @click="activeTab = 'contact'" :class="activeTab === 'contact' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                            <i class="fas fa-address-book mr-2"></i>
+                            Contact & Address
+                        </button>
+                        <button @click="activeTab = 'medical'" :class="activeTab === 'medical' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                            <i class="fas fa-heartbeat mr-2"></i>
+                            Medical Information
+                        </button>
+                        <button @click="activeTab = 'security'" :class="activeTab === 'security' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                            <i class="fas fa-lock mr-2"></i>
+                            Security & Privacy
+                        </button>
+                    </nav>
+                </div>
 
-            <!-- Tab Content -->
-            <div>
-                <!-- Profile Information Tab -->
-                <div x-show="activeTab === 'profile'">
-                    <form method="POST" action="{{ route('consumer.profile.update') }}" class="bg-white shadow rounded-lg p-6 md:p-8 space-y-6">
+                <!-- Tab Content -->
+                <div class="p-8">
+                    <form method="POST" action="{{ route('consumer.profile.update') }}" @submit="handleFormSubmit" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
 
-                        <h3 class="text-lg font-medium text-gray-900 border-b pb-3">Personal Information</h3>
-
-                        <!-- Name -->
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                            <input type="text" name="name" id="name" value="{{ old('name', auth()->user()->name) }}" required 
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                            @error('name')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Email -->
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                            <input type="email" name="email" id="email" value="{{ old('email', auth()->user()->email) }}" required 
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-gray-50 text-gray-500" readonly>
-                            <p class="mt-1 text-xs text-gray-500">Email cannot be changed.</p>
-                            @error('email')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Phone Number -->
-                        <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                            <input type="tel" name="phone" id="phone" value="{{ old('phone', auth()->user()->phone) }}" required 
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" placeholder="+234XXXXXXXXXX">
-                            @error('phone')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Address -->
-                        <div class="form-group">
-                            <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                            <div class="relative">
-                                <i class="fas fa-map-marker-alt absolute left-3 top-3 text-gray-400"></i>
-                                <input id="address" type="text" name="address" value="{{ old('address', auth()->user()->address) }}" required 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 pl-10" 
-                                       placeholder="Enter street address" />
+                        <!-- Personal Information Tab -->
+                        <div x-show="activeTab === 'personal'" x-transition>
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Personal Information</h3>
+                                <p class="text-gray-600">Update your basic personal details</p>
                             </div>
-                            <p class="mt-1 text-sm text-gray-500">Start typing your street address or landmark and select a suggestion for accurate location.</p>
-                            @error('address')
-                                <div class="form-error show">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    <span class="text-red-600">{{ $message }}</span>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Full Name -->
+                                <div class="md:col-span-2">
+                                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-user mr-2 text-gray-400"></i>
+                                        Full Name
+                                    </label>
+                                    <input type="text" id="name" name="name" value="{{ old('name', Auth::user()->name) }}" required 
+                                           class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4 text-lg"
+                                           placeholder="Enter your full name">
+                                    @error('name')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
                                 </div>
-                            @enderror
+
+                                <!-- Email -->
+                                <div class="md:col-span-2">
+                                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-envelope mr-2 text-gray-400"></i>
+                                        Email Address
+                                    </label>
+                                    <input type="email" id="email" name="email" value="{{ old('email', Auth::user()->email) }}" required 
+                                           class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4 text-lg"
+                                           placeholder="Enter your email address">
+                                    @error('email')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Date of Birth -->
+                                <div>
+                                    <label for="date_of_birth" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-calendar mr-2 text-gray-400"></i>
+                                        Date of Birth
+                                    </label>
+                                    <input type="date" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', Auth::user()->date_of_birth) }}" 
+                                           class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4">
+                                    @error('date_of_birth')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Gender -->
+                                <div>
+                                    <label for="gender" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-venus-mars mr-2 text-gray-400"></i>
+                                        Gender
+                                    </label>
+                                    <select id="gender" name="gender" 
+                                            class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4">
+                                        <option value="">Select Gender</option>
+                                        <option value="male" {{ old('gender', Auth::user()->gender) === 'male' ? 'selected' : '' }}>Male</option>
+                                        <option value="female" {{ old('gender', Auth::user()->gender) === 'female' ? 'selected' : '' }}>Female</option>
+                                        <option value="other" {{ old('gender', Auth::user()->gender) === 'other' ? 'selected' : '' }}>Other</option>
+                                        <option value="prefer_not_to_say" {{ old('gender', Auth::user()->gender) === 'prefer_not_to_say' ? 'selected' : '' }}>Prefer not to say</option>
+                                    </select>
+                                    @error('gender')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Blood Type -->
+                                <div>
+                                    <label for="blood_type" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-tint mr-2 text-gray-400"></i>
+                                        Blood Type
+                                    </label>
+                                    <select id="blood_type" name="blood_type" 
+                                            class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4">
+                                        <option value="">Select Blood Type</option>
+                                        <option value="A+" {{ old('blood_type', Auth::user()->blood_type) === 'A+' ? 'selected' : '' }}>A+</option>
+                                        <option value="A-" {{ old('blood_type', Auth::user()->blood_type) === 'A-' ? 'selected' : '' }}>A-</option>
+                                        <option value="B+" {{ old('blood_type', Auth::user()->blood_type) === 'B+' ? 'selected' : '' }}>B+</option>
+                                        <option value="B-" {{ old('blood_type', Auth::user()->blood_type) === 'B-' ? 'selected' : '' }}>B-</option>
+                                        <option value="AB+" {{ old('blood_type', Auth::user()->blood_type) === 'AB+' ? 'selected' : '' }}>AB+</option>
+                                        <option value="AB-" {{ old('blood_type', Auth::user()->blood_type) === 'AB-' ? 'selected' : '' }}>AB-</option>
+                                        <option value="O+" {{ old('blood_type', Auth::user()->blood_type) === 'O+' ? 'selected' : '' }}>O+</option>
+                                        <option value="O-" {{ old('blood_type', Auth::user()->blood_type) === 'O-' ? 'selected' : '' }}>O-</option>
+                                    </select>
+                                    @error('blood_type')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Occupation -->
+                                <div>
+                                    <label for="occupation" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-briefcase mr-2 text-gray-400"></i>
+                                        Occupation
+                                    </label>
+                                    <input type="text" id="occupation" name="occupation" value="{{ old('occupation', Auth::user()->occupation) }}" 
+                                           class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                           placeholder="Enter your occupation">
+                                    @error('occupation')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
-                        <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', auth()->user()->latitude) }}">
-<input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', auth()->user()->longitude) }}">
 
+                        <!-- Contact & Address Tab -->
+                        <div x-show="activeTab === 'contact'" x-transition>
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Contact & Address Information</h3>
+                                <p class="text-gray-600">Update your contact details and address for service delivery</p>
+                            </div>
 
-                        <div class="flex justify-end pt-6 border-t border-gray-200">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                Save Changes
-                            </button>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Phone Number -->
+                                <div>
+                                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-phone mr-2 text-gray-400"></i>
+                                        Phone Number
+                                    </label>
+                                    <input type="tel" id="phone" name="phone" value="{{ old('phone', Auth::user()->phone) }}" 
+                                           class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                           placeholder="+234 800 000 0000">
+                                    @error('phone')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Emergency Contact -->
+                                <div>
+                                    <label for="emergency_contact" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-phone-alt mr-2 text-gray-400"></i>
+                                        Emergency Contact
+                                    </label>
+                                    <input type="tel" id="emergency_contact" name="emergency_contact" value="{{ old('emergency_contact', Auth::user()->emergency_contact) }}" 
+                                           class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                           placeholder="+234 800 000 0000">
+                                    @error('emergency_contact')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Address -->
+                                <div class="md:col-span-2">
+                                    <label for="address" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
+                                        Home Address
+                                    </label>
+                                    <textarea id="address" name="address" rows="3" 
+                                              class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                              placeholder="Enter your complete home address">{{ old('address', Auth::user()->address) }}</textarea>
+                                    @error('address')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- City -->
+                                <div>
+                                    <label for="city" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-city mr-2 text-gray-400"></i>
+                                        City
+                                    </label>
+                                    <input type="text" id="city" name="city" value="{{ old('city', Auth::user()->city) }}" 
+                                           class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                           placeholder="Enter your city">
+                                    @error('city')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- State -->
+                                <div>
+                                    <label for="state" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-map mr-2 text-gray-400"></i>
+                                        State
+                                    </label>
+                                    <select id="state" name="state" 
+                                            class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4">
+                                        <option value="">Select State</option>
+                                        <option value="Lagos" {{ old('state', Auth::user()->state) === 'Lagos' ? 'selected' : '' }}>Lagos</option>
+                                        <option value="Abuja" {{ old('state', Auth::user()->state) === 'Abuja' ? 'selected' : '' }}>Abuja (FCT)</option>
+                                        <option value="Kano" {{ old('state', Auth::user()->state) === 'Kano' ? 'selected' : '' }}>Kano</option>
+                                        <option value="Rivers" {{ old('state', Auth::user()->state) === 'Rivers' ? 'selected' : '' }}>Rivers</option>
+                                        <option value="Oyo" {{ old('state', Auth::user()->state) === 'Oyo' ? 'selected' : '' }}>Oyo</option>
+                                        <option value="Kaduna" {{ old('state', Auth::user()->state) === 'Kaduna' ? 'selected' : '' }}>Kaduna</option>
+                                        <!-- Add more states as needed -->
+                                    </select>
+                                    @error('state')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Location Services -->
+                            <div class="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-200">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-blue-900">Location Services</h4>
+                                        <p class="text-sm text-blue-700 mt-1">Enable location services to find nearby facilities and improve delivery accuracy</p>
+                                    </div>
+                                    <button type="button" @click="getCurrentLocation" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                        <i class="fas fa-location-arrow mr-2"></i>
+                                        Get Current Location
+                                    </button>
+                                </div>
+                                <div x-show="locationStatus" class="mt-4 p-3 rounded-lg" :class="locationStatus.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                                    <p class="text-sm" x-text="locationStatus.message"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Medical Information Tab -->
+                        <div x-show="activeTab === 'medical'" x-transition>
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Medical Information</h3>
+                                <p class="text-gray-600">Provide medical details to help us serve you better</p>
+                            </div>
+
+                            <div class="space-y-6">
+                                <!-- Allergies -->
+                                <div>
+                                    <label for="allergies" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-exclamation-triangle mr-2 text-gray-400"></i>
+                                        Known Allergies
+                                    </label>
+                                    <textarea id="allergies" name="allergies" rows="3" 
+                                              class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                              placeholder="List any known allergies (medications, foods, etc.)">{{ old('allergies', Auth::user()->allergies) }}</textarea>
+                                    @error('allergies')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Current Medications -->
+                                <div>
+                                    <label for="current_medications" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-pills mr-2 text-gray-400"></i>
+                                        Current Medications
+                                    </label>
+                                    <textarea id="current_medications" name="current_medications" rows="3" 
+                                              class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                              placeholder="List any medications you are currently taking">{{ old('current_medications', Auth::user()->current_medications) }}</textarea>
+                                    @error('current_medications')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Medical Conditions -->
+                                <div>
+                                    <label for="medical_conditions" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-stethoscope mr-2 text-gray-400"></i>
+                                        Medical Conditions
+                                    </label>
+                                    <textarea id="medical_conditions" name="medical_conditions" rows="3" 
+                                              class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                              placeholder="List any chronic conditions or medical history">{{ old('medical_conditions', Auth::user()->medical_conditions) }}</textarea>
+                                    @error('medical_conditions')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Insurance Information -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="insurance_provider" class="block text-sm font-semibold text-gray-700 mb-2">
+                                            <i class="fas fa-shield-alt mr-2 text-gray-400"></i>
+                                            Insurance Provider
+                                        </label>
+                                        <input type="text" id="insurance_provider" name="insurance_provider" value="{{ old('insurance_provider', Auth::user()->insurance_provider) }}" 
+                                               class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                               placeholder="Enter insurance provider name">
+                                        @error('insurance_provider')
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                                {{ $message }}
+                                            </p>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="insurance_number" class="block text-sm font-semibold text-gray-700 mb-2">
+                                            <i class="fas fa-id-card mr-2 text-gray-400"></i>
+                                            Insurance Number
+                                        </label>
+                                        <input type="text" id="insurance_number" name="insurance_number" value="{{ old('insurance_number', Auth::user()->insurance_number) }}" 
+                                               class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                               placeholder="Enter insurance policy number">
+                                        @error('insurance_number')
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                                {{ $message }}
+                                            </p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- Medical Preferences -->
+                                <div class="bg-green-50 rounded-xl p-6 border border-green-200">
+                                    <h4 class="text-lg font-semibold text-green-900 mb-4">Medical Preferences</h4>
+                                    <div class="space-y-4">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="willing_to_donate_blood" value="1" {{ old('willing_to_donate_blood', Auth::user()->willing_to_donate_blood) ? 'checked' : '' }} 
+                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                            <span class="ml-3 text-sm text-green-800">I am willing to donate blood when needed</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="emergency_contact_consent" value="1" {{ old('emergency_contact_consent', Auth::user()->emergency_contact_consent) ? 'checked' : '' }} 
+                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                            <span class="ml-3 text-sm text-green-800">Allow emergency contact in case of medical emergencies</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="health_reminders" value="1" {{ old('health_reminders', Auth::user()->health_reminders) ? 'checked' : '' }} 
+                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                            <span class="ml-3 text-sm text-green-800">Send me health tips and reminders</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Security & Privacy Tab -->
+                        <div x-show="activeTab === 'security'" x-transition>
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Security & Privacy Settings</h3>
+                                <p class="text-gray-600">Manage your account security and privacy preferences</p>
+                            </div>
+
+                            <div class="space-y-8">
+                                <!-- Change Password -->
+                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Change Password</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="md:col-span-2">
+                                            <label for="current_password" class="block text-sm font-semibold text-gray-700 mb-2">
+                                                <i class="fas fa-lock mr-2 text-gray-400"></i>
+                                                Current Password
+                                            </label>
+                                            <input type="password" id="current_password" name="current_password" 
+                                                   class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                                   placeholder="Enter your current password">
+                                            @error('current_password')
+                                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                    <i class="fas fa-exclamation-circle mr-2"></i>
+                                                    {{ $message }}
+                                                </p>
+                                            @enderror
+                                        </div>
+
+                                        <div>
+                                            <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                                                <i class="fas fa-key mr-2 text-gray-400"></i>
+                                                New Password
+                                            </label>
+                                            <input type="password" id="password" name="password" 
+                                                   class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                                   placeholder="Enter new password">
+                                            @error('password')
+                                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                    <i class="fas fa-exclamation-circle mr-2"></i>
+                                                    {{ $message }}
+                                                </p>
+                                            @enderror
+                                        </div>
+
+                                        <div>
+                                            <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-2">
+                                                <i class="fas fa-key mr-2 text-gray-400"></i>
+                                                Confirm New Password
+                                            </label>
+                                            <input type="password" id="password_confirmation" name="password_confirmation" 
+                                                   class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
+                                                   placeholder="Confirm new password">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Two-Factor Authentication -->
+                                <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-blue-900">Two-Factor Authentication</h4>
+                                            <p class="text-sm text-blue-700 mt-1">Add an extra layer of security to your account</p>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-sm text-blue-700 mr-3">{{ Auth::user()->two_factor_enabled ? 'Enabled' : 'Disabled' }}</span>
+                                            <button type="button" @click="toggle2FA" 
+                                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                                                    :class="twoFactorEnabled ? 'bg-primary-600' : 'bg-gray-200'">
+                                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                                      :class="twoFactorEnabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div x-show="twoFactorEnabled" x-transition class="mt-4">
+                                        <p class="text-sm text-blue-700">Two-factor authentication is enabled. You'll receive a verification code via SMS when logging in.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Privacy Settings -->
+                                <div class="bg-purple-50 rounded-xl p-6 border border-purple-200">
+                                    <h4 class="text-lg font-semibold text-purple-900 mb-4">Privacy Settings</h4>
+                                    <div class="space-y-4">
+                                        <label class="flex items-center justify-between">
+                                            <span class="text-sm text-purple-800">Allow marketing communications</span>
+                                            <input type="checkbox" name="marketing_consent" value="1" {{ old('marketing_consent', Auth::user()->marketing_consent) ? 'checked' : '' }} 
+                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                        </label>
+                                        <label class="flex items-center justify-between">
+                                            <span class="text-sm text-purple-800">Share data with healthcare partners</span>
+                                            <input type="checkbox" name="data_sharing_consent" value="1" {{ old('data_sharing_consent', Auth::user()->data_sharing_consent) ? 'checked' : '' }} 
+                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                        </label>
+                                        <label class="flex items-center justify-between">
+                                            <span class="text-sm text-purple-800">Enable location tracking for better service</span>
+                                            <input type="checkbox" name="location_tracking" value="1" {{ old('location_tracking', Auth::user()->location_tracking) ? 'checked' : '' }} 
+                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Account Actions -->
+                                <div class="bg-red-50 rounded-xl p-6 border border-red-200">
+                                    <h4 class="text-lg font-semibold text-red-900 mb-4">Account Actions</h4>
+                                    <div class="flex flex-col sm:flex-row gap-4">
+                                        <button type="button" @click="downloadData" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                            <i class="fas fa-download mr-2"></i>
+                                            Download My Data
+                                        </button>
+                                        <button type="button" @click="confirmDeleteAccount" class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                            <i class="fas fa-trash mr-2"></i>
+                                            Delete Account
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="flex justify-end pt-8 border-t border-gray-200 mt-8">
+                            <div class="flex space-x-4">
+                                <button type="button" @click="resetForm" class="inline-flex items-center px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-medium">
+                                    <i class="fas fa-undo mr-2"></i>
+                                    Reset Changes
+                                </button>
+                                <button type="submit" :disabled="isSubmitting" 
+                                        class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-700 border border-transparent rounded-xl font-bold text-white hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105 transition-all duration-200 shadow-lg">
+                                    <span x-show="isSubmitting" class="flex items-center">
+                                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+                                        Saving...
+                                    </span>
+                                    <span x-show="!isSubmitting" class="flex items-center">
+                                        <i class="fas fa-save mr-2"></i>
+                                        Save Changes
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
-
-                <!-- Update Password Tab -->
-                <div x-show="activeTab === 'password'" style="display: none;">
-                     <div class="bg-white shadow rounded-lg p-6 md:p-8">
-                        <h3 class="text-lg font-medium text-gray-900 border-b pb-3 mb-6">Update Password</h3>
-                        <p class="text-sm text-gray-600">Ensure your account is using a long, random password to stay secure.</p>
-                        <!-- Password update form goes here -->
-                         <form class="space-y-6">
-                            <div>
-                                <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
-                                <input type="password" name="current_password" id="current_password" required 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                            </div>
-                             <div>
-                                <label for="new_password" class="block text-sm font-medium text-gray-700">New Password</label>
-                                <input type="password" name="new_password" id="new_password" required 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                            </div>
-                             <div>
-                                <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
-                                <input type="password" name="new_password_confirmation" id="new_password_confirmation" required 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                            </div>
-                             <div class="flex justify-end pt-6 border-t border-gray-200">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                    Update Password
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                 <!-- Account Settings Tab -->
-                <div x-show="activeTab === 'settings'" style="display: none;">
-                    <div class="space-y-8">
-                         <!-- Communication Preferences -->
-                        <div class="bg-white shadow rounded-lg p-6 md:p-8">
-                             <h3 class="text-lg font-medium text-gray-900 border-b pb-3 mb-6">Communication Preferences</h3>
-                             <form>
-                                <fieldset class="space-y-3">
-                                    <div class="relative flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="comm_email" name="communication_preference[]" type="checkbox" value="email" class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" {{ in_array('email', old('communication_preference', auth()->user()->communication_preferences ?? [])) ? 'checked' : '' }}>
-                                        </div>
-                                        <div class="ml-3 text-sm">
-                                            <label for="comm_email" class="font-medium text-gray-700">Email Notifications</label>
-                                            <p class="text-gray-500">Receive order updates, results, and promotions via email.</p>
-                                        </div>
-                                    </div>
-                                    <div class="relative flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="comm_sms" name="communication_preference[]" type="checkbox" value="sms" class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" {{ in_array('sms', old('communication_preference', auth()->user()->communication_preferences ?? [])) ? 'checked' : '' }}>
-                                        </div>
-                                        <div class="ml-3 text-sm">
-                                            <label for="comm_sms" class="font-medium text-gray-700">SMS Notifications</label>
-                                            <p class="text-gray-500">Receive critical order updates via SMS (charges may apply).</p>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <div class="flex justify-end pt-6 border-t border-gray-200 mt-6">
-                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                        Save Preferences
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Delete Account Section -->
-                        <div class="bg-white shadow rounded-lg p-6 md:p-8">
-                            <h3 class="text-lg font-medium text-red-600 border-b border-red-200 pb-3 mb-6">Delete Account</h3>
-                            <p class="text-sm text-gray-600 mb-4">Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.</p>
-                            <div class="text-right">
-                                <button type="button" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                    Delete Account
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
-</x-consumer-dashboard-layout>
 
+    <script>
+        function profileForm() {
+            return {
+                activeTab: 'personal',
+                isSubmitting: false,
+                twoFactorEnabled: {{ Auth::user()->two_factor_enabled ? 'true' : 'false' }},
+                locationStatus: null,
 
-
-
-
-<!-- JavaScript for Google Places Autocomplete -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const addressInput = document.querySelector('#address');
-        let autocomplete;
-
-        // Initialize Google Places Autocomplete with error handling
-        try {
-            autocomplete = new google.maps.places.Autocomplete(addressInput, {
-                componentRestrictions: { country: 'NG' }, // Restrict to Nigeria
-                types: ['geocode', 'establishment'], // Include addresses and establishments
-                fields: ['formatted_address', 'geometry', 'name', 'types'] // Include types for debugging
-            });
-
-            // Update input and hidden fields when a place is selected
-            autocomplete.addListener('place_changed', function () {
-                const place = autocomplete.getPlace();
-                if (place.geometry) {
-                    addressInput.value = place.formatted_address || place.name;
-                    document.querySelector('#latitude').value = place.geometry.location.lat();
-                    document.querySelector('#longitude').value = place.geometry.location.lng();
-                    console.log('Selected address:', place.formatted_address || place.name, 'Coordinates:', {
-                        lat: place.geometry.location.lat(),
-                        lng: place.geometry.location.lng(),
-                        types: place.types
+                init() {
+                    // Auto-save functionality
+                    this.$watch('activeTab', () => {
+                        this.locationStatus = null;
                     });
-                    // Clear error state
-                    addressInput.classList.remove('border-red-500');
-                    const errorDiv = addressInput.closest('.form-group').querySelector('.form-error');
-                    if (errorDiv) errorDiv.classList.remove('show');
-                } else {
-                    console.warn('No geometry available for address:', place.formatted_address || place.name);
-                    addressInput.classList.add('border-red-500');
+                },
+
+                handleFormSubmit(event) {
+                    this.isSubmitting = true;
+                    // Form will submit normally, this just shows loading state
+                },
+
+                handleProfilePictureChange(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        // Handle profile picture upload
+                        console.log('Profile picture selected:', file.name);
+                        // You can add preview functionality here
+                    }
+                },
+
+                getCurrentLocation() {
+                    if (!navigator.geolocation) {
+                        this.locationStatus = {
+                            type: 'error',
+                            message: 'Geolocation is not supported by this browser.'
+                        };
+                        return;
+                    }
+
+                    this.locationStatus = {
+                        type: 'info',
+                        message: 'Getting your location...'
+                    };
+
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
+                            
+                            // Update hidden fields or make API call to save coordinates
+                            this.locationStatus = {
+                                type: 'success',
+                                message: `Location updated successfully! (${latitude.toFixed(6)}, ${longitude.toFixed(6)})`
+                            };
+                            
+                            // You can make an API call here to save the coordinates
+                            this.saveLocation(latitude, longitude);
+                        },
+                        (error) => {
+                            let message = 'Unable to retrieve your location.';
+                            switch(error.code) {
+                                case error.PERMISSION_DENIED:
+                                    message = 'Location access denied by user.';
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    message = 'Location information is unavailable.';
+                                    break;
+                                case error.TIMEOUT:
+                                    message = 'Location request timed out.';
+                                    break;
+                            }
+                            this.locationStatus = {
+                                type: 'error',
+                                message: message
+                            };
+                        }
+                    );
+                },
+
+                saveLocation(latitude, longitude) {
+                    fetch('/api/update-location', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            latitude: latitude,
+                            longitude: longitude
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Location saved successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error saving location:', error);
+                    });
+                },
+
+                toggle2FA() {
+                    this.twoFactorEnabled = !this.twoFactorEnabled;
+                    // Make API call to toggle 2FA
+                    fetch('/api/toggle-2fa', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            enabled: this.twoFactorEnabled
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('2FA toggled successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error toggling 2FA:', error);
+                        // Revert the toggle on error
+                        this.twoFactorEnabled = !this.twoFactorEnabled;
+                    });
+                },
+
+                downloadData() {
+                    if (confirm('Are you sure you want to download all your data? This may take a few minutes.')) {
+                        window.location.href = '/api/download-user-data';
+                    }
+                },
+
+                confirmDeleteAccount() {
+                    if (confirm('Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.')) {
+                        if (confirm('This is your final warning. Are you absolutely sure you want to delete your account?')) {
+                            // Redirect to account deletion route
+                            window.location.href = '/profile/delete-account';
+                        }
+                    }
+                },
+
+                resetForm() {
+                    if (confirm('Are you sure you want to reset all changes? Any unsaved changes will be lost.')) {
+                        location.reload();
+                    }
                 }
-            });
-        } catch (error) {
-            console.error('Failed to initialize Google Places Autocomplete:', error);
-            // Allow typing even if API fails
-            addressInput.removeAttribute('disabled');
-            addressInput.placeholder = 'Enter address manually (autocomplete unavailable)';
+            }
         }
-
-        // Allow typing without restrictions
-        addressInput.addEventListener('input', function () {
-            addressInput.classList.remove('border-red-500');
-            const errorDiv = addressInput.closest('.form-group').querySelector('.form-error');
-            if (errorDiv) errorDiv.classList.remove('show');
-        });
-
-        // Validate address on form submission
-        const form = document.querySelector('form');
-        form.addEventListener('submit', (event) => {
-            const address = addressInput.value.trim();
-            if (!address) {
-                event.preventDefault();
-                alert('Please enter and select a valid address from the suggestions.');
-                addressInput.classList.add('border-red-500');
-                addressInput.focus();
-                return;
-            }
-            // Check for overly broad addresses
-            const broadTerms = ['nigeria', 'kano', 'municipal', 'state', 'city'];
-            if (broadTerms.some(term => address.toLowerCase().includes(term)) && 
-                !address.toLowerCase().includes('road') && 
-                !address.toLowerCase().includes('street') && 
-                !address.toLowerCase().includes('avenue') && 
-                !address.toLowerCase().includes('layout') && 
-                !address.toLowerCase().includes('estate')) {
-                event.preventDefault();
-                alert('Please select a specific address, such as a street, avenue, or landmark (e.g., "No. 12 Zaria Road, Kano").');
-                addressInput.classList.add('border-red-500');
-                addressInput.focus();
-            }
-        });
-    });
-</script>
+    </script>
+</x-consumer-dashboard-layout>
