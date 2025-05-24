@@ -283,7 +283,7 @@
                     <div class="group flex items-center gap-2 mb-4">
                         <img src="{{ asset('images/dhrlogo.jpg') }}" alt="DHR SPACE Logo" class="h-10 w-auto">
                         <span class="text-white font-display font-bold text-xl">
-                            D' Health<span class="text-secondary-500"> Rides</span>
+                            DHR<span class="text-secondary-500"> Space</span>
                         </span>
                     </div>
                     <p class="text-gray-300 mb-6">Revolutionizing Nigeria's medical logistics through cutting-edge technology and innovative solutions.</p>

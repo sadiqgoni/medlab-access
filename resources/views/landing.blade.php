@@ -484,7 +484,7 @@
                     </ul>
                     <a href="{{ route('provider.register') }}" class="inline-flex items-center px-6 py-3 bg-white text-secondary-700 rounded-lg font-medium transition-all hover:bg-secondary-50 hover:shadow-lg">
                         <i class="fas fa-user-plus mr-2"></i>
-                        Register as HealthcareProvider
+                        Register as Healthcare Provider
                     </a>
                 </div>
                 <div class="relative">
@@ -857,24 +857,6 @@
                                 </div>
                             </div>
                         </div>
-{{--                         
-                        <div class="mt-8">
-                            <p class="font-medium mb-3">Follow Us</p>
-                            <div class="flex space-x-4">
-                                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                                    <i class="fab fa-linkedin-in"></i>
-                                </a>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
             </div>
