@@ -532,14 +532,38 @@
     </style>
 </head>
 <body>
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="loader">
-            <div class="blood-drop"></div>
-            <div class="test-tube">
-                <div class="filling"></div>
+    <!-- Enhanced Auth Preloader -->
+    <div id="auth-preloader" class="fixed inset-0 z-50 bg-gradient-to-br from-gray-50 to-primary-50 flex items-center justify-center">
+        <div class="text-center">
+            <!-- Logo Container -->
+            <div class="relative w-24 h-24 mx-auto mb-6">
+                <!-- Pulse Ring -->
+                <div class="absolute inset-0 rounded-full border-2 border-primary-500 animate-ping opacity-75"></div>
+                
+                <!-- Logo -->
+                <div class="absolute inset-2 rounded-full overflow-hidden bg-white shadow-lg flex items-center justify-center">
+                    <img src="/images/dhrlogo.jpg" alt="DHR SPACE" class="w-16 h-16 object-contain">
+                </div>
+                
+                <!-- Rotating Medical Icon -->
+                <div class="absolute -top-2 -right-2 w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center text-white text-xs animate-spin">
+                    ⚕️
+                </div>
             </div>
-            <p class="mt-32 text-center font-display font-semibold text-primary-500">DHR SPACE</p>
+            
+            <!-- Brand -->
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">DHR SPACE</h2>
+            <p class="text-primary-600 font-medium mb-6">Secure Access Portal</p>
+            
+            <!-- Auth Loading Animation -->
+            <div class="flex items-center justify-center space-x-1 mb-4">
+                <div class="w-2 h-2 bg-primary-500 rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-primary-400 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                <div class="w-2 h-2 bg-primary-300 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+            </div>
+            
+            <!-- Loading Text -->
+            <p class="text-gray-500 text-sm" id="auth-loading-text">Preparing secure environment...</p>
         </div>
     </div>
     
@@ -555,11 +579,45 @@
     
     <!-- JavaScript for interactions -->
     <script>
-        // Preloader
+        // Auth Preloader
         document.addEventListener('DOMContentLoaded', function() {
+            // Auth-specific loading texts
+            const authLoadingTexts = [
+                "Preparing secure environment...",
+                "Verifying security protocols...",
+                "Loading authentication system...",
+                "Establishing secure connection...",
+                "Ready for secure access!"
+            ];
+            
+            let currentTextIndex = 0;
+            const loadingTextElement = document.getElementById('auth-loading-text');
+            
+            function rotateAuthLoadingText() {
+                if (loadingTextElement && currentTextIndex < authLoadingTexts.length - 1) {
+                    loadingTextElement.style.opacity = '0.5';
+                    setTimeout(() => {
+                        currentTextIndex++;
+                        loadingTextElement.textContent = authLoadingTexts[currentTextIndex];
+                        loadingTextElement.style.opacity = '1';
+                    }, 200);
+                }
+            }
+            
+            // Rotate loading text every 800ms
+            const textInterval = setInterval(rotateAuthLoadingText, 800);
+            
+            // Hide preloader and show content
             setTimeout(function() {
-                const preloader = document.querySelector('.preloader');
-                preloader.classList.add('hidden');
+                const preloader = document.getElementById('auth-preloader');
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    preloader.style.transition = 'opacity 0.5s ease-out';
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                        clearInterval(textInterval);
+                    }, 500);
+                }
                 
                 // Initialize AOS after preloader
                 AOS.init({
@@ -567,7 +625,7 @@
                     easing: 'ease-out',
                     once: true
                 });
-            }, 1000);
+            }, 2500);
             
             // Password toggle functionality
             const passwordToggles = document.querySelectorAll('.password-toggle');
@@ -598,7 +656,7 @@
                     group.style.transition = 'all 0.5s ease';
                     group.style.opacity = '1';
                     group.style.transform = 'translateY(0)';
-                }, 100 + (index * 100));
+                }, 2600 + (index * 100)); // Wait for preloader to finish
             });
             
             // Button animation
@@ -611,104 +669,33 @@
                     submitBtn.style.transition = 'all 0.5s ease';
                     submitBtn.style.opacity = '1';
                     submitBtn.style.transform = 'translateY(0)';
-                }, 100 + (formGroups.length * 100));
+                }, 2600 + (formGroups.length * 100));
             }
+            
+            // Show mini loader on form submissions
+            document.addEventListener('submit', function(e) {
+                const form = e.target;
+                if (form.tagName === 'FORM') {
+                    showAuthProcessing();
+                }
+            });
         });
         
-        // Preloader styling
-        document.head.insertAdjacentHTML('beforeend', `
-            <style>
-                .preloader {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: white;
-                    z-index: 9999;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
-                }
-                
-                .preloader.hidden {
-                    opacity: 0;
-                    visibility: hidden;
-                }
-                
-                .loader {
-                    position: relative;
-                    width: 100px;
-                    height: 100px;
-                }
-                
-                .blood-drop {
-                    position: absolute;
-                    top: 0;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 40px;
-                    height: 40px;
-                    background: #FF5722;
-                    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-                    animation: drop 2s infinite ease-in-out;
-                }
-                
-                .test-tube {
-                    position: absolute;
-                    bottom: 0;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 30px;
-                    height: 60px;
-                    background: transparent;
-                    border: 3px solid #1E88E5;
-                    border-top: 0;
-                    border-radius: 0 0 15px 15px;
-                    overflow: hidden;
-                }
-                
-                .filling {
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 0%;
-                    background: #FF5722;
-                    animation: fill 2s infinite ease-in-out;
-                }
-                
-                @keyframes drop {
-                    0% {
-                        transform: translateX(-50%) translateY(0) scale(1);
-                    }
-                    40% {
-                        transform: translateX(-50%) translateY(20px) scale(0.5);
-                    }
-                    50% {
-                        transform: translateX(-50%) translateY(30px) scale(0.2);
-                        opacity: 0;
-                    }
-                    100% {
-                        transform: translateX(-50%) translateY(0) scale(1);
-                        opacity: 1;
-                    }
-                }
-                
-                @keyframes fill {
-                    0% {
-                        height: 0%;
-                    }
-                    50% {
-                        height: 80%;
-                    }
-                    100% {
-                        height: 80%;
-                    }
-                }
-            </style>
-        `);
+        // Auth-specific mini loader
+        function showAuthProcessing() {
+            const processingHTML = `
+                <div id="auth-processing" class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center">
+                    <div class="bg-white rounded-xl p-6 shadow-xl max-w-sm mx-4">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+                            <span class="text-gray-700 font-medium">Processing...</span>
+                        </div>
+                        <p class="text-gray-500 text-sm">Please wait while we verify your credentials securely.</p>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', processingHTML);
+        }
     </script>
 </body>
 </html>

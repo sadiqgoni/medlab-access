@@ -150,6 +150,49 @@
     </style>
 </head>
 <body class="bg-white text-neutral-dark">
+    <!-- Simplified DHR SPACE Preloader for Internal Pages -->
+    <div id="simple-preloader" class="fixed inset-0 z-50 bg-gradient-to-br from-gray-50 to-primary-50 flex items-center justify-center" style="display: none;">
+        <div class="text-center">
+            <!-- Logo Container -->
+            <div class="relative w-20 h-20 mx-auto mb-6">
+                <!-- Pulse Ring -->
+                <div class="absolute inset-0 rounded-full border-2 border-primary-500 animate-ping opacity-75"></div>
+                
+                <!-- Logo -->
+                <div class="absolute inset-2 rounded-full overflow-hidden bg-white shadow-lg flex items-center justify-center">
+                    <img src="/images/dhrlogo.jpg" alt="DHR SPACE" class="w-12 h-12 object-contain">
+                </div>
+                
+                <!-- Rotating Medical Icon -->
+                <div class="absolute -top-1 -right-1 w-5 h-5 bg-primary-500 rounded-full flex items-center justify-center text-white text-xs animate-spin">
+                    ⚕️
+                </div>
+            </div>
+            
+            <!-- Brand -->
+            <h2 class="text-xl font-bold text-gray-800 mb-2">DHR SPACE</h2>
+            <p class="text-primary-600 text-sm font-medium mb-4">Medical Logistics Platform</p>
+            
+            <!-- Simple Loading Bar -->
+            <div class="w-32 h-1 bg-gray-200 rounded-full overflow-hidden mx-auto">
+                <div class="h-full bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full animate-pulse"></div>
+            </div>
+            
+            <!-- Loading Text -->
+            <p class="text-gray-500 text-xs mt-3" id="simple-loading-text">Loading...</p>
+        </div>
+    </div>
+    
+    <!-- Minimal Loading Spinner for Quick Actions -->
+    <div id="mini-loader" class="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm flex items-center justify-center" style="display: none;">
+        <div class="bg-white rounded-xl p-6 shadow-xl">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+                <span class="text-gray-700 font-medium">Processing...</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full bg-white/90 backdrop-blur-md z-50 transition-all duration-300">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -513,6 +556,64 @@
                 }
             });
         });
+        
+        // Simple Preloader for page transitions
+        function showSimplePreloader(text = 'Loading...') {
+            const preloader = document.getElementById('simple-preloader');
+            const loadingText = document.getElementById('simple-loading-text');
+            if (preloader && loadingText) {
+                loadingText.textContent = text;
+                preloader.style.display = 'flex';
+            }
+        }
+        
+        function hideSimplePreloader() {
+            const preloader = document.getElementById('simple-preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                preloader.style.transition = 'opacity 0.3s ease-out';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    preloader.style.opacity = '1';
+                }, 300);
+            }
+        }
+        
+        // Mini loader for quick actions
+        function showMiniLoader() {
+            const loader = document.getElementById('mini-loader');
+            if (loader) {
+                loader.style.display = 'flex';
+            }
+        }
+        
+        function hideMiniLoader() {
+            const loader = document.getElementById('mini-loader');
+            if (loader) {
+                loader.style.display = 'none';
+            }
+        }
+        
+        // Auto-hide preloader on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(hideSimplePreloader, 1000);
+        });
+        
+        // Show preloader on form submissions
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            if (form.tagName === 'FORM') {
+                showMiniLoader();
+            }
+        });
+        
+        // Show preloader on navigation links
+        // document.addEventListener('click', function(e) {
+        //     const link = e.target.closest('a[href]');
+        //     if (link && !link.href.includes('#') && !link.target) {
+        //         showSimplePreloader('Navigating...');
+        //     }
+        // });
     </script>
 </body>
 </html>
