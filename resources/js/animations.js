@@ -1,4 +1,4 @@
-// Enhanced animations for MedLab-Access
+// Enhanced animations for DHR SPACE
 
 // Initialize particles background
 function initParticles() {

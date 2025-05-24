@@ -1,7 +1,7 @@
-# MedLab-Access Platform Development Plan
+# DHR SPACE Platform Development Plan
 
 ## Overview
-MedLab-Access is a Laravel-based medical logistics platform for Nigeria, facilitating laboratory test requests, sample transport, and blood donation logistics. The platform comprises **eMedSample** (lab sample transport and report delivery) and **SharedBlood** (blood donation, screening, and transport). It will be developed in four phases over 8 weeks (April 26, 2025 - June 21, 2025) by a team of three: Sadiq Goni (developer), Auwal Muktar (project manager), and Sani Abdullahi (analyst). The project uses **Laravel Filament** for admin/user interfaces, **Cursor AI Pro** ($20/month, ~60,000 NGN for 2 months) for code generation, and **v0** (free tier) for optional landing page UI prototyping. It will be hosted on **Hostinger Premium** with a 200,000 NGN miscellaneous budget for APIs (Paystack, Mapbox, Twilio).
+DHR SPACE is a Laravel-based medical logistics platform for Nigeria, facilitating laboratory test requests, sample transport, and blood donation logistics. The platform comprises **eMedSample** (lab sample transport and report delivery) and **SharedBlood** (blood donation, screening, and transport). It will be developed in four phases over 8 weeks (April 26, 2025 - June 21, 2025) by a team of three: Sadiq Goni (developer), Auwal Muktar (project manager), and Sani Abdullahi (analyst). The project uses **Laravel Filament** for admin/user interfaces, **Cursor AI Pro** ($20/month, ~60,000 NGN for 2 months) for code generation, and **v0** (free tier) for optional landing page UI prototyping. It will be hosted on **Hostinger Premium** with a 200,000 NGN miscellaneous budget for APIs (Paystack, Mapbox, Twilio).
 
 ## Objectives
 - Deliver a scalable Minimum Viable Product (MVP) in Phase 1, followed by advanced features, payment/notification systems, and optimization in subsequent phases.

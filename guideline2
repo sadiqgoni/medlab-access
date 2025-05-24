@@ -1,6 +1,6 @@
-Developer Guide: MedLab-Access Platform Development
+Developer Guide: DHR SPACE Platform Development
 Overview
-The MedLab-Access platform is designed as a centralized, scalable solution to improve medical laboratory access, sample referral, and blood donation logistics. The platform will be developed in phases over a year (as suggested by developers), starting with a Minimum Viable Product (MVP) before additional features are incorporated. The key components of the platform include eMedSample (medical laboratory sample transport and report delivery) and SharedBlood (blood donation, screening, and transport). The following is a proposal based on discussion but can be adjusted as deemed necessary by both parties. Can refer to also the protype and related links shared previously.
+The DHR SPACE platform is designed as a centralized, scalable solution to improve medical laboratory access, sample referral, and blood donation logistics. The platform will be developed in phases over a year (as suggested by developers), starting with a Minimum Viable Product (MVP) before additional features are incorporated. The key components of the platform include eMedSample (medical laboratory sample transport and report delivery) and SharedBlood (blood donation, screening, and transport). The following is a proposal based on discussion but can be adjusted as deemed necessary by both parties. Can refer to also the protype and related links shared previously.
 
 Development Priorities & Timeline Phase 1: MVP Development
 1. Landing Page & Domain Setup

@@ -108,7 +108,7 @@
                                 <i class="fas fa-map-marker-alt absolute left-3 top-3 text-gray-400"></i>
                                 <input id="address" type="text" name="address" value="{{ old('address', auth()->user()->address) }}" required 
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 pl-10" 
-                                       placeholder="Enter street address (e.g., No. 12 Zaria Road, Kano)" />
+                                       placeholder="Enter street address" />
                             </div>
                             <p class="mt-1 text-sm text-gray-500">Start typing your street address or landmark and select a suggestion for accurate location.</p>
                             @error('address')
@@ -217,9 +217,6 @@
 
 
 
-<!-- Hidden Fields for Coordinates -->
-
-<!-- ... Rest of the form (other fields, submit button) remains unchanged ... -->
 
 <!-- JavaScript for Google Places Autocomplete -->
 <script>

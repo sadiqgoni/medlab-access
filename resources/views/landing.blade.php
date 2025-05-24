@@ -3,12 +3,19 @@
 @section('content')
 <!-- Preloader -->
 <div class="preloader">
-    <div class="loader">
-        <div class="blood-drop"></div>
-        <div class="test-tube">
-            <div class="filling"></div>
+    <div class="dhr-loader">
+        <!-- DHR Logo -->
+        <div class="logo-container">
+            <img src="/images/dhrlogo.jpg" alt="D'Health Rides Logo" class="logo-image" height="50">
         </div>
-        <p class="mt-32 text-center font-display font-semibold text-primary-500">MedLab-Access</p>
+        
+        <!-- Loading Text -->
+        <p class="loading-text font-display font-semibold">DHR SPACE</p>
+        
+        <!-- Loading Bar -->
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
     </div>
 </div>
 
@@ -229,6 +236,7 @@
     </div>
 </section>
 
+
 <!-- Enhanced Services Section -->
 <section id="services" class="py-20 bg-neutral-light relative overflow-hidden">
     <!-- Background Elements -->
@@ -303,7 +311,7 @@
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <a href="#" class="group inline-flex items-center font-medium text-primary-600 hover:text-primary-800 transition-colors">
+                        <a href="{{ route('register') }}" class="group inline-flex items-center font-medium text-primary-600 hover:text-primary-800 transition-colors">
                             Explore eMedSample
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -365,7 +373,7 @@
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <a href="#" class="group inline-flex items-center font-medium text-red-600 hover:text-red-800 transition-colors">
+                        <a href="{{ route('register') }}" class="group inline-flex items-center font-medium text-red-600 hover:text-red-800 transition-colors">
                             Explore SharedBlood
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -441,12 +449,57 @@
         </div>
         <!-- Service CTA -->
         <div class="mt-16 text-center" data-aos="fade-up" data-aos-delay="400">
-            <a href="#" class="inline-flex items-center px-8 py-4 bg-primary-500 text-white rounded-xl font-medium text-lg hover:bg-primary-600 transition-colors shadow-lg shadow-primary-500/20 hover:shadow-xl hover:shadow-primary-500/30 pulse-element">
+            <a href="{{ route('register') }}" class="inline-flex items-center px-8 py-4 bg-primary-500 text-white rounded-xl font-medium text-lg hover:bg-primary-600 transition-colors shadow-lg shadow-primary-500/20 hover:shadow-xl hover:shadow-primary-500/30 pulse-element">
                 Explore All Services
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
             </a>
+        </div>
+        
+        <!-- Provider Registration Card (Subtle) -->
+        <div class="mt-24 max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="500">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="bg-secondary-500 p-8 text-white">
+                    <div class="mb-4 flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mr-4">
+                            <i class="fas fa-hospital-user text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">For Healthcare Providers</h3>
+                    </div>
+                    <p class="mb-6">Are you a laboratory, hospital, clinic or blood bank looking to expand your reach? Join our network of trusted healthcare providers.</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            <span>Increase your patient base</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            <span>Optimize logistics and sample collection</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            <span>Enhance service delivery with our technology</span>
+                        </li>
+                    </ul>
+                    <a href="{{ route('provider.register') }}" class="inline-flex items-center px-6 py-3 bg-white text-secondary-700 rounded-lg font-medium transition-all hover:bg-secondary-50 hover:shadow-lg">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Register as HealthcareProvider
+                    </a>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=500&q=80" alt="Medical Provider" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-l from-black/60 to-transparent flex items-center justify-center">
+                        <div class="text-center p-6 max-w-xs">
+                            <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center mb-4 shadow-lg">
+                                <i class="fas fa-handshake text-secondary-500 text-xl"></i>
+                            </div>
+                            <h4 class="text-white text-xl font-bold mb-2">Become a Partner</h4>
+                            <p class="text-white/90 text-sm">Join our network of healthcare providers and expand your services across Nigeria.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -601,7 +654,7 @@
                 <div class="w-full md:w-1/2">
                     <h3 class="text-2xl font-display font-bold mb-4">See How It Works</h3>
                     <p class="text-gray-600 mb-6">
-                        Watch our short demo video to see exactly how MedLab-Access transforms medical logistics in Nigeria, from sample collection to result delivery.
+                        Watch our short demo video to see exactly how DHR SPACE transforms medical logistics in Nigeria, from sample collection to result delivery.
                     </p>
                     
                     <div class="space-y-4 mb-8">
@@ -680,7 +733,7 @@
         <!-- Join CTA -->
         <div class="mt-16 text-center" data-aos="fade-up" data-aos-delay="500">
             <a href="#" class="inline-flex items-center px-8 py-4 bg-secondary-500 text-white rounded-xl font-medium text-lg hover:bg-secondary-600 transition-colors shadow-lg shadow-secondary-500/20 hover:shadow-xl hover:shadow-secondary-500/30 pulse-element">
-                Join MedLab-Access Today
+                Join DHR SPACE Today
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -789,7 +842,7 @@
                                 </div>
                                 <div>
                                     <p class="font-medium mb-1">Email Address</p>
-                                    <p class="text-white/80">info@medlabaccess.ng</p>
+                                    <p class="text-white/80">info@dhealthrides.ng</p>
                                 </div>
                             </div>
                             
@@ -804,7 +857,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+{{--                         
                         <div class="mt-8">
                             <p class="font-medium mb-3">Follow Us</p>
                             <div class="flex space-x-4">
@@ -821,7 +874,7 @@
                                     <i class="fab fa-linkedin-in"></i>
                                 </a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -852,7 +905,7 @@
                     <span class="text-primary-500 text-sm font-bold">M</span>
                 </div>
                 <div class="bg-neutral-light rounded-lg p-3 max-w-[80%]">
-                    <p class="text-sm">Hello! How can I help you with MedLab-Access today?</p>
+                    <p class="text-sm">Hello! How can I help you with DHR SPACE today?</p>
                 </div>
             </div>
         </div>

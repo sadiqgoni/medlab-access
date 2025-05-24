@@ -246,35 +246,48 @@
                         <div class="mt-8">
                             <h4 class="text-sm font-medium text-gray-900 mb-4">Order Specifics</h4>
                             <div class="bg-gray-50 rounded-lg p-4">
-                                @if($order->order_type == 'test')
+                                @if($order->details && isset($order->details['service_ids']) && count($order->details['service_ids']) > 0)
                                     <div class="space-y-3">
-                                        <div class="flex items-center">
-                                            <i class="fas fa-check-circle text-primary-500 mr-2"></i>
-                                            <span class="text-sm text-gray-700">Full Blood Count</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <i class="fas fa-check-circle text-primary-500 mr-2"></i>
-                                            <span class="text-sm text-gray-700">Blood Glucose Test</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <i class="fas fa-check-circle text-primary-500 mr-2"></i>
-                                            <span class="text-sm text-gray-700">Lipid Profile</span>
-                                        </div>
+                                        @php
+                                            $services = App\Models\Service::whereIn('id', $order->details['service_ids'])->get();
+                                        @endphp
+                                        
+                                        @foreach($services as $service)
+                                            <div class="flex items-center">
+                                                @if($order->order_type == 'test')
+                                                    <i class="fas fa-check-circle text-primary-500 mr-2"></i>
+                                                @else
+                                                    <i class="fas fa-tint text-accent mr-2"></i>
+                                                @endif
+                                                <span class="text-sm text-gray-700">{{ $service->name }}</span>
+                                                <span class="ml-auto text-sm text-gray-500">₦{{ number_format($service->price, 2) }}</span>
+                                            </div>
+                                        @endforeach
+                                        
+                                        @if(isset($order->details['test_notes']) && !empty($order->details['test_notes']))
+                                            <div class="mt-3 pt-3 border-t border-gray-200">
+                                                <h5 class="text-sm font-medium text-gray-700 mb-2">Additional Notes:</h5>
+                                                <p class="text-sm text-gray-600">{{ $order->details['test_notes'] }}</p>
+                                            </div>
+                                        @endif
+                                        
+                                        @if(isset($order->details['service_details']) && !empty($order->details['service_details']))
+                                            <div class="mt-3 pt-3 border-t border-gray-200">
+                                                <h5 class="text-sm font-medium text-gray-700 mb-2">Service Details:</h5>
+                                                <dl class="space-y-2">
+                                                    @foreach($order->details['service_details'] as $key => $value)
+                                                        <div class="flex justify-between">
+                                                            <dt class="text-sm text-gray-500">{{ ucwords(str_replace('_', ' ', $key)) }}:</dt>
+                                                            <dd class="text-sm text-gray-700">{{ is_array($value) ? implode(', ', $value) : $value }}</dd>
+                                                        </div>
+                                                    @endforeach
+                                                </dl>
+                                            </div>
+                                        @endif
                                     </div>
                                 @else
-                                    <div class="space-y-3">
-                                        <div class="flex items-center">
-                                            <i class="fas fa-tint text-accent mr-2"></i>
-                                            <span class="text-sm text-gray-700">Blood Group: {{ $order->details['blood_group'] ?? 'N/A' }}</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <i class="fas fa-tint text-accent mr-2"></i>
-                                            <span class="text-sm text-gray-700">Units: {{ $order->details['units'] ?? 'N/A' }}</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <i class="fas fa-tint text-accent mr-2"></i>
-                                            <span class="text-sm text-gray-700">Urgency: {{ ucfirst($order->details['urgency'] ?? 'N/A') }}</span>
-                                        </div>
+                                    <div class="text-center py-4">
+                                        <p class="text-gray-500">No specific services found for this order.</p>
                                     </div>
                                 @endif
                             </div>

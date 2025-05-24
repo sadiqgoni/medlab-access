@@ -8,7 +8,7 @@
                 </div>
             </div>
             <h1>Welcome Back</h1>
-            <p>Sign in to access your MedLab-Access account</p>
+            <p>Sign in to access your DHR SPACE account</p>
         </div>
         
         <div class="auth-body">

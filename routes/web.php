@@ -3,73 +3,69 @@
 use App\Http\Controllers\Consumer\DashboardController;
 use App\Http\Controllers\Consumer\ProfileController;
 use App\Http\Controllers\ConsumerOrderController;
+use App\Http\Controllers\Auth\ProviderRegistrationController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Biker\BikerController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\VerifyIsConsumer;
-use App\Http\Controllers\Api\FacilityServiceController;
-use App\Http\Controllers\Api\NearbyFacilityController; // Import the new controller
+use App\Http\Middleware\VerifyIsBiker;
+
 
 // Public routes
 Route::get('/', function () {
     return view('landing');
 });
 
-// Default dashboard route - will redirect to appropriate dashboard based on role
-Route::get('/dashboard', function () {
-    $user = Auth::user();
-    if (!$user) {
-        return redirect('/login');
-    }
+// Provider Registration Routes
+Route::get('/provider/register', [ProviderRegistrationController::class, 'create'])
+    ->middleware('guest')
+    ->name('provider.register');
     
-    switch ($user->role) {
-        case 'admin':
-            return redirect('/admin');
-        case 'provider':
-            return redirect('/provider');
-        case 'biker':
-            return redirect('/biker');
-        case 'consumer':
-        default:
-            return redirect('/consumer/dashboard');
-    }
-})->middleware(['auth'])->name('dashboard');
+Route::post('/provider/register', [ProviderRegistrationController::class, 'store'])
+    ->middleware('guest')
+    ->name('provider.register.store');
+
+// Provider Registration Confirmation
+Route::get('/provider/registration-confirmation', [ProviderRegistrationController::class, 'confirmation'])
+    ->middleware('guest')
+    ->name('provider.registration.confirmation');
+
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
-    // Profile routes
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
     // Consumer Routes
     Route::middleware(VerifyIsConsumer::class)->prefix('consumer')->name('consumer.')->group(function () {
         // Dashboard
-        Route::get('/dashboard', [App\Http\Controllers\Consumer\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         
-        // Orders
-        Route::resource('orders', App\Http\Controllers\ConsumerOrderController::class);
-        Route::get('orders/{order}/confirmation', [App\Http\Controllers\ConsumerOrderController::class, 'confirmation'])->name('orders.confirmation'); // Add this line
+        // Profile routes
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/location', [ProfileController::class, 'updateLocation'])->name('profile.update.location');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         
-        // Profile
-        Route::get('/profile', [App\Http\Controllers\Consumer\ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [App\Http\Controllers\Consumer\ProfileController::class, 'update'])->name('profile.update');
-
-        // Order Cancellation
-        Route::patch('/orders/{order}/cancel', [App\Http\Controllers\ConsumerOrderController::class, 'cancel'])->name('orders.cancel');
-
-        // Payment Simulation
-        Route::get('/orders/{order}/payment', [App\Http\Controllers\ConsumerOrderController::class, 'showPaymentSimulation'])->name('orders.payment.simulate'); // Show page
-        Route::post('/orders/{order}/confirm-payment', [App\Http\Controllers\ConsumerOrderController::class, 'confirmPayment'])->name('orders.confirm-payment'); // Handle confirmation
+        // Orders routes
+        Route::get('/orders', [ConsumerOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/create', [ConsumerOrderController::class, 'create'])->name('orders.create');
+        Route::post('/orders', [ConsumerOrderController::class, 'store'])->name('orders.store');
+        Route::get('/orders/{order}', [ConsumerOrderController::class, 'show'])->name('orders.show');
+        Route::post('/orders/{order}/payment', [ConsumerOrderController::class, 'confirmPayment'])->name('orders.payment.confirm');
+        Route::get('/orders/{order}/confirmation', [ConsumerOrderController::class, 'confirmation'])->name('orders.confirmation');
+        Route::post('/orders/{order}/cancel', [ConsumerOrderController::class, 'cancel'])->name('orders.cancel');
     });
-
-    // TODO: Add routes for Provider, Biker, Admin panels
+    
+    // Biker Routes
+    Route::middleware(VerifyIsBiker::class)->prefix('biker')->name('biker.')->group(function () {
+        // Map routes
+        Route::get('/orders/{order}/map', [BikerController::class, 'mapRoute'])->name('map-route');
+        // Order status update
+        Route::post('/orders/{order}/status', [BikerController::class, 'updateOrderStatus'])->name('update-order-status');
+    });
 });
 
-// API Routes (for internal use like fetching services)
-// Moved outside the main 'auth' middleware group
-Route::prefix('api')->middleware('auth:sanctum')->group(function () { // Added auth:sanctum middleware
-    Route::get('/facilities/{facility}/services', [FacilityServiceController::class, 'index'])->name('api.facility.services');
-    Route::get('/facilities/nearby', [NearbyFacilityController::class, 'index'])->name('api.facilities.nearby'); // Add route for nearby facilities
-});
+// Add logout route
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
 
 require __DIR__.'/auth.php';

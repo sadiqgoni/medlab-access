@@ -31,9 +31,6 @@ class RegisteredUserController extends Controller
             'address' => ['required', 'string', 'max:1000'],
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
-            'government_id' => ['nullable', 'string', 'max:50', 'unique:'.User::class.',government_id'],
-            'blood_group' => ['nullable', 'string', Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])],
-            'eligible_donor' => ['nullable', 'boolean'],
             'communication_preference' => ['required', 'string', Rule::in(['email', 'sms', 'app'])],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -89,9 +86,6 @@ class RegisteredUserController extends Controller
             'address' => $validated['address'],
             'latitude' => $latitude,
             'longitude' => $longitude,
-            'government_id' => $validated['government_id'] ?? null,
-            'blood_group' => $validated['blood_group'] ?? null,
-            'eligible_donor' => $request->boolean('eligible_donor'),
             'password' => Hash::make($validated['password']),
             'role' => 'consumer',
         ]);

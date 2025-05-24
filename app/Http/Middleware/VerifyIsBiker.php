@@ -5,20 +5,20 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
 
 class VerifyIsBiker
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || Auth::user()->role !== 'biker') {
-            // Redirect or abort if not a biker
-            return redirect('/')->with('error', 'You do not have permission to access this area.');
+        if (!auth()->check() || auth()->user()->role !== 'biker') {
+            abort(403, 'Unauthorized action. Only bikers can access this area.');
         }
 
         return $next($request);

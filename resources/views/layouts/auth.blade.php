@@ -1,11 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'MedLab-Access') }}</title>
+    <title>{{ config('app.name', 'DHR SPACE') }}</title>
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <!-- Configure Tailwind with our color palette -->
     <script>
@@ -104,14 +109,12 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <!-- Mapbox Search JS -->
-    {{-- <script src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
-    <link href="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.css" rel="stylesheet" />
-     --}}
-    <!-- Custom Auth CSS -->
-    <link href="{{ asset('css/auth-animations.css') }}" rel="stylesheet">
+    <!-- Google Maps API -->
     <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places"></script>
  
+    <!-- Custom Auth CSS -->
+    <link href="{{ asset('css/auth-animations.css') }}" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Outfit', sans-serif;
@@ -280,6 +283,10 @@
             margin-right: 0.25rem;
         }
         
+        .form-error.show {
+            display: flex;
+        }
+        
         .btn {
             display: inline-flex;
             align-items: center;
@@ -334,45 +341,6 @@
         .auth-link:hover {
             color: #0068d6;
             text-decoration: underline;
-        }
-        
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-            color: #6b7280;
-        }
-        
-        .divider::before,
-        .divider::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .divider span {
-            padding: 0 1rem;
-            font-size: 0.875rem;
-        }
-        
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-        }
-        
-        .checkbox-wrapper input[type="checkbox"] {
-            width: 1.125rem;
-            height: 1.125rem;
-            margin-right: 0.5rem;
-            border-radius: 0.25rem;
-            border: 1px solid #e5e7eb;
-            cursor: pointer;
-        }
-        
-        .checkbox-wrapper label {
-            font-size: 0.875rem;
-            color: #6b7280;
-            cursor: pointer;
         }
         
         /* Background Elements */
@@ -452,11 +420,6 @@
                 padding: 0.625rem 1.25rem;
                 font-size: 0.875rem;
             }
-            
-            .grid.grid-cols-1.md\:grid-cols-2 {
-                display: flex;
-                flex-direction: column;
-            }
         }
 
         @media (max-width: 480px) {
@@ -477,131 +440,7 @@
                 padding: 0.75rem;
             }
         }
-
-        /* Fix the background shapes to not overflow on mobile */
-        @media (max-width: 640px) {
-            .bg-shape-1, .bg-shape-2 {
-                width: 200px;
-                height: 200px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .bg-shape-1, .bg-shape-2 {
-                width: 150px;
-                height: 150px;
-            }
-        }
-        
-        /* Animation Classes */
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-    
-
-    /* Mapbox Search Box Styling */
-    mapbox-search-box {
-        width: 100%;
-        display: block;
-    }
-
-    mapbox-search-box input {
-        width: 100%;
-        padding: 0.75rem 1rem 0.75rem 2.75rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        background-color: #f9fafb;
-    }
-
-    mapbox-search-box input:focus {
-        outline: none;
-        border-color: #1E88E5;
-        box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
-        background-color: white;
-    }
-
-    /* Suggestions Dropdown */
-    map-Authentication Errorbox-search-box .mapboxgl-ctrl-geocoder--suggestion {
-        background-color: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        font-family: 'Outfit', sans-serif;
-        font-size: 0.95rem;
-    }
-
-    mapbox-search-box .mapboxgl-ctrl-geocoder--suggestion:hover {
-        background-color: #f9fafb;
-        cursor: pointer;
-    }
-  
-
-    /* Form Error Styling */
-    .form-error {
-        color: #ef4444;
-        font-size: 0.8rem;
-        margin-top: 0.25rem;
-        display: none; /* Hide by default */
-        align-items: center;
-    }
-    
-    .form-error.show {
-        display: flex; /* Show only when explicitly triggered */
-    }
-    
-    .form-error i {
-        margin-right: 0.25rem;
-    }
-
-    /* Input Error State */
-    input.border-red-500 {
-        border-color: #ef4444 !important;
-        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-    }
-
-    /* Suppress Google Maps default error icons */
-    .pac-container .pac-item::before,
-    .pac-container::before {
-        display: none !important; /* Hide any Google Maps error icons */
-    }
-
-    /* Ensure input remains responsive */
-    input#address {
-        width: 100%;
-        padding: 0.75rem 1rem 0.75rem 2.75rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        background-color: #f9fafb;
-    }
-</style>
+    </style>
 </head>
 <body>
     <!-- Preloader -->
@@ -611,7 +450,7 @@
             <div class="test-tube">
                 <div class="filling"></div>
             </div>
-            <p class="mt-32 text-center font-display font-semibold text-primary-500">MedLab-Access</p>
+            <p class="mt-32 text-center font-display font-semibold text-primary-500">DHR SPACE</p>
         </div>
     </div>
     

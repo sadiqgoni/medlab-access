@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Facility extends Model
 {
@@ -26,7 +27,12 @@ class Facility extends Model
         'email',
         'status',
         'user_id',
+        'type',
+        'services_description',
+        'services_offered',
+        'license_number',
     ];
+
 
     /**
      * The attributes that should be cast.
@@ -49,8 +55,8 @@ class Facility extends Model
     /**
      * The services that belong to the facility.
      */
-    public function services(): BelongsToMany
+    public function services(): HasMany
     {
-        return $this->belongsToMany(Service::class, 'facility_service');
+        return $this->hasMany(Service::class);
     }
 }

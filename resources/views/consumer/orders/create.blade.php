@@ -12,7 +12,7 @@
     </x-slot>
 
     <!-- Main Content -->
-    <div class="py-6">
+    <div class="py-6" x-data="orderForm()">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Order Type Selection -->
             <div class="bg-white rounded-xl shadow-md p-6 mb-8 border border-gray-100">
@@ -59,7 +59,7 @@
             </div>
             
             <!-- Order Form -->
-            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100" x-data="orderForm()">
+            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
                 <form id="order-form" method="POST" action="{{ route('consumer.orders.store') }}" class="space-y-6">
                     @csrf
                     <input type="hidden" id="order_type_input" name="order_type" x-model="orderType">
@@ -96,15 +96,38 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Select Service(s)</label>
                             <div class="space-y-3 max-h-60 overflow-y-auto border rounded-md p-3 bg-gray-50">
                                 <template x-for="service in availableServices" :key="service.id">
-                                    <div class="relative flex items-start">
-                                        <div class="flex items-center h-5">
+                                    <div class="relative flex items-start p-3 rounded hover:bg-gray-100 transition-colors mb-2">
+                                        <div class="flex items-center h-5 mr-3">
                                             <input :id="'service_' + service.id" name="services[]" :value="service.id" type="checkbox" 
                                                    x-model="selectedServices" 
                                                    class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500">
                                         </div>
-                                        <div class="ml-3 text-sm">
-                                            <label :for="'service_' + service.id" class="font-medium text-gray-700" x-text="service.name"></label>
-                                            <p class="text-gray-500" x-text="service.description ? service.description + ' (' + formatCurrency(service.price) + ')' : formatCurrency(service.price)"></p>
+                                        <div class="flex-grow">
+                                            <div class="flex justify-between items-start">
+                                                <label :for="'service_' + service.id" class="font-medium text-gray-900 block" x-text="service.name"></label>
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                                                      :class="{
+                                                        'bg-green-100 text-green-800': service.availability_status === 'available', 
+                                                        'bg-yellow-100 text-yellow-800': service.availability_status === 'limited',
+                                                        'bg-red-100 text-red-800': service.availability_status === 'unavailable'
+                                                      }">
+                                                    <span x-text="service.category === 'SharedBlood' 
+                                                        ? service.availability_status 
+                                                        : service.turnaround_time || 'No turnaround time specified'"></span>
+                                                </span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <div>
+                                                    <p class="text-gray-500" x-text="formatCurrency(service.price)"></p>
+                                                    <p x-show="service.requirements" class="text-sm text-gray-500 italic mt-1">
+                                                        <span class="font-medium">Requirements:</span> 
+                                                        <span x-text="service.requirements"></span>
+                                                    </p>
+                                                    <p x-show="service.notes" class="text-sm text-gray-500 mt-1">
+                                                        <span x-text="service.notes"></span>
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </template>
@@ -121,75 +144,14 @@
                         </div>
                     </div>
                     
-                    <!-- Dynamically Rendered Attribute Fields -->
-                    <div class="space-y-6 pt-6 border-t border-gray-200" x-show="selectedServices.length > 0">
-                        <h3 class="text-lg font-medium text-gray-900">Service Details</h3>
-                        <template x-for="attribute in requiredAttributes" :key="attribute.name">
-                            <div class="mb-4">
-                                <label :for="'attribute_' + attribute.name" class="block text-sm font-medium text-gray-700" >
-                                    <span x-text="attribute.label"></span>
-                                    <span x-show="attribute.required" class="text-red-500">*</span>
-                                </label>
-                                
-                                <!-- Text Input -->
-                                <input x-show="attribute.type === 'text'" :type="attribute.type" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" :required="attribute.required"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                                
-                                <!-- Number Input -->
-                                <input x-show="attribute.type === 'number'" :type="attribute.type" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" :required="attribute.required"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-
-                                <!-- Text Area -->
-                                <textarea x-show="attribute.type === 'textarea'" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" rows="3" :required="attribute.required"
-                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"></textarea>
-                                
-                                <!-- Select Dropdown -->
-                                <select x-show="attribute.type === 'select'" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" :required="attribute.required"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                                    <option value="">-- Select <span x-text="attribute.label"></span> --</option>
-                                    <template x-for="option in attribute.options" :key="option">
-                                        <option :value="option" x-text="option"></option>
-                                    </template>
-                                </select>
-
-                                <!-- Checkbox -->
-                                <div x-show="attribute.type === 'checkbox'" class="flex items-center mt-1">
-                                    <input :type="attribute.type" :name="'details[' + attribute.name + ']'" :id="'attribute_' + attribute.name" value="1" 
-                                           class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-                                    <label :for="'attribute_' + attribute.name" class="ml-2 block text-sm text-gray-900">Yes</label> 
-                                    <input type="hidden" :name="'details[' + attribute.name + ']'" value="0" x-show="!document.getElementById('attribute_' + attribute.name)?.checked">
-                                </div>
-
-                                @php
-                                    $errorKey = 'details.' . (isset($attribute['name']) ? $attribute['name'] : '__dynamic__'); 
-                                @endphp
-                                @error($errorKey) 
-                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                                 <span x-show="errors && errors['details.' + attribute.name]">
-                                     <p class="mt-2 text-sm text-red-600" x-text="errors['details.' + attribute.name][0]"></p>
-                                </span>
-                            </div>
-                        </template>
-                    </div>
-                   
-                    <!-- Lab Test Notes -->
-                    <div id="test_notes_container" x-show="hasSelectedTestService" x-transition>
-                         <h3 class="text-lg font-medium text-gray-900">Additional Test Notes</h3>
-                         <div>
-                            <label for="test_notes" class="block text-sm font-medium text-gray-700 mb-1 sr-only">Additional Test Notes</label>
-                            <textarea id="test_notes" name="test_notes" rows="3" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" placeholder="Any specific instructions or additional tests not listed above">{{ old('test_notes') }}</textarea>
-                             @error('test_notes')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
+                
+                
                     
                     <!-- Logistics Fields -->
                     <div class="pt-6 border-t border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Logistics</h3>
                         <div class="mt-4">
-                            <label for="delivery_address" class="block text-sm font-medium text-gray-700 mb-1">Delivery Address</label>
+                            <label for="delivery_address" class="block text-sm font-medium text-gray-700 mb-1">Pickup/Delivery Address</label>
                             <input type="text" id="delivery_address" name="delivery_address" value="{{ old('delivery_address', Auth::user()->address) }}" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                              @error('delivery_address')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -278,7 +240,7 @@
                                 <p class="text-sm text-gray-600">Please transfer the total amount to the following bank account:</p>
                                 <div class="bg-white p-4 rounded-md border border-gray-200">
                                     <p><strong>Bank:</strong> GTB Bank</p>
-                                    <p><strong>Account Name:</strong> D' Health Rides</p>
+                                    <p><strong>Account Name:</strong> DHR SPACE</p>
                                     <p><strong>Account Number:</strong> 1234567890</p>
                                     <p><strong>Amount:</strong> <span x-text="formatCurrency(totalAmount)"></span></p>
                                 </div>
@@ -351,24 +313,56 @@
                 },
                 waitingForTransfer: false,
                 isPaymentProcessing: false,
+                isPaymentValid: true, // Add this missing property
     
                 init() {
+                    // Initialize with any existing value from old input if form was submitted with errors
+                    this.orderType = @json(old('order_type')) || null;
                     this.errors = @json($errors->toArray());
+                    
                     // Don't fetch services initially, wait for facility selection
                     // If old facility ID exists, we might need to re-fetch nearby first to populate the list
                     // For simplicity, let's require user interaction first.
                     this.updateCost(); // Initialize cost calculation
                     this.$watch('selectedServices', () => this.updateCost());
                     this.$watch('paymentMethod', () => this.resetPaymentState());
+                    
                     // Watch orderType to clear dependent selections
                     this.$watch('orderType', () => {
                         this.selectedFacility = '';
                         this.availableServices = [];
                         this.selectedServices = [];
                         this.nearbyFacilities = []; // Clear previous nearby list
+                        
+                        // If orderType is set, fetch nearby facilities
+                        if (this.orderType) {
+                            this.fetchNearbyFacilities();
+                        }
+                    });
+                    
+                    // Initialize payment validity check
+                    this.$watch('cardDetails', () => {
+                        if (this.paymentMethod === 'card') {
+                            this.validateCardPayment();
+                        }
+                    }, { deep: true });
+                    
+                    this.$watch('paymentMethod', () => {
+                        this.isPaymentValid = this.paymentMethod !== 'card' || 
+                            (!this.cardErrors.number && !this.cardErrors.expiry && !this.cardErrors.cvv);
                     });
                 },
 
+                // Validate card payment fields
+                validateCardPayment() {
+                    this.validateCardNumber();
+                    this.validateCardExpiry();
+                    this.validateCardCvv();
+                    
+                    this.isPaymentValid = !this.cardErrors.number && !this.cardErrors.expiry && !this.cardErrors.cvv;
+                },
+
+                // ... keep existing methods ...
                 fetchNearbyFacilities() {
                     if (!this.orderType || this.userLatitude === null || this.userLongitude === null) {
                         if (this.userLatitude === null || this.userLongitude === null) {
@@ -383,7 +377,8 @@
                     this.nearbyFacilities = [];
                     this.selectedFacility = ''; // Reset selected facility
 
-                    const url = `{{ route('api.facilities.nearby') }}?latitude=${this.userLatitude}&longitude=${this.userLongitude}&order_type=${this.orderType}`;
+                    // Construct the API URL with query parameters
+                    const url = `/api/nearby-facilities?latitude=${this.userLatitude}&longitude=${this.userLongitude}&order_type=${this.orderType}&radius=10`;
                     
                     fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
                         .then(response => {
@@ -418,8 +413,20 @@
                             return response.json();
                         })
                         .then(data => {
-                            // Filter services based on the initially selected orderType
-                            this.availableServices = Array.isArray(data) ? data.filter(service => service.type === this.orderType && service.is_active) : [];
+                            // Filter services based on the initially selected orderType and availability
+                            this.availableServices = Array.isArray(data) ? data.filter(service => {
+                                // Match the service type with the selected order type
+                                if (service.type !== this.orderType || !service.is_active) {
+                                    return false;
+                                }
+                                
+                                // For blood services, only show available ones
+                                if (service.category === 'SharedBlood' && service.availability_status === 'unavailable') {
+                                    return false;
+                                }
+                                
+                                return true;
+                            }) : [];
                         })
                         .catch(error => {
                             console.error('Error fetching services:', error);

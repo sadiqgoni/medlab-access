@@ -1,4 +1,4 @@
-// Enhanced animations for MedLab-Access
+// Enhanced animations for DHR SPACE
 
 // Initialize particles background
 function initParticles() {
@@ -287,23 +287,55 @@ function initCustomCursor() {
 // Preloader
 function setupPreloader() {
   console.log("setupPreloader function called");
-  const preloader = document.querySelector(".preloader")
+  const preloader = document.querySelector(".preloader");
   if (!preloader) {
     console.error("Preloader element not found!");
-    return
+    return;
   }
+
+  // Add additional spokes to wheels for better visual effect
+  const addSpokes = () => {
+    const wheels = document.querySelectorAll('.wheel-spokes');
+    
+    wheels.forEach(wheel => {
+      // Add diagonal spokes
+      const diagonal1 = document.createElement('div');
+      diagonal1.style.position = 'absolute';
+      diagonal1.style.top = '50%';
+      diagonal1.style.left = '50%';
+      diagonal1.style.width = '100%';
+      diagonal1.style.height = '4px';
+      diagonal1.style.backgroundColor = 'rgba(76, 175, 80, 0.7)';
+      diagonal1.style.transform = 'translate(-50%, -50%) rotate(45deg)';
+      
+      const diagonal2 = document.createElement('div');
+      diagonal2.style.position = 'absolute';
+      diagonal2.style.top = '50%';
+      diagonal2.style.left = '50%';
+      diagonal2.style.width = '100%';
+      diagonal2.style.height = '4px';
+      diagonal2.style.backgroundColor = 'rgba(76, 175, 80, 0.7)';
+      diagonal2.style.transform = 'translate(-50%, -50%) rotate(135deg)';
+      
+      wheel.appendChild(diagonal1);
+      wheel.appendChild(diagonal2);
+    });
+  };
+
+  // Initialize the animation
+  addSpokes();
 
   window.addEventListener("load", () => {
     console.log("Window load event fired for preloader");
     setTimeout(() => {
       console.log("Hiding preloader now...");
-      preloader.classList.add("hidden")
+      preloader.classList.add("hidden");
       setTimeout(() => {
         console.log("Removing preloader now...");
-        preloader.remove()
-      }, 500)
-    }, 1500)
-  })
+        preloader.remove();
+      }, 500);
+    }, 2000); // Slightly longer to allow users to see the cool animation
+  });
 }
 
 // Fade in sections on scroll
@@ -334,27 +366,61 @@ function initHowItWorksSlider() {
 
   const images = sliderContainer.querySelectorAll('.slider-image');
   const controls = sliderContainer.querySelectorAll('.slider-control');
+  let currentSlide = 1;
+  let slideInterval;
 
+  // Function to change slide
+  const changeSlide = (targetSlide) => {
+    // Update active control button
+    controls.forEach(c => c.classList.remove('active-slide', 'scale-125'));
+    controls[targetSlide-1].classList.add('active-slide', 'scale-125');
+
+    // Show target image and hide others
+    images.forEach(image => {
+      if (image.getAttribute('data-slide') === targetSlide.toString()) {
+        image.classList.remove('opacity-0');
+        image.classList.add('opacity-100');
+      } else {
+        image.classList.remove('opacity-100');
+        image.classList.add('opacity-0');
+      }
+    });
+    
+    currentSlide = parseInt(targetSlide);
+  };
+
+  // Start auto-sliding
+  const startAutoSlide = () => {
+    slideInterval = setInterval(() => {
+      let nextSlide = currentSlide + 1;
+      if (nextSlide > images.length) nextSlide = 1;
+      changeSlide(nextSlide);
+    }, 4000); // Change slide every 5 seconds
+  };
+
+  // Setup manual controls
   controls.forEach(control => {
     control.addEventListener('click', () => {
       const targetSlide = control.getAttribute('data-target-slide');
-
-      // Update active control button
-      controls.forEach(c => c.classList.remove('active-slide', 'scale-125'));
-      control.classList.add('active-slide', 'scale-125');
-
-      // Show target image and hide others
-      images.forEach(image => {
-        if (image.getAttribute('data-slide') === targetSlide) {
-          image.classList.remove('opacity-0');
-          image.classList.add('opacity-100');
-        } else {
-          image.classList.remove('opacity-100');
-          image.classList.add('opacity-0');
-        }
-      });
+      
+      // Clear the interval and restart it
+      clearInterval(slideInterval);
+      changeSlide(parseInt(targetSlide));
+      startAutoSlide();
     });
   });
+
+  // Handle mouse hover - pause on hover
+  sliderContainer.addEventListener('mouseenter', () => {
+    clearInterval(slideInterval);
+  });
+  
+  sliderContainer.addEventListener('mouseleave', () => {
+    startAutoSlide();
+  });
+
+  // Start auto-sliding immediately
+  startAutoSlide();
 }
 
 // Initialize all animations

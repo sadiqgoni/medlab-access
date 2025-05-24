@@ -13,16 +13,19 @@ return new class extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('address');
-            $table->decimal('latitude', 10, 7)->nullable(); // Precision for lat/lng
+            $table->string('name')->nullable();
+            $table->text('address')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable(); 
             $table->decimal('longitude', 10, 7)->nullable();
             $table->string('contact_person')->nullable();
+            $table->string('type')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable()->unique();
-            $table->json('services_offered')->nullable(); // Storing as JSON for flexibility
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Link to the provider user
+            $table->text('services_description')->nullable();
+            $table->json('services_offered')->nullable();
+            $table->string('license_number')->nullable();
+            $table->string('status')->default('pending');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
             $table->timestamps();
         });
     }

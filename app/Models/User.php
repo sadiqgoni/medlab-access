@@ -27,10 +27,11 @@ class User extends Authenticatable
         'blood_group',
         'latitude', 
         'longitude',
-        'eligible_donor',
         'communication_preference',
         'role',
-        'communication_preferences',
+        'status', 
+        'facility_id', 
+        'is_facility_admin',
     ];
 
     /**

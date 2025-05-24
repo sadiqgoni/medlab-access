@@ -19,9 +19,12 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone')->unique()->nullable();
             $table->text('address')->nullable();
-            $table->string('government_id')->nullable()->unique();
+            $table->decimal('latitude', 10, 7)->nullable(); 
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->string('status')->default('pending'); 
+            $table->string('government_id')->nullable();
             $table->string('blood_group')->nullable();
-            $table->boolean('eligible_donor')->default(false);
+            $table->boolean('is_facility_admin')->default(false);
             $table->enum('communication_preference', ['email', 'sms', 'app'])->default('email');
             $table->enum('role', ['consumer', 'provider', 'biker', 'admin'])->default('consumer');
             $table->rememberToken();

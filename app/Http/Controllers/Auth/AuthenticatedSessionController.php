@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use App\Providers\RouteServiceProvider;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -29,21 +29,24 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // Redirect based on user's role
-        $user = $request->user();
-        
-        switch ($user->role) {
-            case 'admin':
-                return redirect()->intended('/admin');
-            case 'provider':
-                return redirect()->intended('/provider');
-            case 'biker':
-                return redirect()->intended('/biker');
-            case 'consumer':
-                return redirect()->intended(RouteServiceProvider::HOME); // This is '/consumer/dashboard'
-            default:
-                return redirect()->intended(RouteServiceProvider::HOME);
+        // Redirect based on user role
+        $user = Auth::user();
+        if ($user) {
+            switch ($user->role) {
+                case 'admin':
+                    return redirect()->intended(route('filament.admin.pages.dashboard'));
+                case 'provider':
+                    return redirect()->intended(route('filament.provider.pages.dashboard'));
+                case 'biker':
+                    return redirect()->intended(route('filament.biker.pages.dashboard'));
+                case 'consumer':
+                    return redirect()->intended(route('consumer.dashboard'));
+                default:
+                    return redirect()->intended(RouteServiceProvider::HOME);
+            }
         }
+
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**

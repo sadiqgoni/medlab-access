@@ -95,8 +95,8 @@
             <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200">
                 <div class="flex items-center">
                     <a href="{{ route('consumer.dashboard') }}" class="flex items-center gap-2">
-                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-8 w-auto">
-                        <span class="ml-2 text-lg font-semibold text-gray-900 hidden sm:inline">D' Health Rides</span>
+                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="DHR SPACE Logo" class="h-8 w-auto">
+                        <span class="ml-2 text-lg font-semibold text-gray-900 hidden sm:inline">DHR SPACE</span>
                     </a>
                 </div>
                 <button @click="sidebarOpen = false" class="text-gray-500 hover:text-gray-700">
@@ -115,8 +115,8 @@
                     Dashboard
                 </a>
                 
-                <a href="{{ route('consumer.orders.index') }}" class="flex items-center px-4 py-2 text-sm font-medium {{ request()->routeIs('consumer.orders.*') ? 'text-primary-700 bg-primary-50' : 'text-gray-700 hover:bg-gray-100' }} rounded-md">
-                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('consumer.orders.*') ? 'text-primary-500' : 'text-gray-500' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('consumer.orders.index') }}" class="flex items-center px-4 py-2 text-sm font-medium {{ (request()->routeIs('consumer.orders.index') || request()->routeIs('consumer.orders.show')) ? 'text-primary-700 bg-primary-50' : 'text-gray-700 hover:bg-gray-100' }} rounded-md">
+                    <svg class="mr-3 h-5 w-5 {{ (request()->routeIs('consumer.orders.index') || request()->routeIs('consumer.orders.show')) ? 'text-primary-500' : 'text-gray-500' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                     </svg>
                     My Orders
@@ -147,8 +147,8 @@
         <div class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:bg-white">
             <div class="flex items-center h-16 px-4 border-b border-gray-200">
                 <a href="{{ route('consumer.dashboard') }}" class="flex items-center gap-2">
-                    <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-8 w-auto">
-                    <span class="ml-2 text-lg font-semibold text-gray-900">D' Health Rides</span>
+                    <img src="{{ asset('images/dhrlogo.jpg') }}" alt="DHR SPACE Logo" class="h-8 w-auto">
+                    <span class="ml-2 text-lg font-semibold text-gray-900">DHR SPACE</span>
                 </a>
             </div>
             
@@ -161,8 +161,8 @@
                     Dashboard
                 </a>
                 
-                <a href="{{ route('consumer.orders.index') }}" class="flex items-center px-4 py-2 text-sm font-medium {{ request()->routeIs('consumer.orders.*') ? 'text-primary-700 bg-primary-50' : 'text-gray-700 hover:bg-gray-100' }} rounded-md">
-                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('consumer.orders.*') ? 'text-primary-500' : 'text-gray-500' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('consumer.orders.index') }}" class="flex items-center px-4 py-2 text-sm font-medium {{ (request()->routeIs('consumer.orders.index') || request()->routeIs('consumer.orders.show')) ? 'text-primary-700 bg-primary-50' : 'text-gray-700 hover:bg-gray-100' }} rounded-md">
+                    <svg class="mr-3 h-5 w-5 {{ (request()->routeIs('consumer.orders.index') || request()->routeIs('consumer.orders.show')) ? 'text-primary-500' : 'text-gray-500' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                     </svg>
                     My Orders
@@ -207,7 +207,7 @@
                 </button>
                 <div class="flex items-center justify-center flex-1 px-4">
                     <a href="{{ route('consumer.dashboard') }}">
-                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-8 w-auto">
+                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="DHR SPACE Logo" class="h-8 w-auto">
                     </a>
                 </div>
                 <div class="flex items-center px-4">

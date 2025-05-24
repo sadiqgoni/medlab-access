@@ -53,11 +53,7 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'role.redirect' => \App\Http\Middleware\RedirectBasedOnRole::class,
-        'admin' => \App\Http\Middleware\VerifyIsAdmin::class,
-        'provider' => \App\Http\Middleware\VerifyIsProvider::class,
         'biker' => \App\Http\Middleware\VerifyIsBiker::class,
-        'consumer' => \App\Http\Middleware\VerifyIsConsumer::class,
     ];
 
     /**
@@ -69,4 +65,4 @@ class Kernel extends HttpKernel
     {
         //
     }
-} 
+}

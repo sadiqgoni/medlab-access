@@ -53,7 +53,6 @@ class BikerPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                VerifyIsBiker::class,
                 \App\Http\Middleware\RedirectUser::class,
             ]);
     }

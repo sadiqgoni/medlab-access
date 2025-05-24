@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="D' Health Rides - Revolutionary Medical Logistics Platform in Nigeria | Seamless Lab Tests and Blood Donations">
-    <title>D' Health Rides - Advanced Medical Logistics Platform</title>
+    <meta name="description" content="DHR SPACE - Revolutionary Medical Logistics Platform in Nigeria | Seamless Lab Tests and Blood Donations">
+    <title>DHR SPACE - Advanced Medical Logistics Platform</title>
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -157,9 +157,9 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="/" class="group flex items-center gap-2 transition-all duration-300">
-                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-10 w-auto group-hover:scale-110 transition-transform">
+                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="DHR SPACE Logo" class="h-10 w-auto group-hover:scale-110 transition-transform">
                         <span class="text-primary-600 font-display font-bold text-xl group-hover:text-primary-500 transition-colors hidden sm:inline">
-                            D' Health<span class="text-secondary-500"> Rides</span>
+                            DHR<span class="text-secondary-500"> SPACE</span>
                         </span>
                     </a>
                 </div>
@@ -180,10 +180,38 @@
                     <a href="#services" class="hover-link text-neutral-dark hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-300">Services</a>
                     <a href="#how-it-works" class="hover-link text-neutral-dark hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-300">How It Works</a>
                     <a href="#contact" class="hover-link text-neutral-dark hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-300">Contact</a>
-                    <a href="{{ route('register') }}" class="magnetic-btn group relative bg-primary-500 text-white px-7 py-3 rounded-full text-sm font-medium transition-all duration-300 hover:bg-primary-600 hover:shadow-lg hover:shadow-primary-500/20 overflow-hidden">
-                        <span class="relative z-10 font-medium">Register</span>
-                        <span class="absolute top-0 left-0 w-full h-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    </a>
+                    
+                    @guest
+                        <a href="{{ route('login') }}" class="hover-link text-neutral-dark hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-300">Login</a>
+                        <a href="{{ route('register') }}" class="magnetic-btn group relative bg-primary-500 text-white px-7 py-3 rounded-full text-sm font-medium transition-all duration-300 hover:bg-primary-600 hover:shadow-lg hover:shadow-primary-500/20 overflow-hidden">
+                            <span class="relative z-10 font-medium">Register</span>
+                            <span class="absolute top-0 left-0 w-full h-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                        </a>
+                    @else
+                        <div class="relative group">
+                            <button class="flex items-center hover-link text-neutral-dark hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-300">
+                                <span>{{ Auth::user()->name }}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-10 hidden group-hover:block">
+                                @if(Auth::user()->role === 'admin')
+                                    <a href="{{ route('filament.admin.pages.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50">Admin Dashboard</a>
+                                @elseif(Auth::user()->role === 'provider')
+                                    <a href="{{ route('filament.provider.pages.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50">Provider Dashboard</a>
+                                @elseif(Auth::user()->role === 'biker')
+                                    <a href="{{ route('filament.biker.pages.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50">Biker Dashboard</a>
+                                @elseif(Auth::user()->role === 'consumer')
+                                    <a href="{{ route('consumer.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50">My Dashboard</a>
+                                @endif
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-primary-50">Logout</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endguest
                 </div>
             </div>
             
@@ -194,7 +222,26 @@
                     <a href="#services" class="block px-3 py-2 text-base font-medium text-neutral-dark hover:text-primary-500 transition-colors duration-300 micro-interaction">Services</a>
                     <a href="#how-it-works" class="block px-3 py-2 text-base font-medium text-neutral-dark hover:text-primary-500 transition-colors duration-300 micro-interaction">How It Works</a>
                     <a href="#contact" class="block px-3 py-2 text-base font-medium text-neutral-dark hover:text-primary-500 transition-colors duration-300 micro-interaction">Contact</a>
-                    <a href="#" class="block mt-4 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-full text-sm font-medium text-center transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/20">Register</a>
+                    
+                    @guest
+                        <a href="{{ route('login') }}" class="block px-3 py-2 text-base font-medium text-neutral-dark hover:text-primary-500 transition-colors duration-300 micro-interaction">Login</a>
+                        <a href="{{ route('register') }}" class="block mt-4 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-full text-sm font-medium text-center transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/20">Register</a>
+                    @else
+                        @if(Auth::user()->role === 'admin')
+                            <a href="{{ route('filament.admin.pages.dashboard') }}" class="block px-3 py-2 text-base font-medium text-neutral-dark hover:text-primary-500 transition-colors duration-300 micro-interaction">Admin Dashboard</a>
+                        @elseif(Auth::user()->role === 'provider')
+                            <a href="{{ route('filament.provider.pages.dashboard') }}" class="block px-3 py-2 text-base font-medium text-neutral-dark hover:text-primary-500 transition-colors duration-300 micro-interaction">Provider Dashboard</a>
+                        @elseif(Auth::user()->role === 'biker')
+                            <a href="{{ route('filament.biker.pages.dashboard') }}" class="block px-3 py-2 text-base font-medium text-neutral-dark hover:text-primary-500 transition-colors duration-300 micro-interaction">Biker Dashboard</a>
+                        @elseif(Auth::user()->role === 'consumer')
+                            <a href="{{ route('consumer.dashboard') }}" class="block px-3 py-2 text-base font-medium text-neutral-dark hover:text-primary-500 transition-colors duration-300 micro-interaction">My Dashboard</a>
+                        @endif
+                        
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block mt-4 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full text-sm font-medium text-center transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20 w-full">Logout</button>
+                        </form>
+                    @endguest
                 </div>
             </div>
         </div>
@@ -234,7 +281,7 @@
                 <!-- Company Info -->
                 <div data-aos="fade-right" data-aos-delay="100">
                     <div class="group flex items-center gap-2 mb-4">
-                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="D' Health Rides Logo" class="h-10 w-auto">
+                        <img src="{{ asset('images/dhrlogo.jpg') }}" alt="DHR SPACE Logo" class="h-10 w-auto">
                         <span class="text-white font-display font-bold text-xl">
                             D' Health<span class="text-secondary-500"> Rides</span>
                         </span>
@@ -294,7 +341,7 @@
                             </div>
                             <div>
                                 <p class="text-white font-medium">Email</p>
-                                <a href="mailto:info@medlabaccess.ng" class="text-gray-300 hover:text-white transition-colors">info@medlabaccess.ng</a>
+                                <a href="mailto:info@dhealthrides.ng" class="text-gray-300 hover:text-white transition-colors">info@dhealthrides.ng</a>
                             </div>
                         </li>
                         <li class="flex items-start group">
@@ -312,7 +359,7 @@
                             </div>
                             <div>
                                 <p class="text-white font-medium">Address</p>
-                                <span class="text-gray-300">Lagos, Nigeria</span>
+                                <span class="text-gray-300">Bauchi, Nigeria</span>
                             </div>
                         </li>
                     </ul>
@@ -334,7 +381,7 @@
             </div>
             
             <div class="border-t border-gray-700 mt-12 pt-8 text-center">
-                <p class="text-gray-400">© {{ date('Y') }} D' Health Rides. All rights reserved.</p>
+                <p class="text-gray-400">© {{ date('Y') }} DHR SPACE. All rights reserved.</p>
                 <p class="text-gray-500 text-sm mt-2">Transforming medical logistics in Nigeria through innovation.</p>
             </div>
         </div>
