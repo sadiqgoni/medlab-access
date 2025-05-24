@@ -1,17 +1,16 @@
 <x-consumer-dashboard-layout>
     <x-slot name="header">
-        <div class="flex items-center">
-        
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">My Profile</h1>
-                <p class="mt-2 text-gray-600">Manage your personal information and preferences</p>
-                <div class="flex items-center mt-3 space-x-4">
-                    <div class="flex items-center text-sm text-green-600">
-                        <i class="fas fa-shield-alt mr-2"></i>
+        <div class="flex flex-col sm:flex-row sm:items-center">
+            <div class="flex-1">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">My Profile</h1>
+                <p class="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Manage your personal information and preferences</p>
+                <div class="flex flex-wrap items-center mt-2 sm:mt-3 space-x-2 sm:space-x-4">
+                    <div class="flex items-center text-xs sm:text-sm text-green-600">
+                        <i class="fas fa-shield-alt mr-1 sm:mr-2"></i>
                         <span>Secure & Private</span>
                     </div>
-                    <div class="flex items-center text-sm text-blue-600">
-                        <i class="fas fa-sync-alt mr-2"></i>
+                    <div class="flex items-center text-xs sm:text-sm text-blue-600">
+                        <i class="fas fa-sync-alt mr-1 sm:mr-2"></i>
                         <span>Auto-saved</span>
                     </div>
                 </div>
@@ -257,12 +256,12 @@
 
                         <!-- Contact & Address Tab -->
                         <div x-show="activeTab === 'contact'" x-transition>
-                            <div class="mb-8">
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Contact & Address Information</h3>
-                                <p class="text-gray-600">Update your contact details and address for service delivery</p>
+                            <div class="mb-6 md:mb-8">
+                                <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-1 md:mb-2">Contact & Address Information</h3>
+                                <p class="text-sm text-gray-600">Update your contact details and address for service delivery</p>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                 <!-- Phone Number -->
                                 <div>
                                     <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -358,31 +357,32 @@
                             </div>
 
                             <!-- Location Services -->
-                            <div class="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-200">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="text-lg font-semibold text-blue-900">Location Services</h4>
-                                        <p class="text-sm text-blue-700 mt-1">Enable location services to find nearby facilities and improve delivery accuracy</p>
+                            <div class="mt-6 md:mt-8 p-4 md:p-6 bg-blue-50 rounded-xl border border-blue-200">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                    <div class="mb-4 sm:mb-0">
+                                        <h4 class="text-base md:text-lg font-semibold text-blue-900">Location Services</h4>
+                                        <p class="text-xs md:text-sm text-blue-700 mt-1">Enable location services to find nearby facilities and improve delivery accuracy</p>
                                     </div>
-                                    <button type="button" @click="getCurrentLocation" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    <button type="button" @click="getCurrentLocation" class="w-full sm:w-auto inline-flex items-center justify-center px-3 md:px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
                                         <i class="fas fa-location-arrow mr-2"></i>
-                                        Get Current Location
+                                        <span class="hidden sm:inline">Get Current Location</span>
+                                        <span class="sm:hidden">Get Location</span>
                                     </button>
                                 </div>
                                 <div x-show="locationStatus" class="mt-4 p-3 rounded-lg" :class="locationStatus.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-                                    <p class="text-sm" x-text="locationStatus.message"></p>
+                                    <p class="text-xs md:text-sm" x-text="locationStatus.message"></p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Medical Information Tab -->
                         <div x-show="activeTab === 'medical'" x-transition>
-                            <div class="mb-8">
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Medical Information</h3>
-                                <p class="text-gray-600">Provide medical details to help us serve you better</p>
+                            <div class="mb-6 md:mb-8">
+                                <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-1 md:mb-2">Medical Information</h3>
+                                <p class="text-sm text-gray-600">Provide medical details to help us serve you better</p>
                             </div>
 
-                            <div class="space-y-6">
+                            <div class="space-y-4 md:space-y-6">
                                 <!-- Allergies -->
                                 <div>
                                     <label for="allergies" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -435,7 +435,7 @@
                                 </div>
 
                                 <!-- Insurance Information -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                     <div>
                                         <label for="insurance_provider" class="block text-sm font-semibold text-gray-700 mb-2">
                                             <i class="fas fa-shield-alt mr-2 text-gray-400"></i>
@@ -470,23 +470,23 @@
                                 </div>
 
                                 <!-- Medical Preferences -->
-                                <div class="bg-green-50 rounded-xl p-6 border border-green-200">
-                                    <h4 class="text-lg font-semibold text-green-900 mb-4">Medical Preferences</h4>
-                                    <div class="space-y-4">
-                                        <label class="flex items-center">
+                                <div class="bg-green-50 rounded-xl p-4 md:p-6 border border-green-200">
+                                    <h4 class="text-base md:text-lg font-semibold text-green-900 mb-3 md:mb-4">Medical Preferences</h4>
+                                    <div class="space-y-3 md:space-y-4">
+                                        <label class="flex items-start">
                                             <input type="checkbox" name="willing_to_donate_blood" value="1" {{ old('willing_to_donate_blood', Auth::user()->willing_to_donate_blood) ? 'checked' : '' }} 
-                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                                            <span class="ml-3 text-sm text-green-800">I am willing to donate blood when needed</span>
+                                                   class="mt-1 rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                            <span class="ml-3 text-xs md:text-sm text-green-800">I am willing to donate blood when needed</span>
                                         </label>
-                                        <label class="flex items-center">
+                                        <label class="flex items-start">
                                             <input type="checkbox" name="emergency_contact_consent" value="1" {{ old('emergency_contact_consent', Auth::user()->emergency_contact_consent) ? 'checked' : '' }} 
-                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                                            <span class="ml-3 text-sm text-green-800">Allow emergency contact in case of medical emergencies</span>
+                                                   class="mt-1 rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                            <span class="ml-3 text-xs md:text-sm text-green-800">Allow emergency contact in case of medical emergencies</span>
                                         </label>
-                                        <label class="flex items-center">
+                                        <label class="flex items-start">
                                             <input type="checkbox" name="health_reminders" value="1" {{ old('health_reminders', Auth::user()->health_reminders) ? 'checked' : '' }} 
-                                                   class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                                            <span class="ml-3 text-sm text-green-800">Send me health tips and reminders</span>
+                                                   class="mt-1 rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                            <span class="ml-3 text-xs md:text-sm text-green-800">Send me health tips and reminders</span>
                                         </label>
                                     </div>
                                 </div>
@@ -495,16 +495,16 @@
 
                         <!-- Security & Privacy Tab -->
                         <div x-show="activeTab === 'security'" x-transition>
-                            <div class="mb-8">
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Security & Privacy Settings</h3>
-                                <p class="text-gray-600">Manage your account security and privacy preferences</p>
+                            <div class="mb-6 md:mb-8">
+                                <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-1 md:mb-2">Security & Privacy Settings</h3>
+                                <p class="text-sm text-gray-600">Manage your account security and privacy preferences</p>
                             </div>
 
-                            <div class="space-y-8">
+                            <div class="space-y-6 md:space-y-8">
                                 <!-- Change Password -->
-                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Change Password</h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-gray-50 rounded-xl p-4 md:p-6 border border-gray-200">
+                                    <h4 class="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">Change Password</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                         <div class="md:col-span-2">
                                             <label for="current_password" class="block text-sm font-semibold text-gray-700 mb-2">
                                                 <i class="fas fa-lock mr-2 text-gray-400"></i>
@@ -550,43 +550,43 @@
                                 </div>
 
                                 <!-- Two-Factor Authentication -->
-                                <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div>
-                                            <h4 class="text-lg font-semibold text-blue-900">Two-Factor Authentication</h4>
-                                            <p class="text-sm text-blue-700 mt-1">Add an extra layer of security to your account</p>
+                                <div class="bg-blue-50 rounded-xl p-4 md:p-6 border border-blue-200">
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 md:mb-4">
+                                        <div class="mb-3 sm:mb-0">
+                                            <h4 class="text-base md:text-lg font-semibold text-blue-900">Two-Factor Authentication</h4>
+                                            <p class="text-xs md:text-sm text-blue-700 mt-1">Add an extra layer of security to your account</p>
                                         </div>
                                         <div class="flex items-center">
-                                            <span class="text-sm text-blue-700 mr-3">{{ Auth::user()->two_factor_enabled ? 'Enabled' : 'Disabled' }}</span>
+                                            <span class="text-xs md:text-sm text-blue-700 mr-3">{{ Auth::user()->two_factor_enabled ? 'Enabled' : 'Disabled' }}</span>
                                             <button type="button" @click="toggle2FA" 
-                                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                                                    class="relative inline-flex h-5 w-9 md:h-6 md:w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                                                     :class="twoFactorEnabled ? 'bg-primary-600' : 'bg-gray-200'">
-                                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                                                      :class="twoFactorEnabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                                                <span class="pointer-events-none inline-block h-4 w-4 md:h-5 md:w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                                      :class="twoFactorEnabled ? 'translate-x-4 md:translate-x-5' : 'translate-x-0'"></span>
                                             </button>
                                         </div>
                                     </div>
-                                    <div x-show="twoFactorEnabled" x-transition class="mt-4">
-                                        <p class="text-sm text-blue-700">Two-factor authentication is enabled. You'll receive a verification code via SMS when logging in.</p>
+                                    <div x-show="twoFactorEnabled" x-transition class="mt-3 md:mt-4">
+                                        <p class="text-xs md:text-sm text-blue-700">Two-factor authentication is enabled. You'll receive a verification code via SMS when logging in.</p>
                                     </div>
                                 </div>
 
                                 <!-- Privacy Settings -->
-                                <div class="bg-purple-50 rounded-xl p-6 border border-purple-200">
-                                    <h4 class="text-lg font-semibold text-purple-900 mb-4">Privacy Settings</h4>
-                                    <div class="space-y-4">
+                                <div class="bg-purple-50 rounded-xl p-4 md:p-6 border border-purple-200">
+                                    <h4 class="text-base md:text-lg font-semibold text-purple-900 mb-3 md:mb-4">Privacy Settings</h4>
+                                    <div class="space-y-3 md:space-y-4">
                                         <label class="flex items-center justify-between">
-                                            <span class="text-sm text-purple-800">Allow marketing communications</span>
+                                            <span class="text-xs md:text-sm text-purple-800">Allow marketing communications</span>
                                             <input type="checkbox" name="marketing_consent" value="1" {{ old('marketing_consent', Auth::user()->marketing_consent) ? 'checked' : '' }} 
                                                    class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                                         </label>
                                         <label class="flex items-center justify-between">
-                                            <span class="text-sm text-purple-800">Share data with healthcare partners</span>
+                                            <span class="text-xs md:text-sm text-purple-800">Share data with healthcare partners</span>
                                             <input type="checkbox" name="data_sharing_consent" value="1" {{ old('data_sharing_consent', Auth::user()->data_sharing_consent) ? 'checked' : '' }} 
                                                    class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                                         </label>
                                         <label class="flex items-center justify-between">
-                                            <span class="text-sm text-purple-800">Enable location tracking for better service</span>
+                                            <span class="text-xs md:text-sm text-purple-800">Enable location tracking for better service</span>
                                             <input type="checkbox" name="location_tracking" value="1" {{ old('location_tracking', Auth::user()->location_tracking) ? 'checked' : '' }} 
                                                    class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                                         </label>
@@ -594,14 +594,14 @@
                                 </div>
 
                                 <!-- Account Actions -->
-                                <div class="bg-red-50 rounded-xl p-6 border border-red-200">
-                                    <h4 class="text-lg font-semibold text-red-900 mb-4">Account Actions</h4>
-                                    <div class="flex flex-col sm:flex-row gap-4">
-                                        <button type="button" @click="downloadData" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                <div class="bg-red-50 rounded-xl p-4 md:p-6 border border-red-200">
+                                    <h4 class="text-base md:text-lg font-semibold text-red-900 mb-3 md:mb-4">Account Actions</h4>
+                                    <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
+                                        <button type="button" @click="downloadData" class="w-full sm:w-auto inline-flex items-center justify-center px-3 md:px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
                                             <i class="fas fa-download mr-2"></i>
                                             Download My Data
                                         </button>
-                                        <button type="button" @click="confirmDeleteAccount" class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                        <button type="button" @click="confirmDeleteAccount" class="w-full sm:w-auto inline-flex items-center justify-center px-3 md:px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors">
                                             <i class="fas fa-trash mr-2"></i>
                                             Delete Account
                                         </button>

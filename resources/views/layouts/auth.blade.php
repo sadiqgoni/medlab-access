@@ -166,7 +166,7 @@
             position: relative;
             z-index: 10;
             border: 1px solid rgba(30, 136, 229, 0.1);
-            margin: 1rem;
+            margin: 0 auto;
         }
         
         .auth-header {
@@ -232,6 +232,7 @@
             transform: translateY(-50%);
             color: #1E88E5;
             font-size: 1rem;
+            z-index: 2;
         }
         
         .form-group input,
@@ -244,6 +245,8 @@
             font-size: 1rem;
             transition: all 0.3s ease;
             background-color: #f9fafb;
+            position: relative;
+            z-index: 1;
         }
         
         .form-group input:focus,
@@ -265,6 +268,7 @@
             background: none;
             border: none;
             padding: 0;
+            z-index: 2;
         }
         
         .form-group .password-toggle:hover {
@@ -343,46 +347,90 @@
             text-decoration: underline;
         }
         
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: auto;
+            padding: 0;
+        }
+        
+        .checkbox-wrapper label {
+            margin-bottom: 0;
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+        
         /* Background Elements */
         .bg-shape-1 {
-            position: absolute;
+            position: fixed;
             top: -100px;
             right: -100px;
             width: 250px;
             height: 250px;
-            background: linear-gradient(135deg, rgba(30, 136, 229, 0.2), rgba(76, 175, 80, 0.2));
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.1), rgba(76, 175, 80, 0.1));
             border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
             animation: morph 15s linear infinite alternate;
             z-index: 1;
         }
         
         .bg-shape-2 {
-            position: absolute;
+            position: fixed;
             bottom: -100px;
             left: -100px;
             width: 250px;
             height: 250px;
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(30, 136, 229, 0.2));
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(30, 136, 229, 0.1));
             border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
             animation: morph 15s linear infinite alternate;
             z-index: 1;
         }
         
         .bg-dots {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(rgba(30, 136, 229, 0.1) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(30, 136, 229, 0.05) 1px, transparent 1px);
             background-size: 20px 20px;
             z-index: 0;
         }
         
         /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .auth-container {
+                padding: 0.5rem;
+                align-items: flex-start;
+                padding-top: 2rem;
+            }
+            
+            .auth-card {
+                margin: 0;
+                border-radius: 15px;
+                max-width: 100%;
+            }
+        }
+        
         @media (max-width: 640px) {
+            .auth-container {
+                padding: 0.5rem;
+                min-height: 100vh;
+                display: block;
+                padding-top: 1rem;
+            }
+            
+            .auth-card {
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+            
             .auth-header {
-                padding: 1.25rem 1rem;
+                padding: 1.5rem 1rem;
             }
             
             .auth-header h1 {
@@ -394,50 +442,112 @@
             }
             
             .auth-body {
-                padding: 1.25rem 1rem;
+                padding: 1.5rem 1rem;
             }
             
             .auth-footer {
                 padding: 1rem;
             }
             
+            .form-group {
+                margin-bottom: 1rem;
+            }
+            
             .form-group label {
                 font-size: 0.875rem;
+                margin-bottom: 0.375rem;
             }
             
             .form-group input,
             .form-group select,
             .form-group textarea {
-                padding: 0.625rem 0.75rem 0.625rem 2.5rem;
+                padding: 0.75rem 0.75rem 0.75rem 2.5rem;
                 font-size: 0.875rem;
+                border-radius: 8px;
             }
             
             .form-group .input-icon {
                 left: 0.75rem;
+                font-size: 0.875rem;
+            }
+            
+            .form-group .password-toggle {
+                right: 0.75rem;
             }
             
             .btn {
-                padding: 0.625rem 1.25rem;
+                padding: 0.75rem 1.25rem;
                 font-size: 0.875rem;
+                border-radius: 8px;
+            }
+            
+            .bg-shape-1,
+            .bg-shape-2 {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .bg-shape-1 {
+                top: -75px;
+                right: -75px;
+            }
+            
+            .bg-shape-2 {
+                bottom: -75px;
+                left: -75px;
             }
         }
 
         @media (max-width: 480px) {
+            .auth-container {
+                padding: 0.25rem;
+                padding-top: 1rem;
+            }
+            
             .auth-card {
-                margin: 0.5rem;
-                border-radius: 15px;
+                border-radius: 12px;
             }
             
             .auth-header {
-                padding: 1rem 0.75rem;
+                padding: 1.25rem 0.75rem;
+            }
+            
+            .auth-header h1 {
+                font-size: 1.375rem;
             }
             
             .auth-body {
-                padding: 1rem 0.75rem;
+                padding: 1.25rem 0.75rem;
             }
             
             .auth-footer {
                 padding: 0.75rem;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 0.625rem 0.625rem 0.625rem 2.25rem;
+                font-size: 0.8125rem;
+            }
+            
+            .form-group .input-icon {
+                left: 0.625rem;
+                font-size: 0.8125rem;
+            }
+            
+            .form-group .password-toggle {
+                right: 0.625rem;
+            }
+        }
+        
+        @media (max-width: 375px) {
+            .auth-header h1 {
+                font-size: 1.25rem;
+            }
+            
+            .auth-header p {
+                font-size: 0.8125rem;
             }
         }
     </style>
