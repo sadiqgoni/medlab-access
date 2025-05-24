@@ -1,9 +1,6 @@
 <x-consumer-dashboard-layout>
     <x-slot name="header">
         <div class="flex items-center">
-            <a href="{{ route('consumer.dashboard') }}" class="mr-4 p-2 bg-white rounded-lg shadow-sm border border-gray-200 hover:bg-gray-50 transition-colors">
-                <i class="fas fa-arrow-left text-gray-600"></i>
-            </a>
             <div>
                 <h1 class="text-3xl font-bold text-gray-900">Place New Order</h1>
                 <p class="mt-2 text-gray-600">Request lab tests or blood services from our trusted network</p>

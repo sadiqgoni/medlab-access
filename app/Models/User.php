@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -57,5 +58,13 @@ class User extends Authenticatable
             'eligible_donor' => 'boolean',
             'communication_preferences' => 'array',
         ];
+    }
+    
+    /**
+     * Get the orders placed by the user as a consumer.
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'consumer_id');
     }
 }
