@@ -6,7 +6,7 @@
     <div class="dhr-loader">
         <!-- DHR Logo -->
         <div class="logo-container">
-            <img src="/images/dhrlogo.jpg" alt="D'Health Rides Logo" class="logo-image" height="50">
+            <img src="/images/dhrlogo.jpg" alt="DHR SPACE Logo" class="logo-image" height="50">
         </div>
         
         <!-- Loading Text -->
@@ -873,7 +873,7 @@
     <div id="chat-widget" class="hidden absolute bottom-20 right-0 w-80 bg-white rounded-xl shadow-2xl overflow-hidden">
         <div class="bg-primary-500 text-white p-4 flex justify-between items-center">
             <div>
-                <h3 class="font-bold">MedLab Support</h3>
+                <h3 class="font-bold">DHR Support</h3>
                 <p class="text-xs text-white/80">We typically reply in a few minutes</p>
             </div>
             <button id="close-chat" class="text-white hover:text-white/80">
@@ -884,7 +884,7 @@
         <div class="h-80 p-4 overflow-y-auto" id="chat-messages">
             <div class="flex mb-4">
                 <div class="w-8 h-8 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-2">
-                    <span class="text-primary-500 text-sm font-bold">M</span>
+                    <span class="text-primary-500 text-sm font-bold">DHR</span>
                 </div>
                 <div class="bg-neutral-light rounded-lg p-3 max-w-[80%]">
                     <p class="text-sm">Hello! How can I help you with DHR SPACE today?</p>
@@ -944,7 +944,7 @@
                 const botMessageHTML = `
                     <div class="flex mb-4">
                         <div class="w-8 h-8 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center mr-2">
-                            <span class="text-primary-500 text-sm font-bold">M</span>
+                            <span class="text-primary-500 text-sm font-bold">DHR</span>
                         </div>
                         <div class="bg-neutral-light rounded-lg p-3 max-w-[80%]">
                             <p class="text-sm">Thank you for your message. One of our representatives will assist you shortly.</p>

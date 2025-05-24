@@ -58,7 +58,8 @@ class ConsumerOrderController extends Controller
         $services = collect();
         if ($selectedFacility) {
             $servicesQuery = Service::where('facility_id', $selectedFacility->id)
-                ->where('is_available', true);
+                ->where('availability_status', 'available')
+                ->where('status', 'approved');
                 
             if ($selectedCategory) {
                 $servicesQuery->where('category', $selectedCategory);

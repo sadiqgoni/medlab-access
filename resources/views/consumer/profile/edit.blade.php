@@ -47,50 +47,71 @@
     <div class="py-6" x-data="profileForm()">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             
+            <!-- Success Message -->
+            @if(session('success'))
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6" x-data="{ show: true }" x-show="show" x-transition>
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+                        </div>
+                        <div class="ml-auto pl-3">
+                            <button @click="show = false" class="text-green-400 hover:text-green-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <!-- Profile Header Card -->
-            <div class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-xl p-8 mb-8 text-white relative overflow-hidden">
+            <div class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-xl p-4 md:p-8 mb-6 md:mb-8 text-white relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-blue-600/20"></div>
-                <div class="relative flex flex-col md:flex-row items-center md:items-start">
+                <div class="relative flex flex-col items-center text-center md:flex-row md:items-start md:text-left">
                     <!-- Profile Picture -->
-                    <div class="relative mb-6 md:mb-0 md:mr-8">
-                        <div class="h-24 w-24 md:h-32 md:w-32 rounded-full bg-white/20 flex items-center justify-center text-4xl md:text-6xl font-bold text-white shadow-2xl">
+                    <div class="relative mb-4 md:mb-0 md:mr-6">
+                        <div class="h-20 w-20 md:h-32 md:w-32 rounded-full bg-white/20 flex items-center justify-center text-2xl md:text-6xl font-bold text-white shadow-2xl">
                             {{ substr(Auth::user()->name, 0, 1) }}
                         </div>
-                        <button @click="$refs.profilePicture.click()" class="absolute bottom-0 right-0 h-8 w-8 md:h-10 md:w-10 bg-white rounded-full flex items-center justify-center text-primary-600 hover:bg-gray-100 transition-colors shadow-lg">
+                        <button @click="$refs.profilePicture.click()" class="absolute bottom-0 right-0 h-6 w-6 md:h-10 md:w-10 bg-white rounded-full flex items-center justify-center text-primary-600 hover:bg-gray-100 transition-colors shadow-lg">
                             <i class="fas fa-camera text-xs md:text-base"></i>
                         </button>
                         <input type="file" x-ref="profilePicture" @change="handleProfilePictureChange" accept="image/*" class="hidden">
                     </div>
                     
                     <!-- Profile Info -->
-                    <div class="text-center md:text-left flex-1">
-                        <h2 class="text-xl md:text-3xl font-bold mb-2">{{ Auth::user()->name }}</h2>
-                        <p class="text-primary-100 text-base md:text-lg mb-4">{{ Auth::user()->email }}</p>
+                    <div class="flex-1 mb-4 md:mb-0">
+                        <h2 class="text-xl md:text-3xl font-bold mb-1 md:mb-2">{{ Auth::user()->name }}</h2>
+                        <p class="text-primary-100 text-sm md:text-lg mb-3 md:mb-4">{{ Auth::user()->email }}</p>
                         
-                        <!-- Profile Stats -->
-                        <div class="grid grid-cols-3 gap-2 md:gap-6 mt-4 md:mt-6">
+                        <!-- Profile Stats - Mobile Optimized -->
+                        <div class="grid grid-cols-3 gap-3 md:gap-6">
                             <div class="text-center">
-                                <div class="text-lg md:text-2xl font-bold">{{ Auth::user()->orders()->count() }}</div>
-                                <div class="text-xs md:text-sm text-primary-100">Total Orders</div>
+                                <div class="text-base md:text-2xl font-bold">{{ Auth::user()->orders()->count() }}</div>
+                                <div class="text-xs md:text-sm text-primary-100">Orders</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-lg md:text-2xl font-bold">{{ Auth::user()->orders()->where('status', 'completed')->count() }}</div>
+                                <div class="text-base md:text-2xl font-bold">{{ Auth::user()->orders()->where('status', 'completed')->count() }}</div>
                                 <div class="text-xs md:text-sm text-primary-100">Completed</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-lg md:text-2xl font-bold">{{ Auth::user()->created_at->diffInMonths() }}</div>
-                                <div class="text-xs md:text-sm text-primary-100">Months Active</div>
+                                <div class="text-base md:text-2xl font-bold">{{ Auth::user()->created_at->diffInMonths() + 1 }}</div>
+                                <div class="text-xs md:text-sm text-primary-100">Months</div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Health Score -->
-                    <div class="mt-6 md:mt-0 text-center w-full md:w-auto">
-                        <div class="bg-white/20 rounded-2xl p-4 md:p-6 backdrop-blur-sm">
-                            <div class="text-2xl md:text-3xl font-bold mb-1 md:mb-2">85</div>
-                            <div class="text-xs md:text-sm text-primary-100">Health Score</div>
-                            <div class="mt-2 md:mt-3 h-2 bg-white/20 rounded-full overflow-hidden">
-                                <div class="h-full bg-white rounded-full" style="width: 85%"></div>
+                    <!-- Health Score - Mobile Optimized -->
+                    <div class="w-full md:w-auto">
+                        <div class="bg-white/20 rounded-xl p-3 md:p-6 backdrop-blur-sm">
+                            <div class="text-center">
+                                <div class="text-xl md:text-3xl font-bold mb-1">85</div>
+                                <div class="text-xs md:text-sm text-primary-100 mb-2">Health Score</div>
+                                <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                                    <div class="h-full bg-white rounded-full" style="width: 85%"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -211,23 +232,23 @@
 
                                 <!-- Blood Type -->
                                 <div>
-                                    <label for="blood_type" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <label for="blood_group" class="block text-sm font-semibold text-gray-700 mb-2">
                                         <i class="fas fa-tint mr-2 text-gray-400"></i>
                                         Blood Type
                                     </label>
-                                    <select id="blood_type" name="blood_type" 
+                                    <select id="blood_group" name="blood_group" 
                                             class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4">
                                         <option value="">Select Blood Type</option>
-                                        <option value="A+" {{ old('blood_type', Auth::user()->blood_type) === 'A+' ? 'selected' : '' }}>A+</option>
-                                        <option value="A-" {{ old('blood_type', Auth::user()->blood_type) === 'A-' ? 'selected' : '' }}>A-</option>
-                                        <option value="B+" {{ old('blood_type', Auth::user()->blood_type) === 'B+' ? 'selected' : '' }}>B+</option>
-                                        <option value="B-" {{ old('blood_type', Auth::user()->blood_type) === 'B-' ? 'selected' : '' }}>B-</option>
-                                        <option value="AB+" {{ old('blood_type', Auth::user()->blood_type) === 'AB+' ? 'selected' : '' }}>AB+</option>
-                                        <option value="AB-" {{ old('blood_type', Auth::user()->blood_type) === 'AB-' ? 'selected' : '' }}>AB-</option>
-                                        <option value="O+" {{ old('blood_type', Auth::user()->blood_type) === 'O+' ? 'selected' : '' }}>O+</option>
-                                        <option value="O-" {{ old('blood_type', Auth::user()->blood_type) === 'O-' ? 'selected' : '' }}>O-</option>
+                                        <option value="A+" {{ old('blood_group', Auth::user()->blood_group) === 'A+' ? 'selected' : '' }}>A+</option>
+                                        <option value="A-" {{ old('blood_group', Auth::user()->blood_group) === 'A-' ? 'selected' : '' }}>A-</option>
+                                        <option value="B+" {{ old('blood_group', Auth::user()->blood_group) === 'B+' ? 'selected' : '' }}>B+</option>
+                                        <option value="B-" {{ old('blood_group', Auth::user()->blood_group) === 'B-' ? 'selected' : '' }}>B-</option>
+                                        <option value="AB+" {{ old('blood_group', Auth::user()->blood_group) === 'AB+' ? 'selected' : '' }}>AB+</option>
+                                        <option value="AB-" {{ old('blood_group', Auth::user()->blood_group) === 'AB-' ? 'selected' : '' }}>AB-</option>
+                                        <option value="O+" {{ old('blood_group', Auth::user()->blood_group) === 'O+' ? 'selected' : '' }}>O+</option>
+                                        <option value="O-" {{ old('blood_group', Auth::user()->blood_group) === 'O-' ? 'selected' : '' }}>O-</option>
                                     </select>
-                                    @error('blood_type')
+                                    @error('blood_group')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
                                             <i class="fas fa-exclamation-circle mr-2"></i>
                                             {{ $message }}
@@ -312,65 +333,23 @@
                                         </p>
                                     @enderror
                                 </div>
-
-                                <!-- City -->
-                                <div>
-                                    <label for="city" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        <i class="fas fa-city mr-2 text-gray-400"></i>
-                                        City
-                                    </label>
-                                    <input type="text" id="city" name="city" value="{{ old('city', Auth::user()->city) }}" 
-                                           class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
-                                           placeholder="Enter your city">
-                                    @error('city')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <i class="fas fa-exclamation-circle mr-2"></i>
-                                            {{ $message }}
-                                        </p>
-                                    @enderror
-                                </div>
-
-                                <!-- State -->
-                                <div>
-                                    <label for="state" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        <i class="fas fa-map mr-2 text-gray-400"></i>
-                                        State
-                                    </label>
-                                    <select id="state" name="state" 
-                                            class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4">
-                                        <option value="">Select State</option>
-                                        <option value="Lagos" {{ old('state', Auth::user()->state) === 'Lagos' ? 'selected' : '' }}>Lagos</option>
-                                        <option value="Abuja" {{ old('state', Auth::user()->state) === 'Abuja' ? 'selected' : '' }}>Abuja (FCT)</option>
-                                        <option value="Kano" {{ old('state', Auth::user()->state) === 'Kano' ? 'selected' : '' }}>Kano</option>
-                                        <option value="Rivers" {{ old('state', Auth::user()->state) === 'Rivers' ? 'selected' : '' }}>Rivers</option>
-                                        <option value="Oyo" {{ old('state', Auth::user()->state) === 'Oyo' ? 'selected' : '' }}>Oyo</option>
-                                        <option value="Kaduna" {{ old('state', Auth::user()->state) === 'Kaduna' ? 'selected' : '' }}>Kaduna</option>
-                                        <!-- Add more states as needed -->
-                                    </select>
-                                    @error('state')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <i class="fas fa-exclamation-circle mr-2"></i>
-                                            {{ $message }}
-                                        </p>
-                                    @enderror
-                                </div>
                             </div>
 
                             <!-- Location Services -->
-                            <div class="mt-6 md:mt-8 p-4 md:p-6 bg-blue-50 rounded-xl border border-blue-200">
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                                    <div class="mb-4 sm:mb-0">
-                                        <h4 class="text-base md:text-lg font-semibold text-blue-900">Location Services</h4>
-                                        <p class="text-xs md:text-sm text-blue-700 mt-1">Enable location services to find nearby facilities and improve delivery accuracy</p>
+                            <div class="mt-6 md:mt-8 p-3 md:p-4 bg-blue-50 rounded-xl border border-blue-200">
+                                <div class="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
+                                    <div>
+                                        <h4 class="text-sm md:text-base font-semibold text-blue-900">Location Services</h4>
+                                        <p class="text-xs text-blue-700 mt-1 hidden sm:block">Find nearby facilities and improve delivery</p>
+                                        <p class="text-xs text-blue-700 mt-1 sm:hidden">Update your location</p>
                                     </div>
-                                    <button type="button" @click="getCurrentLocation" class="w-full sm:w-auto inline-flex items-center justify-center px-3 md:px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                                    <button type="button" @click="getCurrentLocation" class="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 bg-blue-600 text-white text-xs md:text-sm rounded-lg hover:bg-blue-700 transition-colors">
                                         <i class="fas fa-location-arrow mr-2"></i>
-                                        <span class="hidden sm:inline">Get Current Location</span>
-                                        <span class="sm:hidden">Get Location</span>
+                                        <span>Get Location</span>
                                     </button>
                                 </div>
-                                <div x-show="locationStatus" class="mt-4 p-3 rounded-lg" :class="locationStatus.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-                                    <p class="text-xs md:text-sm" x-text="locationStatus.message"></p>
+                                <div x-show="locationStatus" class="mt-3 p-2 md:p-3 rounded-lg" :class="locationStatus.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                                    <p class="text-xs" x-text="locationStatus.message"></p>
                                 </div>
                             </div>
                         </div>
@@ -432,41 +411,6 @@
                                             {{ $message }}
                                         </p>
                                     @enderror
-                                </div>
-
-                                <!-- Insurance Information -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                                    <div>
-                                        <label for="insurance_provider" class="block text-sm font-semibold text-gray-700 mb-2">
-                                            <i class="fas fa-shield-alt mr-2 text-gray-400"></i>
-                                            Insurance Provider
-                                        </label>
-                                        <input type="text" id="insurance_provider" name="insurance_provider" value="{{ old('insurance_provider', Auth::user()->insurance_provider) }}" 
-                                               class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
-                                               placeholder="Enter insurance provider name">
-                                        @error('insurance_provider')
-                                            <p class="mt-2 text-sm text-red-600 flex items-center">
-                                                <i class="fas fa-exclamation-circle mr-2"></i>
-                                                {{ $message }}
-                                            </p>
-                                        @enderror
-                                    </div>
-
-                                    <div>
-                                        <label for="insurance_number" class="block text-sm font-semibold text-gray-700 mb-2">
-                                            <i class="fas fa-id-card mr-2 text-gray-400"></i>
-                                            Insurance Number
-                                        </label>
-                                        <input type="text" id="insurance_number" name="insurance_number" value="{{ old('insurance_number', Auth::user()->insurance_number) }}" 
-                                               class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-3 px-4"
-                                               placeholder="Enter insurance policy number">
-                                        @error('insurance_number')
-                                            <p class="mt-2 text-sm text-red-600 flex items-center">
-                                                <i class="fas fa-exclamation-circle mr-2"></i>
-                                                {{ $message }}
-                                            </p>
-                                        @enderror
-                                    </div>
                                 </div>
 
                                 <!-- Medical Preferences -->
@@ -549,28 +493,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Two-Factor Authentication -->
-                                <div class="bg-blue-50 rounded-xl p-4 md:p-6 border border-blue-200">
-                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 md:mb-4">
-                                        <div class="mb-3 sm:mb-0">
-                                            <h4 class="text-base md:text-lg font-semibold text-blue-900">Two-Factor Authentication</h4>
-                                            <p class="text-xs md:text-sm text-blue-700 mt-1">Add an extra layer of security to your account</p>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <span class="text-xs md:text-sm text-blue-700 mr-3">{{ Auth::user()->two_factor_enabled ? 'Enabled' : 'Disabled' }}</span>
-                                            <button type="button" @click="toggle2FA" 
-                                                    class="relative inline-flex h-5 w-9 md:h-6 md:w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                                                    :class="twoFactorEnabled ? 'bg-primary-600' : 'bg-gray-200'">
-                                                <span class="pointer-events-none inline-block h-4 w-4 md:h-5 md:w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                                                      :class="twoFactorEnabled ? 'translate-x-4 md:translate-x-5' : 'translate-x-0'"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div x-show="twoFactorEnabled" x-transition class="mt-3 md:mt-4">
-                                        <p class="text-xs md:text-sm text-blue-700">Two-factor authentication is enabled. You'll receive a verification code via SMS when logging in.</p>
-                                    </div>
-                                </div>
-
                                 <!-- Privacy Settings -->
                                 <div class="bg-purple-50 rounded-xl p-4 md:p-6 border border-purple-200">
                                     <h4 class="text-base md:text-lg font-semibold text-purple-900 mb-3 md:mb-4">Privacy Settings</h4>
@@ -639,7 +561,6 @@
             return {
                 activeTab: 'personal',
                 isSubmitting: false,
-                twoFactorEnabled: {{ Auth::user()->two_factor_enabled ? 'true' : 'false' }},
                 locationStatus: null,
 
                 init() {
@@ -685,7 +606,7 @@
                             // Update hidden fields or make API call to save coordinates
                             this.locationStatus = {
                                 type: 'success',
-                                message: `Location updated successfully! (${latitude.toFixed(6)}, ${longitude.toFixed(6)})`
+                                message: 'Location updated successfully!'
                             };
                             
                             // You can make an API call here to save the coordinates
@@ -730,30 +651,6 @@
                     })
                     .catch(error => {
                         console.error('Error saving location:', error);
-                    });
-                },
-
-                toggle2FA() {
-                    this.twoFactorEnabled = !this.twoFactorEnabled;
-                    // Make API call to toggle 2FA
-                    fetch('/api/toggle-2fa', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            enabled: this.twoFactorEnabled
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('2FA toggled successfully');
-                    })
-                    .catch(error => {
-                        console.error('Error toggling 2FA:', error);
-                        // Revert the toggle on error
-                        this.twoFactorEnabled = !this.twoFactorEnabled;
                     });
                 },
 

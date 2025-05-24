@@ -26,9 +26,22 @@ class BikerPanelProvider extends PanelProvider
         return $panel
             ->id('biker')
             ->path('biker')
+            ->brandName('DHR SPACE Delivery')
+            ->brandLogo(asset('images/dhrlogo.jpg'))
+            ->favicon(asset('images/favicon.ico'))
             ->login()
             ->colors([
                 'primary' => Color::Green,
+            ])
+            ->font('Inter')
+            ->darkMode(false)
+            ->sidebarCollapsibleOnDesktop()
+            ->navigationGroups([
+                'Dashboard',
+                'Delivery Management',
+                'Route Planning',
+                'Performance',
+                'Account'
             ])
             ->discoverResources(in: app_path('Filament/Biker/Resources'), for: 'App\\Filament\\Biker\\Resources')
             ->discoverPages(in: app_path('Filament/Biker/Pages'), for: 'App\\Filament\\Biker\\Pages')
@@ -38,7 +51,7 @@ class BikerPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Biker/Widgets'), for: 'App\\Filament\\Biker\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Biker-specific widgets will be discovered
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -54,6 +67,7 @@ class BikerPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\RedirectUser::class,
-            ]);
+            ])
+            ->spa();
     }
 }

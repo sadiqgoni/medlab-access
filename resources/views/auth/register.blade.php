@@ -5,7 +5,7 @@
                 <div
                     class="relative h-16 w-16 bg-white/20 rounded-full overflow-hidden flex items-center justify-center">
                     <div class="absolute h-10 w-10 bg-white rounded-full top-2 left-2 opacity-20"></div>
-                    <span class="relative text-white font-bold text-3xl">M</span>
+                    <span class="relative text-white font-bold text-3xl">DHR</span>
                 </div>
             </div>
             <h1>Create Your Account</h1>

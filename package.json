@@ -1,7 +1,7 @@
 {
-  "name": "DHR SPACE",
+  "name": "dhr-space",
   "version": "1.0.0",
-  "description": "<p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",
+  "description": "DHR SPACE - Revolutionary Medical Logistics Platform in Nigeria",
   "type": "module",
   "main": "postcss.config.js",
   "directories": {
@@ -12,9 +12,17 @@
     "build": "vite build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "healthcare",
+    "medical",
+    "logistics",
+    "nigeria",
+    "lab-tests",
+    "blood-bank",
+    "laravel"
+  ],
+  "author": "DHR SPACE Team",
+  "license": "Proprietary",
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.4",
     "autoprefixer": "^10.4.21",

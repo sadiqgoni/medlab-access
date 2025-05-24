@@ -26,9 +26,23 @@ class ProviderPanelProvider extends PanelProvider
         return $panel
             ->id('provider')
             ->path('provider')
+            ->brandName('DHR Health Provider')
+            ->brandLogo(asset('images/dhrlogo.jpg'))
+            ->favicon(asset('images/favicon.ico'))
             ->login()
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->font('Inter')
+            // ->darkMode(false)
+            ->sidebarCollapsibleOnDesktop()
+            ->navigationGroups([
+                'Dashboard',
+                'Service Management',
+                'Order Management',
+                'Facility Management',
+                'Reports',
+                'Account'
             ])
             ->discoverResources(in: app_path('Filament/Provider/Resources'), for: 'App\\Filament\\Provider\\Resources')
             ->discoverPages(in: app_path('Filament/Provider/Pages'), for: 'App\\Filament\\Provider\\Pages')
@@ -38,7 +52,7 @@ class ProviderPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Provider/Widgets'), for: 'App\\Filament\\Provider\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Provider-specific widgets will be discovered
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -54,6 +68,7 @@ class ProviderPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\RedirectUser::class,
-            ]);
+            ])
+            ->spa();
     }
 }

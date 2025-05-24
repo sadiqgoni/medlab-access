@@ -27,9 +27,23 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('DHR SPACE')
+            ->brandLogo(asset('images/dhrlogo.jpg'))
+            ->favicon(asset('images/favicon.ico'))
             ->login()
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->font('Inter')
+            // ->darkMode(false)
+            ->sidebarCollapsibleOnDesktop()
+            ->navigationGroups([
+                'System Management',
+                'User Management', 
+                'Service Management',
+                'Order Management',
+                'Reports & Analytics',
+                'Settings'
             ])
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
@@ -39,7 +53,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Remove the FilamentInfoWidget to clean up the interface
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -55,6 +69,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 RedirectUser::class,
-            ]);
+            ])
+            ->spa();
     }
 }

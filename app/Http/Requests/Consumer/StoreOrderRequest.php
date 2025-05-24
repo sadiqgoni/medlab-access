@@ -39,8 +39,8 @@ class StoreOrderRequest extends FormRequest
             'services.*' => [
                 'integer',
                 Rule::exists('services', 'id')->where(function ($query) {
-                    $query->where('is_active', true)
-                          ->where('type', $this->input('order_type'));
+                    $query->where('availability_status', 'available')
+                          ->where('status', 'approved');
                 }),
                 // Custom rule to check if service belongs to the selected facility
                 function ($attribute, $value, $fail) {

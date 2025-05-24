@@ -78,6 +78,10 @@
                         'scroll-x': {
                             '0%': { transform: 'translateX(0)' },
                             '100%': { transform: 'translateX(-100%)' },
+                        },
+                        'fadeInUp': {
+                            'from': { opacity: 0, transform: 'translateY(30px)' },
+                            'to': { opacity: 1, transform: 'translateY(0)' }
                         }
                     },
                     animation: {
@@ -88,6 +92,7 @@
                         'morph': 'morph 15s linear infinite alternate',
                         'shimmer': 'shimmer 2s infinite linear',
                         'scroll-x': 'scroll-x 30s linear infinite',
+                        'fadeInUp': 'fadeInUp 0.6s ease-out forwards'
                     }
                 }
             }
@@ -120,6 +125,11 @@
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
             background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -154,6 +164,8 @@
             position: relative;
             z-index: 10;
             width: 100%;
+            /* Ensure perfect centering */
+            box-sizing: border-box;
         }
         
         .auth-card {
@@ -166,7 +178,27 @@
             position: relative;
             z-index: 10;
             border: 1px solid rgba(30, 136, 229, 0.1);
-            margin: 0 auto;
+            margin: auto;
+            /* Ensure the card is perfectly centered */
+            transform: translateY(0);
+            /* Add smooth fade-in animation */
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .auth-header {
@@ -400,140 +432,87 @@
             z-index: 0;
         }
         
-        /* Responsive Adjustments */
+        /* Mobile responsive adjustments */
         @media (max-width: 768px) {
             .auth-container {
-                padding: 0.5rem;
-                align-items: flex-start;
-                padding-top: 2rem;
-            }
-            
-            .auth-card {
-                margin: 0;
-                border-radius: 15px;
-                max-width: 100%;
-            }
-        }
-        
-        @media (max-width: 640px) {
-            .auth-container {
-                padding: 0.5rem;
+                padding: 0.75rem;
                 min-height: 100vh;
-                display: block;
-                padding-top: 1rem;
+                /* Ensure full height on mobile */
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             
             .auth-card {
-                margin: 0;
+                margin: auto;
                 width: 100%;
                 max-width: 100%;
+                /* Ensure card doesn't get cut off on small screens */
+                min-height: auto;
+                transform: translateY(0);
             }
             
             .auth-header {
-                padding: 1.5rem 1rem;
-            }
-            
-            .auth-header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .auth-header p {
-                font-size: 0.875rem;
+                padding: 1.5rem;
             }
             
             .auth-body {
-                padding: 1.5rem 1rem;
-            }
-            
-            .auth-footer {
-                padding: 1rem;
+                padding: 1.5rem;
             }
             
             .form-group {
-                margin-bottom: 1rem;
-            }
-            
-            .form-group label {
-                font-size: 0.875rem;
-                margin-bottom: 0.375rem;
+                margin-bottom: 1.25rem;
             }
             
             .form-group input,
             .form-group select,
             .form-group textarea {
-                padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-                font-size: 0.875rem;
-                border-radius: 8px;
+                padding: 0.875rem 1rem 0.875rem 2.5rem;
+                font-size: 1rem;
             }
             
             .form-group .input-icon {
-                left: 0.75rem;
+                left: 0.875rem;
                 font-size: 0.875rem;
             }
             
             .form-group .password-toggle {
-                right: 0.75rem;
+                right: 0.875rem;
             }
             
             .btn {
-                padding: 0.75rem 1.25rem;
-                font-size: 0.875rem;
-                border-radius: 8px;
-            }
-            
-            .bg-shape-1,
-            .bg-shape-2 {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .bg-shape-1 {
-                top: -75px;
-                right: -75px;
-            }
-            
-            .bg-shape-2 {
-                bottom: -75px;
-                left: -75px;
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
             }
         }
-
+        
         @media (max-width: 480px) {
             .auth-container {
-                padding: 0.25rem;
-                padding-top: 1rem;
+                padding: 0.5rem;
+                /* Tighter padding on very small screens */
             }
             
             .auth-card {
-                border-radius: 12px;
+                border-radius: 15px;
+                /* Slightly smaller border radius on small screens */
             }
             
             .auth-header {
-                padding: 1.25rem 0.75rem;
-            }
-            
-            .auth-header h1 {
-                font-size: 1.375rem;
+                padding: 1.25rem;
             }
             
             .auth-body {
-                padding: 1.25rem 0.75rem;
-            }
-            
-            .auth-footer {
-                padding: 0.75rem;
+                padding: 1.25rem;
             }
             
             .form-group input,
             .form-group select,
             .form-group textarea {
-                padding: 0.625rem 0.625rem 0.625rem 2.25rem;
-                font-size: 0.8125rem;
+                padding: 0.75rem 0.875rem 0.75rem 2.25rem;
             }
             
             .form-group .input-icon {
-                left: 0.625rem;
-                font-size: 0.8125rem;
+                left: 0.75rem;
             }
             
             .form-group .password-toggle {

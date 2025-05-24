@@ -33,6 +33,29 @@ class User extends Authenticatable
         'status', 
         'facility_id', 
         'is_facility_admin',
+        
+        // Personal Information
+        'date_of_birth',
+        'gender',
+        'occupation',
+        
+        // Contact Information
+        'emergency_contact',
+        
+        // Medical Information
+        'allergies',
+        'current_medications',
+        'medical_conditions',
+        
+        // Medical Preferences
+        'willing_to_donate_blood',
+        'emergency_contact_consent',
+        'health_reminders',
+        
+        // Privacy Settings
+        'marketing_consent',
+        'data_sharing_consent',
+        'location_tracking',
     ];
 
     /**

@@ -32,6 +32,7 @@ class FacilityResource extends Resource
     protected static ?string $navigationLabel = 'Healthcare Facilities';
     protected static ?string $recordTitleAttribute = 'name';
     protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Facility Management';
 
     public static function getNavigationBadge(): ?string
     {

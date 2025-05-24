@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Consumer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
-use Http;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
@@ -30,6 +30,7 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         
         // Keep the original validated data
@@ -90,6 +91,33 @@ class ProfileController extends Controller
         $user->latitude = $latitude;   // Use the (potentially updated) latitude
         $user->longitude = $longitude; // Use the (potentially updated) longitude
         
+        // Personal Information
+        $user->date_of_birth = $validated['date_of_birth'] ?? null;
+        $user->gender = $validated['gender'] ?? null;
+        $user->blood_group = $validated['blood_group'] ?? null;
+        $user->occupation = $validated['occupation'] ?? null;
+        
+        // Contact Information
+        $user->emergency_contact = $validated['emergency_contact'] ?? null;
+        
+        // Medical Information
+        $user->allergies = $validated['allergies'] ?? null;
+        $user->current_medications = $validated['current_medications'] ?? null;
+        $user->medical_conditions = $validated['medical_conditions'] ?? null;
+        
+        // Medical Preferences (convert to boolean)
+        $user->willing_to_donate_blood = isset($validated['willing_to_donate_blood']) ? (bool)$validated['willing_to_donate_blood'] : false;
+        $user->emergency_contact_consent = isset($validated['emergency_contact_consent']) ? (bool)$validated['emergency_contact_consent'] : false;
+        $user->health_reminders = isset($validated['health_reminders']) ? (bool)$validated['health_reminders'] : false;
+        
+        // Privacy Settings (convert to boolean)
+        $user->marketing_consent = isset($validated['marketing_consent']) ? (bool)$validated['marketing_consent'] : false;
+        $user->data_sharing_consent = isset($validated['data_sharing_consent']) ? (bool)$validated['data_sharing_consent'] : false;
+        $user->location_tracking = isset($validated['location_tracking']) ? (bool)$validated['location_tracking'] : false;
+        
+        // Communication Preference
+        $user->communication_preference = $validated['communication_preference'] ?? 'email';
+        
         // Update password if provided
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
@@ -102,7 +130,7 @@ class ProfileController extends Controller
         
         $user->save();
         
-        return back()->with('status', 'profile-updated');
+        return back()->with('success', 'Profile updated successfully!');
     }
 
     /**
@@ -110,6 +138,7 @@ class ProfileController extends Controller
      */
     public function updateLocation(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         
         $validated = $request->validate([
