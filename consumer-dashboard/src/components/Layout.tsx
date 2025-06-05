@@ -57,7 +57,8 @@ export default function Layout({ children }: LayoutProps) {
 
   const isActive = (href: string) => {
     if (href === '/dashboard') return pathname === '/dashboard';
-    if (href === '/orders') return pathname === '/orders' || pathname.startsWith('/orders/');
+    if (href === '/orders') return pathname === '/orders';
+    if (href === '/orders/create') return pathname === '/orders/create';
     return pathname === href;
   };
 
@@ -224,8 +225,8 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           </div>
           
-          {/* Desktop Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+          {/* Desktop Navigation - Improved Spacing & Font Weight */}
+          <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto">
             {navigation.map((item) => {
               const active = isActive(item.href);
               return (
@@ -233,19 +234,19 @@ export default function Layout({ children }: LayoutProps) {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group",
+                    "flex items-center px-4 py-4 text-sm rounded-lg transition-all duration-200 group",
                     active 
-                      ? "text-blue-700 bg-blue-50 border-r-4 border-blue-500" 
-                      : "text-gray-700 hover:bg-gray-50"
+                      ? "text-blue-700 bg-blue-50 border-r-4 border-blue-500 font-semibold" 
+                      : "text-gray-800 hover:bg-gray-50 font-medium"
                   )}
                 >
                   <div className={cn(
-                    "h-10 w-10 rounded-lg flex items-center justify-center mr-3 transition-colors",
+                    "h-10 w-10 rounded-lg flex items-center justify-center mr-4 transition-colors",
                     active ? "bg-blue-100" : "bg-gray-100 group-hover:bg-blue-50"
                   )}>
                     <i className={cn(
                       `fas ${item.icon}`,
-                      active ? "text-blue-600" : "text-gray-500 group-hover:text-blue-500"
+                      active ? "text-blue-600" : "text-gray-600 group-hover:text-blue-500"
                     )}></i>
                   </div>
                   <span>{item.name}</span>
@@ -256,29 +257,29 @@ export default function Layout({ children }: LayoutProps) {
               );
             })}
 
-            {/* Quick Actions */}
-            <div className="pt-6 mt-6 border-t border-gray-200">
-              <p className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Quick Actions</p>
-              <div className="space-y-2">
+            {/* Quick Actions - Better Spacing & Visual Separation */}
+            <div className="pt-8 mt-8 border-t-2 border-gray-100">
+              <p className="px-4 text-xs font-bold text-gray-500 uppercase tracking-wider mb-6">Quick Actions</p>
+              <div className="space-y-3">
                 {quickActions.map((action) => (
                   <Link
                     key={action.name}
                     href={action.href}
                     className={cn(
-                      "flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg transition-colors group",
+                      "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors group",
                       action.color === 'blue' ? "hover:bg-blue-50 hover:text-blue-700" : "hover:bg-red-50 hover:text-red-700"
                     )}
                   >
                     <div className={cn(
-                      "h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3 transition-colors",
-                      action.color === 'blue' ? "group-hover:bg-blue-50" : "group-hover:bg-red-50"
+                      "h-9 w-9 rounded-lg bg-gray-100 flex items-center justify-center mr-4 transition-colors",
+                      action.color === 'blue' ? "group-hover:bg-blue-100" : "group-hover:bg-red-100"
                     )}>
                       <i className={cn(
                         `fas ${action.icon}`,
-                        action.color === 'blue' ? "text-blue-500" : "text-red-500"
+                        action.color === 'blue' ? "text-blue-600" : "text-red-600"
                       )}></i>
                     </div>
-                    <span>{action.name}</span>
+                    <span className="text-gray-800">{action.name}</span>
                   </Link>
                 ))}
               </div>
@@ -319,7 +320,7 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Main content */}
         <div className="lg:pl-72">
-          {/* Enhanced Top navigation */}
+          {/* Enhanced Top navigation - Improved Spacing & No Title Repetition */}
           <div className="sticky top-0 z-30 flex h-20 items-center gap-x-4 border-b border-gray-200 bg-white/95 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button
               type="button"
@@ -336,35 +337,28 @@ export default function Layout({ children }: LayoutProps) {
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
               <div className="flex flex-1 items-center">
-                <div className="flex-1 flex items-center">
-                  <div className="hidden lg:block">
-                    <h1 className="text-2xl font-bold text-gray-900">DHR SPACE</h1>
-                    <p className="text-gray-600">Your Health Dashboard</p>
-                  </div>
-                </div>
+                {/* Removed duplicate title - keeps only sidebar branding */}
               </div>
               
-              <div className="flex items-center gap-x-4 lg:gap-x-6">
-                {/* Notifications */}
+              <div className="flex items-center gap-x-3 bg-gray-50 rounded-full px-4 py-2">
+                {/* Notifications - Better grouped spacing */}
                 <div className="relative">
                   <button 
-                    className="p-2 text-gray-400 hover:text-gray-500 transition-colors"
+                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
                     onClick={() => setShowNotifications(!showNotifications)}
                   >
                     <span className="sr-only">View notifications</span>
-                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                     </svg>
                     <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>
                   </button>
                 </div>
 
-                <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" />
-
-                {/* Profile dropdown */}
+                {/* Profile dropdown - Closer spacing */}
                 <div className="relative">
                   <button 
-                    className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ml-2"
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                   >
                     <span className="sr-only">Open user menu</span>

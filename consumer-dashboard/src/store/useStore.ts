@@ -15,6 +15,7 @@ interface DashboardStore {
   setUser: (user: User | null) => void;
   fetchDashboardData: () => Promise<void>;
   fetchOrders: () => Promise<void>;
+  createOrder: (orderData: any) => Promise<void>;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   reset: () => void;
@@ -157,6 +158,44 @@ export const useStore = create<DashboardStore>((set, get) => ({
         loading: false,
         error: null, // Don't show error for now
       });
+    }
+  },
+
+  createOrder: async (orderData) => {
+    set({ loading: true, error: null });
+    try {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Create new order with mock ID
+      const newOrder: Order = {
+        id: Date.now(),
+        user_id: 1,
+        type: orderData.type,
+        status: 'pending',
+        test_type: orderData.testType || orderData.serviceType,
+        facility_name: orderData.facility,
+        facility_address: '',
+        scheduled_date: `${orderData.preferredDate}T${orderData.preferredTime}:00Z`,
+        total_amount: orderData.type === 'test' ? 15000 : 0,
+        payment_status: 'pending',
+        results_ready: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      // Add to orders
+      const { orders } = get();
+      set({ 
+        orders: [newOrder, ...orders],
+        loading: false 
+      });
+    } catch (error) {
+      set({ 
+        loading: false,
+        error: 'Failed to create order'
+      });
+      throw error;
     }
   },
 
