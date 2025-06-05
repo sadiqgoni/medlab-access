@@ -7,7 +7,7 @@ import {
   FunnelIcon,
   BeakerIcon,
   HeartIcon,
-  BrainIcon,
+  CpuChipIcon,
   ShieldCheckIcon,
   EyeIcon,
   UserIcon,
@@ -55,7 +55,7 @@ const testCategories: TestCategory[] = [
     id: 'infectious-diseases',
     name: 'Infectious Diseases',
     description: 'HIV, Hepatitis, Malaria, Tuberculosis screening',
-    icon: BrainIcon,
+    icon: CpuChipIcon,
     testCount: 32,
     popularTests: ['HIV Test', 'Hepatitis B & C', 'Malaria Test', 'TB Test'],
     color: 'bg-purple-50 border-purple-200 text-purple-700'

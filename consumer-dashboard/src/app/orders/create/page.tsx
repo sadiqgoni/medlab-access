@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useStore } from '@/store/useStore';
 import { 
   MapPinIcon, 
@@ -262,7 +262,7 @@ export default function NewOrder() {
   const [step, setStep] = useState<'centers' | 'services' | 'categories' | 'tests' | 'cart'>('centers');
   const [selectedCenter, setSelectedCenter] = useState<MedicalCenter | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<TestCategory | null>(null);
-  const [selectedTests, setSelectedTests] = useState<Test[]>([]);
+  // const [selectedTests, setSelectedTests] = useState<Test[]>([]);
   const [cart, setCart] = useState<Test[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTestModal, setShowTestModal] = useState(false);
