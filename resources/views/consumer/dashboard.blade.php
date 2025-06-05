@@ -64,7 +64,7 @@
                                 <span class="text-white text-xl font-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
                             </div>
                             <div>
-                                <h2 class="text-2xl font-bold text-gray-900">Your Health Dashboard</h2>
+                                <h2 class="text-2xl font-bold text-gray-900">Your Heeeealth Dashboard</h2>
                                 <p class="text-gray-600">Stay on top of your health with our comprehensive medical services</p>
                             </div>
                         </div>
