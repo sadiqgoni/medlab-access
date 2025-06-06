@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next build && next export",
+    "deploy": "npm run export && echo 'Upload the out/ directory to your hosting server'"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
