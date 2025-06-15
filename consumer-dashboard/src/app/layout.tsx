@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Layout from "@/components/Layout";
+import ClientLayout from "@/components/ClientLayout";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,11 +34,16 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link 
+          rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${inter.variable} antialiased font-sans`}>
-        <Layout>
-        {children}
-        </Layout>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );
