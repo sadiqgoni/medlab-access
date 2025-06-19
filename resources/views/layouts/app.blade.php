@@ -384,7 +384,7 @@
                             </div>
                             <div>
                                 <p class="text-white font-medium">Email</p>
-                                <a href="mailto:info@dhealthrides.ng" class="text-gray-300 hover:text-white transition-colors">info@dhealthrides.ng</a>
+                                <a href="mailto:info@dhealthrides.com" class="text-gray-300 hover:text-white transition-colors">info@dhealthrides.com</a>
                             </div>
                         </li>
                         <li class="flex items-start group">
@@ -393,7 +393,7 @@
                             </div>
                             <div>
                                 <p class="text-white font-medium">Phone</p>
-                                <a href="tel:+2348000000000" class="text-gray-300 hover:text-white transition-colors">+234-XXX-XXX-XXXX</a>
+                                <a href="tel:+2347015262726" class="text-gray-300 hover:text-white transition-colors">+2347015262726</a>
                             </div>
                         </li>
                         <li class="flex items-start group">
@@ -402,7 +402,7 @@
                             </div>
                             <div>
                                 <p class="text-white font-medium">Address</p>
-                                <span class="text-gray-300">Bauchi, Nigeria</span>
+                                <span class="text-gray-300">B292 Wunti Street, Bauchi, Bauchi State, Nigeria</span>
                             </div>
                         </li>
                     </ul>

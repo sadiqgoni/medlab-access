@@ -1077,7 +1077,7 @@
                                 </div>
                                 <div>
                                     <p class="font-medium mb-1">Our Location</p>
-                                    <p class="text-white/80">Bauchi, Nigeria</p>
+                                    <p class="text-white/80">B292 Wunti Street, Bauchi, Bauchi State, Nigeria</p>
                                 </div>
                             </div>
                             
@@ -1086,8 +1086,9 @@
                                     <i class="fas fa-phone"></i>
                                 </div>
                                 <div>
-                                    <p class="font-medium mb-1">Phone Number</p>
-                                    <p class="text-white/80">+234-XXX-XXX-XXXX</p>
+                                    <p class="font-medium mb-1">Phone Numbers</p>
+                                    <p class="text-white/80">+2347015262726</p>
+                                    <p class="text-white/80">+2348100413965</p>
                                 </div>
                             </div>
                             
@@ -1097,8 +1098,18 @@
                                 </div>
                                 <div>
                                     <p class="font-medium mb-1">Email Address</p>
-                                    <p class="text-white/80">info@dhealthrides.ng</p>
+                                    <p class="text-white/80">info@dhealthrides.com</p>
                                 </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                {{-- <div>
+                                    <p class="font-medium mb-1">WhatsApp</p>
+                                    <a href="https://wa.me/2347015262726" target="_blank" class="text-white/80 hover:text-white transition-colors">+2347015262726</a>
+                                </div> --}}
                             </div>
                             
                             <div class="flex items-start">

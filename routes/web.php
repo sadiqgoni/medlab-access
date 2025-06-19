@@ -9,26 +9,51 @@ use App\Http\Controllers\Biker\BikerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifyIsConsumer;
 use App\Http\Middleware\VerifyIsBiker;
+use Illuminate\Http\Request;
 
 
 // Public routes
 Route::get('/', function () {
     return view('landing');
-});
+})->name('landing');
 
-// Provider Registration Routes
-Route::get('/provider/register', [ProviderRegistrationController::class, 'create'])
-    ->middleware('guest')
-    ->name('provider.register');
+// Coming Soon route
+Route::get('/coming-soon', function () {
+    return view('coming-soon');
+})->name('coming-soon');
+
+// Contact form submission - Redirect to WhatsApp
+Route::post('/contact', function (Request $request) {
+    $name = $request->input('name', 'Guest');
+    $email = $request->input('email', '');
+    $subject = $request->input('subject', 'Contact from website');
+    $message = $request->input('message', '');
     
-Route::post('/provider/register', [ProviderRegistrationController::class, 'store'])
-    ->middleware('guest')
-    ->name('provider.register.store');
+    // Format WhatsApp message
+    $whatsappMessage = "Hello DHR SPACE!\n\n";
+    $whatsappMessage .= "Name: {$name}\n";
+    $whatsappMessage .= "Email: {$email}\n";
+    $whatsappMessage .= "Subject: {$subject}\n\n";
+    $whatsappMessage .= "Message:\n{$message}";
+    
+    $whatsappUrl = "https://wa.me/2347015262726?text=" . urlencode($whatsappMessage);
+    
+    return redirect()->away($whatsappUrl);
+})->name('contact.submit');
 
-// Provider Registration Confirmation
-Route::get('/provider/registration-confirmation', [ProviderRegistrationController::class, 'confirmation'])
-    ->middleware('guest')
-    ->name('provider.registration.confirmation');
+// Provider Registration Routes - Redirected to Coming Soon
+Route::get('/provider/register', function () {
+    return redirect()->route('coming-soon');
+})->middleware('guest')->name('provider.register');
+    
+Route::post('/provider/register', function () {
+    return redirect()->route('coming-soon');
+})->middleware('guest')->name('provider.register.store');
+
+// Provider Registration Confirmation - Redirected to Coming Soon
+Route::get('/provider/registration-confirmation', function () {
+    return redirect()->route('coming-soon');
+})->middleware('guest')->name('provider.registration.confirmation');
 
 
 // Authenticated routes
