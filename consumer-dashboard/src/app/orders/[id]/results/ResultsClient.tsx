@@ -202,35 +202,107 @@ export default function ResultsClient({ orderId }: ResultsClientProps) {
     window.print();
   };
 
-  const handleDownloadPDF = () => {
-    // Generate PDF content
-    const element = document.getElementById('pdf-content');
-    if (!element) return;
+  const handleDownloadPDF = async () => {
+    try {
+      // Generate PDF content
+      const element = document.getElementById('pdf-content');
+      if (!element) {
+        alert('PDF content not found');
+        return;
+      }
 
-    // Use html2pdf library for PDF generation
-    import('html2pdf.js').then((html2pdf) => {
-      const opt = {
-        margin: 0.5,
-        filename: `Lab_Report_${mockTestResults.testInfo.reportId}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-      
-      html2pdf.default().set(opt).from(element).save();
-    }).catch(() => {
-      // Fallback: create a simple text file if html2pdf fails
-      const content = `Lab Report - ${mockTestResults.testInfo.reportId}\n\nThis is a medical lab report. Please use a modern browser for full PDF functionality.`;
-      const blob = new Blob([content], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Lab_Report_${mockTestResults.testInfo.reportId}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
+      // Show loading message
+      const button = document.querySelector('[title="Download PDF"]');
+      const originalText = button?.innerHTML;
+      if (button) {
+        button.innerHTML = '<div class="animate-spin w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full"></div>';
+        button.setAttribute('disabled', 'true');
+      }
+
+      // Try to use html2pdf library
+      try {
+        const html2pdf = await import('html2pdf.js');
+        const opt = {
+          margin: 0.5,
+          filename: `Lab_Report_${mockTestResults.testInfo.reportId}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        
+        await html2pdf.default().set(opt).from(element).save();
+      } catch (pdfError) {
+        console.log('PDF generation failed, using fallback:', pdfError);
+        
+        // Fallback: create a simple text version
+        const textContent = generateTextReport();
+        const blob = new Blob([textContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Lab_Report_${mockTestResults.testInfo.reportId}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert('PDF generation not available. Downloaded text version instead.');
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      alert('Download failed. Please try again.');
+    } finally {
+      // Restore button
+      const button = document.querySelector('[title="Download PDF"]');
+      if (button && button.innerHTML.includes('animate-spin')) {
+        button.innerHTML = '<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>';
+        button.removeAttribute('disabled');
+      }
+    }
+  };
+
+  const generateTextReport = () => {
+    return `
+LAGOS MEDICAL LABORATORY CENTER
+15 ADEMOLA STREET, VICTORIA ISLAND, LAGOS
+TEL: +234-1-234-5678 | EMAIL: LAB@LAGOSMEDICAL.NG
+LICENSE: LMC-2024-001 | ACCREDITED: ISO 15189:2012
+
+LABORATORY REPORT
+
+PATIENT INFORMATION:
+NAME: ${mockTestResults.patientInfo.name.toUpperCase()}
+PATIENT ID: ${mockTestResults.patientInfo.patientId}
+AGE/SEX: ${mockTestResults.patientInfo.age} YEARS / ${mockTestResults.patientInfo.gender.toUpperCase()}
+DATE OF BIRTH: ${formatDate(mockTestResults.patientInfo.dateOfBirth).toUpperCase()}
+PHONE: ${mockTestResults.patientInfo.phone}
+
+SPECIMEN INFORMATION:
+REPORT ID: ${mockTestResults.testInfo.reportId}
+TEST NAME: ${mockTestResults.testInfo.testName.toUpperCase()}
+SPECIMEN: ${mockTestResults.testInfo.sampleType.toUpperCase()}
+COLLECTED: ${formatDate(mockTestResults.testInfo.collectionDate).toUpperCase()}
+RECEIVED: ${formatDate(mockTestResults.testInfo.receivedDate).toUpperCase()}
+REPORTED: ${formatDate(mockTestResults.testInfo.reportedDate).toUpperCase()}
+
+TEST RESULTS:
+${mockTestResults.results.map(result => 
+  `${result.parameter}: ${result.value} ${result.unit} (Ref: ${result.referenceRange})`
+).join('\n')}
+
+CLINICAL INTERPRETATION:
+SUMMARY: ${mockTestResults.interpretation.summary.toUpperCase()}
+CLINICAL SIGNIFICANCE: ${mockTestResults.interpretation.clinicalSignificance}
+RECOMMENDATIONS: ${mockTestResults.interpretation.recommendations.join('; ').toUpperCase()}
+
+PERFORMED BY: ${mockTestResults.testInfo.technologist.toUpperCase()}
+MEDICAL LABORATORY TECHNOLOGIST
+
+REVIEWED BY: ${mockTestResults.testInfo.physician.toUpperCase()}
+CONSULTANT PATHOLOGIST
+
+Report generated: ${new Date().toLocaleDateString()}
+`;
   };
 
   const handleShare = () => {
@@ -392,7 +464,7 @@ export default function ResultsClient({ orderId }: ResultsClientProps) {
                 <div>{mockTestResults.testInfo.technologist.toUpperCase()}</div>
                 <div>MEDICAL LABORATORY TECHNOLOGIST</div>
                 <div className="mt-1">________________________</div>
-                <div className="text-xs">DIGITAL SIGNATURE</div>
+                <div className="text-xs"> SIGNATURE</div>
               </div>
             </div>
             <div>
@@ -401,13 +473,13 @@ export default function ResultsClient({ orderId }: ResultsClientProps) {
                 <div>{mockTestResults.testInfo.physician.toUpperCase()}</div>
                 <div>CONSULTANT PATHOLOGIST</div>
                 <div className="mt-1">________________________</div>
-                <div className="text-xs">DIGITAL SIGNATURE</div>
+                <div className="text-xs"> SIGNATURE</div>
               </div>
             </div>
           </div>
           <div className="text-center mt-4 text-xs">
             <div>*** END OF REPORT ***</div>
-            <div className="mt-2">THIS REPORT IS COMPUTER GENERATED AND DIGITALLY SIGNED</div>
+            {/* <div className="mt-2">THIS REPORT IS COMPUTER GENERATED AND DIGITALLY SIGNED</div> */}
             <div>REPORT GENERATED ON: {formatDate(new Date().toISOString()).toUpperCase()}</div>
           </div>
         </div>

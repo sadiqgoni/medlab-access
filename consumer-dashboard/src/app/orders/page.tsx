@@ -302,9 +302,13 @@ export default function OrdersPage() {
 
                             <div className="flex items-center space-x-2">
                               {order.results_ready && order.results_url && (
-                                <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                <Link
+                                  href={`/orders/${order.id}/results`}
+                                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                  title="View Results"
+                                >
                                   <DocumentArrowDownIcon className="h-5 w-5" />
-                                </button>
+                                </Link>
                               )}
                               <Link
                                 href={`/orders/${order.id}`}
@@ -381,9 +385,13 @@ export default function OrdersPage() {
                       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                         <div className="flex items-center space-x-2">
                           {order.results_ready && order.results_url && (
-                            <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                            <Link
+                              href={`/orders/${order.id}/results`}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="View Results"
+                            >
                               <DocumentArrowDownIcon className="h-4 w-4" />
-                            </button>
+                            </Link>
                           )}
                         </div>
                         <Link

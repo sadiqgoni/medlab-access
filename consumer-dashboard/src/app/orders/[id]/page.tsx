@@ -16,12 +16,14 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
   const { id } = await params;
   
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center min-h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    }>
-      <OrderDetailsClient orderId={id} />
-    </Suspense>
+         <div className="min-h-screen -mx-4 lg:-mx-6 -mt-4 lg:-mt-6 px-4 lg:px-6 pt-4 lg:pt-6">
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+        </div>
+      }>
+        <OrderDetailsClient orderId={id} />
+      </Suspense>
+    </div>
   );
 } 
