@@ -204,8 +204,8 @@ export default function ResultsClient({ orderId }: ResultsClientProps) {
 
   const handleDownloadPDF = async () => {
     try {
-      // Generate PDF content
-      const element = document.getElementById('pdf-content');
+    // Generate PDF content
+    const element = document.getElementById('pdf-content');
       if (!element) {
         alert('PDF content not found');
         return;
@@ -222,14 +222,14 @@ export default function ResultsClient({ orderId }: ResultsClientProps) {
       // Try to use html2pdf library
       try {
         const html2pdf = await import('html2pdf.js');
-        const opt = {
-          margin: 0.5,
-          filename: `Lab_Report_${mockTestResults.testInfo.reportId}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-        
+      const opt = {
+        margin: 0.5,
+        filename: `Lab_Report_${mockTestResults.testInfo.reportId}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      
         await html2pdf.default().set(opt).from(element).save();
       } catch (pdfError) {
         console.log('PDF generation failed, using fallback:', pdfError);
@@ -237,14 +237,14 @@ export default function ResultsClient({ orderId }: ResultsClientProps) {
         // Fallback: create a simple text version
         const textContent = generateTextReport();
         const blob = new Blob([textContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Lab_Report_${mockTestResults.testInfo.reportId}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Lab_Report_${mockTestResults.testInfo.reportId}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
         
         alert('PDF generation not available. Downloaded text version instead.');
       }

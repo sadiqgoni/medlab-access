@@ -426,6 +426,10 @@
             <div class="border-t border-gray-700 mt-12 pt-8 text-center">
                 <p class="text-gray-400">© {{ date('Y') }} DHR SPACE. All rights reserved.</p>
                 <p class="text-gray-500 text-sm mt-2">Transforming medical logistics in Nigeria through innovation.</p>
+                <!-- Hidden staff login -->
+                <div class="mt-4 flex justify-center">
+                    <a href="https://mail.hostinger.com/?clearSession=true&_user=info@dhealthrides.com" target="_blank" class="inline-block w-2 h-2 bg-gray-600 rounded-full opacity-30 hover:opacity-60 transition-opacity duration-300" title="Staff Portal"></a>
+                </div>
             </div>
         </div>
     </footer>

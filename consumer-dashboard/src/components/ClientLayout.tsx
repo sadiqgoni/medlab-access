@@ -91,8 +91,8 @@ export default function ClientLayout({ children }: LayoutProps) {
         {/* Mobile Header */}
         <div className="flex items-center justify-between h-16 px-4 bg-gradient-to-r from-blue-700 to-blue-800 border-b border-blue-500/20">
           <div className="flex items-center space-x-3">
-            <div className="h-8 w-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <i className="fas fa-heartbeat h-5 w-5 text-white" />
+            <div className="h-8 w-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+              <img src="/logodhr.jpg" alt="DHR" className="h-6 w-6 object-contain" />
             </div>
             <div>
               <span className="text-lg font-bold text-white">DHR SPACE</span>
@@ -206,8 +206,8 @@ export default function ClientLayout({ children }: LayoutProps) {
         {/* Desktop Header */}
         <div className="flex items-center h-16 px-4 bg-gradient-to-r from-blue-700 to-blue-800 border-b border-blue-500/20">
           <div className="flex items-center space-x-3">
-            <div className="h-9 w-9 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <i className="fas fa-heartbeat h-6 w-6 text-white" />
+            <div className="h-9 w-9 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+              <img src="/logodhr.jpg" alt="DHR" className="h-7 w-7 object-contain" />
             </div>
             <div>
               <span className="text-xl font-bold text-white">DHR SPACE</span>

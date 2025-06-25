@@ -167,8 +167,8 @@
                         <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-secondary-500 rounded-full flex items-center justify-center text-white text-xs">
                             🩺
                         </div>
-                        <div class="absolute -left-2 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs heartbeat">
-                            ❤️
+                        <div class="absolute -left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md heartbeat overflow-hidden">
+                            <img src="/images/logodhr.jpg" alt="DHR" class="w-6 h-6 object-contain">
                         </div>
                         <div class="absolute -right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs">
                             🔬

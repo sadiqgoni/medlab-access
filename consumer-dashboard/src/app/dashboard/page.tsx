@@ -3,8 +3,8 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import {
-  ClockIcon,
+import { 
+  ClockIcon, 
   CheckCircleIcon,
   BeakerIcon,
   HeartIcon,
@@ -82,7 +82,7 @@ export default function DashboardPage() {
           </h1>
           <p className="text-gray-600 mt-1 text-sm lg:text-base">Here's what's happening with your health today</p>
         </div>
-
+        
         {/* Action Buttons - Horizontal on desktop */}
         <div className="flex items-center space-x-3">
           {/* Primary Action Button */}
@@ -93,10 +93,10 @@ export default function DashboardPage() {
             <PlusIcon className="w-5 h-5 mr-2" />
             New Order
           </Link>
-
+          
           {/* Quick Actions Dropdown */}
           <div className="relative">
-            <button
+            <button 
               onClick={() => setQuickActionsOpen(!quickActionsOpen)}
               className="inline-flex items-center justify-center px-4 py-3 bg-white border border-gray-300 rounded-lg font-medium text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
             >
@@ -104,7 +104,7 @@ export default function DashboardPage() {
               Quick Actions
               <ChevronDownIcon className="w-4 h-4 ml-2" />
             </button>
-
+            
             {quickActionsOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setQuickActionsOpen(false)} />
@@ -135,48 +135,48 @@ export default function DashboardPage() {
         <div className="relative px-6 lg:px-8 py-6">
           <div className="grid lg:grid-cols-[1fr_auto] gap-6 items-start">
             {/* Left Content */}
-            <div className="space-y-4">
-              {/* Profile Section */}
+          <div className="space-y-4">
+            {/* Profile Section */}
               <div className="flex items-start space-x-4">
                 <div className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center shadow-lg flex-shrink-0">
                   <span className="text-white text-xl font-bold">{user?.name?.charAt(0) || "U"}</span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-xl lg:text-2xl font-bold text-gray-900 leading-tight">
-                    Overview of Your Health Services
-                  </h2>
-                  <p className="text-gray-600 text-sm lg:text-base mt-1">
-                    Stay on top of your health with our comprehensive medical services
-                  </p>
-                </div>
               </div>
-
-              {/* Active Orders Alert */}
-              {stats && stats.activeOrders > 0 && (
+              <div className="min-w-0 flex-1">
+                  <h2 className="text-xl lg:text-2xl font-bold text-gray-900 leading-tight">
+                  Overview of Your Health Services
+                </h2>
+                  <p className="text-gray-600 text-sm lg:text-base mt-1">
+                  Stay on top of your health with our comprehensive medical services
+                </p>
+              </div>
+            </div>
+            
+            {/* Active Orders Alert */}
+            {stats && stats.activeOrders > 0 && (
                 <div className="p-4 bg-white/80 rounded-lg backdrop-blur-sm border border-white/20">
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
                       <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
                         <ClockIcon className="h-4 w-4 text-blue-600" />
                       </div>
-                    </div>
-                    <div className="min-w-0 flex-1">
+                  </div>
+                  <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-gray-900 leading-tight">
                         You have {stats.activeOrders} active {stats.activeOrders === 1 ? "order" : "orders"} in progress
-                      </p>
-                      <p className="text-xs text-gray-600 mt-1">Track your orders for real-time updates</p>
-                    </div>
-                    <div className="flex-shrink-0">
+                    </p>
+                    <p className="text-xs text-gray-600 mt-1">Track your orders for real-time updates</p>
+                  </div>
+                  <div className="flex-shrink-0">
                       <Link
                         href="/orders"
                         className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors whitespace-nowrap"
                       >
-                        View →
-                      </Link>
-                    </div>
+                      View →
+                    </Link>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
             </div>
 
             {/* Right Stats Cards */}
@@ -205,7 +205,7 @@ export default function DashboardPage() {
           href="/orders"
           trend={stats?.activeOrders ? { value: stats.activeOrders, isPositive: true } : undefined}
         />
-
+        
         <StatsCard
           title="Results Ready"
           value={stats?.resultsReadyOrders || 0}
@@ -215,7 +215,7 @@ export default function DashboardPage() {
           href="/orders"
           badge={stats?.resultsReadyOrders ? "New" : undefined}
         />
-
+        
         <StatsCard
           title="Completed"
           value={stats?.completedOrders || 0}
@@ -224,7 +224,7 @@ export default function DashboardPage() {
           description="View history"
           href="/orders"
         />
-
+        
         <StatsCard
           title="This Month"
           value={stats?.totalOrders || 0}
@@ -240,8 +240,8 @@ export default function DashboardPage() {
           <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 bg-gray-50 sm:bg-white">
             <div className="flex items-center justify-between">
               <h3 className="text-base sm:text-lg font-medium text-gray-900">Recent Orders</h3>
-              <Link
-                href="/orders"
+              <Link 
+                href="/orders" 
                 className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
               >
                 View all →
@@ -266,7 +266,7 @@ export default function DashboardPage() {
                       <HeartIcon className="h-4 w-4 sm:h-5 sm:w-5 text-red-600" />
                     )}
                   </div>
-
+                  
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-1 sm:space-y-0">
                       <div className="min-w-0 flex-1">
