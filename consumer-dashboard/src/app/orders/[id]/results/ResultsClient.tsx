@@ -338,15 +338,15 @@ Report generated: ${new Date().toLocaleDateString()}
   }
 
   const renderPDFViewer = () => (
-    <div className={`bg-white border border-gray-300 rounded-lg overflow-hidden ${isFullscreen ? 'fixed inset-4 z-50 shadow-2xl' : ''}`}>
+    <div className={`bg-white border border-gray-300 rounded-2xl shadow-lg overflow-hidden ${isFullscreen ? 'fixed inset-4 z-50 shadow-2xl' : ''}`}>
       {/* PDF Toolbar */}
-      <div className="bg-gray-100 border-b border-gray-300 px-2 md:px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-2 md:space-x-3 flex-1 min-w-0">
-          <DocumentTextIcon className="w-4 md:w-5 h-4 md:h-5 text-gray-600 flex-shrink-0" />
-          <span className="text-xs md:text-sm font-medium text-gray-900 truncate">Official Lab Report - {mockTestResults.testInfo.reportId}.pdf</span>
-          <span className="text-xs bg-green-100 text-green-700 px-1 md:px-2 py-1 rounded-full flex-shrink-0 hidden sm:inline">Verified</span>
+      <div className="bg-gray-100 border-b border-gray-300 px-3 sm:px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+          <DocumentTextIcon className="w-4 sm:w-5 h-4 sm:h-5 text-gray-600 flex-shrink-0" />
+          <span className="text-sm sm:text-sm font-medium text-gray-900 truncate">Official Lab Report - {mockTestResults.testInfo.reportId}.pdf</span>
+          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full flex-shrink-0 hidden sm:inline">Verified</span>
         </div>
-        <div className="flex items-center space-x-1 md:space-x-2 flex-shrink-0">
+        <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
           <button
             onClick={toggleFullscreen}
             className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
@@ -375,58 +375,94 @@ Report generated: ${new Date().toLocaleDateString()}
         </div>
       </div>
 
-      {/* PDF Content - Medical Lab Report with Typewriter Font */}
-      <div id="pdf-content" className="bg-white p-4 md:p-8 text-black font-mono text-xs md:text-sm leading-relaxed overflow-x-auto" style={{ fontFamily: 'Monaco, "Courier New", Courier, monospace' }}>
+      {/* PDF Content - Mobile-Optimized Medical Lab Report */}
+      <div id="pdf-content" className="bg-white p-4 sm:p-6 lg:p-8 text-black font-mono leading-relaxed overflow-x-auto" style={{ fontFamily: 'Monaco, "Courier New", Courier, monospace' }}>
         {/* Lab Header */}
         <div className="text-center border-b-2 border-black pb-4 mb-6">
-          <div className="text-base md:text-lg font-bold">LAGOS MEDICAL LABORATORY CENTER</div>
-          <div className="text-xs md:text-sm mt-1">15 ADEMOLA STREET, VICTORIA ISLAND, LAGOS</div>
-          <div className="text-xs md:text-sm break-all">TEL: +234-1-234-5678 | EMAIL: LAB@LAGOSMEDICAL.NG</div>
-          <div className="text-xs md:text-sm">LICENSE: LMC-2024-001 | ACCREDITED: ISO 15189:2012</div>
-          <div className="text-sm md:text-base font-bold mt-2 border border-black px-2 md:px-4 py-1 inline-block">
+          <div className="text-base sm:text-lg lg:text-xl font-bold">LAGOS MEDICAL LABORATORY CENTER</div>
+          <div className="text-sm sm:text-base lg:text-sm mt-1">15 ADEMOLA STREET, VICTORIA ISLAND, LAGOS</div>
+          <div className="text-xs sm:text-sm lg:text-sm break-words">TEL: +234-1-234-5678 | EMAIL: LAB@LAGOSMEDICAL.NG</div>
+          <div className="text-xs sm:text-sm lg:text-sm">LICENSE: LMC-2024-001 | ACCREDITED: ISO 15189:2012</div>
+          <div className="text-sm sm:text-base lg:text-base font-bold mt-3 border border-black px-3 sm:px-4 py-1 inline-block">
             LABORATORY REPORT
           </div>
         </div>
 
         {/* Report Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6">
           <div>
-            <div className="font-bold underline mb-2">PATIENT INFORMATION:</div>
-            <div>NAME: {mockTestResults.patientInfo.name.toUpperCase()}</div>
-            <div>PATIENT ID: {mockTestResults.patientInfo.patientId}</div>
-            <div>AGE/SEX: {mockTestResults.patientInfo.age} YEARS / {mockTestResults.patientInfo.gender.toUpperCase()}</div>
-            <div>DATE OF BIRTH: {formatDate(mockTestResults.patientInfo.dateOfBirth).toUpperCase()}</div>
-            <div>PHONE: {mockTestResults.patientInfo.phone}</div>
+            <div className="font-bold underline mb-3 text-sm sm:text-base">PATIENT INFORMATION:</div>
+            <div className="space-y-1 text-sm sm:text-base">
+              <div>NAME: {mockTestResults.patientInfo.name.toUpperCase()}</div>
+              <div>PATIENT ID: {mockTestResults.patientInfo.patientId}</div>
+              <div>AGE/SEX: {mockTestResults.patientInfo.age} YEARS / {mockTestResults.patientInfo.gender.toUpperCase()}</div>
+              <div>DATE OF BIRTH: {formatDate(mockTestResults.patientInfo.dateOfBirth).toUpperCase()}</div>
+              <div>PHONE: {mockTestResults.patientInfo.phone}</div>
+            </div>
           </div>
           <div>
-            <div className="font-bold underline mb-2">SPECIMEN INFORMATION:</div>
-            <div>REPORT ID: {mockTestResults.testInfo.reportId}</div>
-            <div>TEST NAME: {mockTestResults.testInfo.testName.toUpperCase()}</div>
-            <div>SPECIMEN: {mockTestResults.testInfo.sampleType.toUpperCase()}</div>
-            <div>COLLECTED: {formatDate(mockTestResults.testInfo.collectionDate).toUpperCase()}</div>
-            <div>RECEIVED: {formatDate(mockTestResults.testInfo.receivedDate).toUpperCase()}</div>
-            <div>REPORTED: {formatDate(mockTestResults.testInfo.reportedDate).toUpperCase()}</div>
+            <div className="font-bold underline mb-3 text-sm sm:text-base">SPECIMEN INFORMATION:</div>
+            <div className="space-y-1 text-sm sm:text-base">
+              <div>REPORT ID: {mockTestResults.testInfo.reportId}</div>
+              <div>TEST NAME: {mockTestResults.testInfo.testName.toUpperCase()}</div>
+              <div>SPECIMEN: {mockTestResults.testInfo.sampleType.toUpperCase()}</div>
+              <div>COLLECTED: {formatDate(mockTestResults.testInfo.collectionDate).toUpperCase()}</div>
+              <div>RECEIVED: {formatDate(mockTestResults.testInfo.receivedDate).toUpperCase()}</div>
+              <div>REPORTED: {formatDate(mockTestResults.testInfo.reportedDate).toUpperCase()}</div>
+            </div>
           </div>
         </div>
 
-        {/* Results Table */}
+        {/* Results Table - Mobile-Optimized */}
         <div className="mb-6">
-          <div className="font-bold underline mb-3">TEST RESULTS:</div>
-          <div className="border border-black overflow-x-auto">
-            <div className="bg-gray-100 border-b border-black px-1 md:px-2 py-1 font-bold grid grid-cols-5 gap-1 md:gap-2 min-w-full">
-              <div className="text-xs md:text-sm">PARAMETER</div>
-              <div className="text-center text-xs md:text-sm">RESULT</div>
-              <div className="text-center text-xs md:text-sm">UNIT</div>
-              <div className="text-center text-xs md:text-sm">REF RANGE</div>
-              <div className="text-center text-xs md:text-sm">FLAG</div>
+          <div className="font-bold underline mb-3 text-sm sm:text-base">TEST RESULTS:</div>
+          
+          {/* Mobile: Card Layout */}
+          <div className="lg:hidden space-y-3">
+            {mockTestResults.results.map((result, index) => (
+              <div key={index} className="border border-gray-300 rounded-lg p-3 bg-gray-50">
+                <div className="font-bold text-sm mb-2">{result.parameter}</div>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-gray-600">Result:</span>
+                    <span className="font-bold ml-1">{result.value} {result.unit}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-600">Reference:</span>
+                    <span className="ml-1">{result.referenceRange}</span>
+                  </div>
+                </div>
+                {result.status !== 'normal' && (
+                  <div className="mt-2">
+                    <span className={`px-2 py-1 rounded text-xs font-bold ${
+                      result.status === 'high' ? 'bg-red-100 text-red-800' :
+                      result.status === 'low' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {result.status.toUpperCase()}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: Table Layout */}
+          <div className="hidden lg:block border border-black overflow-x-auto">
+            <div className="bg-gray-100 border-b border-black px-2 py-2 font-bold grid grid-cols-5 gap-2">
+              <div className="text-sm">PARAMETER</div>
+              <div className="text-center text-sm">RESULT</div>
+              <div className="text-center text-sm">UNIT</div>
+              <div className="text-center text-sm">REF RANGE</div>
+              <div className="text-center text-sm">FLAG</div>
             </div>
             {mockTestResults.results.map((result, index) => (
-              <div key={index} className={`px-1 md:px-2 py-1 border-b border-gray-300 grid grid-cols-5 gap-1 md:gap-2 min-w-full ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                <div className="text-xs md:text-sm truncate">{result.parameter}</div>
-                <div className="text-center font-bold text-xs md:text-sm">{result.value}</div>
-                <div className="text-center text-xs md:text-sm">{result.unit}</div>
-                <div className="text-center text-xs md:text-sm">{result.referenceRange}</div>
-                <div className="text-center text-xs md:text-sm">
+              <div key={index} className={`px-2 py-1 border-b border-gray-300 grid grid-cols-5 gap-2 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                <div className="text-sm">{result.parameter}</div>
+                <div className="text-center font-bold text-sm">{result.value}</div>
+                <div className="text-center text-sm">{result.unit}</div>
+                <div className="text-center text-sm">{result.referenceRange}</div>
+                <div className="text-center text-sm">
                   {result.status === 'normal' ? '' : 
                    result.status === 'high' ? 'H' : 
                    result.status === 'low' ? 'L' : ''}
@@ -438,17 +474,17 @@ Report generated: ${new Date().toLocaleDateString()}
 
         {/* Clinical Notes */}
         <div className="mb-6">
-          <div className="font-bold underline mb-2">CLINICAL INTERPRETATION:</div>
-          <div className="border border-black p-2">
-            <div className="mb-2">
+          <div className="font-bold underline mb-3 text-sm sm:text-base">CLINICAL INTERPRETATION:</div>
+          <div className="border border-black p-3 sm:p-4">
+            <div className="mb-3 text-sm sm:text-base">
               <span className="font-bold">SUMMARY: </span>
               {mockTestResults.interpretation.summary.toUpperCase()}
             </div>
-            <div className="mb-2">
+            <div className="mb-3 text-sm sm:text-base">
               <span className="font-bold">CLINICAL SIGNIFICANCE: </span>
               {mockTestResults.interpretation.clinicalSignificance}
             </div>
-            <div>
+            <div className="text-sm sm:text-base">
               <span className="font-bold">RECOMMENDATIONS: </span>
               {mockTestResults.interpretation.recommendations.join('; ').toUpperCase()}
             </div>
@@ -457,30 +493,29 @@ Report generated: ${new Date().toLocaleDateString()}
 
         {/* Footer */}
         <div className="border-t-2 border-black pt-4">
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
             <div>
-              <div className="font-bold underline">PERFORMED BY:</div>
-              <div className="mt-2">
-                <div>{mockTestResults.testInfo.technologist.toUpperCase()}</div>
-                <div>MEDICAL LABORATORY TECHNOLOGIST</div>
-                <div className="mt-1">________________________</div>
+              <div className="font-bold underline text-sm sm:text-base">PERFORMED BY:</div>
+              <div className="mt-3">
+                <div className="text-sm sm:text-base">{mockTestResults.testInfo.technologist.toUpperCase()}</div>
+                <div className="text-sm sm:text-base">MEDICAL LABORATORY TECHNOLOGIST</div>
+                <div className="mt-2">________________________</div>
                 <div className="text-xs"> SIGNATURE</div>
               </div>
             </div>
             <div>
-              <div className="font-bold underline">REVIEWED BY:</div>
-              <div className="mt-2">
-                <div>{mockTestResults.testInfo.physician.toUpperCase()}</div>
-                <div>CONSULTANT PATHOLOGIST</div>
-                <div className="mt-1">________________________</div>
+              <div className="font-bold underline text-sm sm:text-base">REVIEWED BY:</div>
+              <div className="mt-3">
+                <div className="text-sm sm:text-base">{mockTestResults.testInfo.physician.toUpperCase()}</div>
+                <div className="text-sm sm:text-base">CONSULTANT PATHOLOGIST</div>
+                <div className="mt-2">________________________</div>
                 <div className="text-xs"> SIGNATURE</div>
               </div>
             </div>
           </div>
-          <div className="text-center mt-4 text-xs">
+          <div className="text-center mt-6 text-xs sm:text-sm">
             <div>*** END OF REPORT ***</div>
-            {/* <div className="mt-2">THIS REPORT IS COMPUTER GENERATED AND DIGITALLY SIGNED</div> */}
-            <div>REPORT GENERATED ON: {formatDate(new Date().toISOString()).toUpperCase()}</div>
+            <div className="mt-2">REPORT GENERATED ON: {formatDate(new Date().toISOString()).toUpperCase()}</div>
           </div>
         </div>
       </div>
@@ -616,41 +651,42 @@ Report generated: ${new Date().toLocaleDateString()}
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 print:hidden">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
+      {/* Mobile-Optimized Header */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+        <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center space-x-3 sm:space-x-4">
             <button
               onClick={() => router.back()}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 sm:p-3 hover:bg-gray-100 rounded-xl transition-colors shadow-sm border border-gray-200"
             >
               <ArrowLeftIcon className="w-5 h-5" />
             </button>
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">Medical Test Results</h1>
-              <p className="text-gray-600">Order #{order.id} • {mockTestResults.testInfo.testName}</p>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900 leading-tight">Medical Test Results</h1>
+              <p className="text-sm sm:text-base text-gray-600 font-medium">Order #{order.id} • {mockTestResults.testInfo.testName}</p>
             </div>
           </div>
           
-          <div className="flex items-center space-x-3">
+          {/* Mobile: Stacked Action Buttons */}
+          <div className="hidden sm:flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={handleShare}
-              className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              className="inline-flex items-center justify-center px-3 py-2 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium shadow-sm"
             >
               <ShareIcon className="w-4 h-4 mr-2" />
               Share
             </button>
             <button
               onClick={handleDownloadPDF}
-              className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              className="inline-flex items-center justify-center px-3 py-2 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium shadow-sm"
             >
               <DocumentArrowDownIcon className="w-4 h-4 mr-2" />
-              Download PDF
+              Result 
             </button>
             <button
               onClick={handlePrint}
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+              className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 text-sm"
             >
               <PrinterIcon className="w-4 h-4 mr-2" />
               Print
@@ -658,36 +694,63 @@ Report generated: ${new Date().toLocaleDateString()}
           </div>
         </div>
       </div>
+      <div className="flex gap-2 md:hidden px-2 mt-4">
+  <button
+    onClick={handleShare}
+    className="w-1/3 flex flex-col items-center justify-center p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-[11px] font-medium shadow-sm text-center"
+  >
+    <ShareIcon className="w-4 h-4 mb-1" />
+    Share
+  </button>
+  <button
+    onClick={handleDownloadPDF}
+    className="w-1/3 flex flex-col items-center justify-center p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-[11px] font-medium shadow-sm text-center"
+  >
+    <DocumentArrowDownIcon className="w-4 h-4 mb-1" />
+    Result
+  </button>
+  <button
+    onClick={handlePrint}
+    className="w-1/3 flex flex-col items-center justify-center p-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-semibold shadow-md hover:shadow-lg transform hover:scale-[1.03] text-[11px] text-center"
+  >
+    <PrinterIcon className="w-4 h-4 mb-1" />
+    Print
+  </button>
+</div>
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
         {/* Tab Navigation */}
         <div className="mb-6">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
-              <button
-                onClick={() => setActiveTab('pdf')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'pdf'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <DocumentTextIcon className="w-5 h-5 inline mr-2" />
-                Official Lab Report (PDF)
-              </button>
-              <button
-                onClick={() => setActiveTab('summary')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'summary'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <EyeIcon className="w-5 h-5 inline mr-2" />
-                Test Summary & Details
-              </button>
-            </nav>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <div className="border-b border-gray-200">
+              <nav className="-mb-px flex flex-row space-y-2 sm:space-y-0 sm:space-x-8">
+                <button
+                  onClick={() => setActiveTab('pdf')}
+                  className={`py-2 sm:w-1/2 px-1 border-b-2 font-medium text-sm flex items-center justify-center sm:justify-start ${
+                    activeTab === 'pdf'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <DocumentTextIcon className="w-5 h-5 inline mr-2" />
+                  <span className="hidden sm:inline">Official Lab Report</span>
+                  <span className="sm:hidden">Report</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('summary')}
+                  className={`py-2 sm:w-1/2 px-1 border-b-2 font-medium text-sm flex items-center justify-center sm:justify-start ${
+                    activeTab === 'summary'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <EyeIcon className="w-5 h-5 inline mr-2" />
+                  <span className="hidden sm:inline">Test Summary & Details</span>
+                  <span className="sm:hidden">Summary</span>
+                </button>
+              </nav>
+            </div>
           </div>
         </div>
 

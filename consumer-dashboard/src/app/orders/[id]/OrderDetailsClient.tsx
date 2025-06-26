@@ -175,86 +175,92 @@ export default function OrderDetailsClient({ orderId }: OrderDetailsClientProps)
   const StatusIcon = statusInfo.icon;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => router.back()}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <ArrowLeftIcon className="w-5 h-5" />
-          </button>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Order Details</h1>
-            <p className="text-gray-600">Order #{order.id}</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
+        <div className="space-y-6">
+          {/* Mobile-Optimized Header */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <div className=" flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <button
+                  onClick={() => router.back()}
+                  className="p-2 sm:p-3 hover:bg-gray-100 rounded-xl transition-colors shadow-sm border border-gray-200"
+                >
+                  <ArrowLeftIcon className="w-5 h-5" />
+                </button>
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">Order Details</h1>
+                  <p className="text-sm sm:text-base text-gray-600 font-medium">Order #{order.id}</p>
+                </div>
+              </div>
+              
+              {/* Mobile: Stacked Buttons */}
+              <div className="hidden sm:flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+                {order.results_ready && order.results_url && (
+                  <Link
+                    href={`/orders/${order.id}/results`}
+                    className="inline-flex items-center justify-center px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 text-sm"
+                  >
+                    <DocumentArrowDownIcon className="w-4 h-4 mr-2" />
+                    View Results
+                  </Link>
+                )}
+                <button className="inline-flex items-center justify-center px-4 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-300 font-medium text-sm shadow-sm">
+                  <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
+                  <span className="hidden sm:inline">Contact Support</span>
+                  <span className="sm:hidden">Support</span>
+                </button>
+              </div>
+            </div> 
           </div>
-        </div>
-        
-        <div className="flex items-center space-x-3">
-          {order.results_ready && order.results_url && (
-            <Link
-              href={`/orders/${order.id}/results`}
-              className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              <DocumentArrowDownIcon className="w-4 h-4 mr-2" />
-              View Results
-            </Link>
-          )}
-          <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
-            Contact Support
-          </button>
-        </div>
-      </div>
+         
+          {/* Status Banner */}
+          <div className={`rounded-2xl border p-4 sm:p-6 ${statusInfo.color}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0">
+              <StatusIcon className="w-8 h-8 sm:mr-4 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg sm:text-xl font-semibold capitalize">{order.status.replace('_', ' ')}</h3>
+                <p className="mt-1 text-sm sm:text-base">{statusInfo.message}</p>
+                <p className="text-xs sm:text-sm mt-2 opacity-75">Next: {statusInfo.nextStep}</p>
+              </div>
+              <div className="text-left sm:text-right sm:flex-shrink-0">
+                <div className="text-xs sm:text-sm opacity-75">Order Date</div>
+                <div className="font-medium text-sm sm:text-base">{formatDate(order.created_at)}</div>
+              </div>
+            </div>
+          </div>
 
-      {/* Status Banner */}
-      <div className={`rounded-xl border p-6 ${statusInfo.color}`}>
-        <div className="flex items-center">
-          <StatusIcon className="w-8 h-8 mr-4" />
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold capitalize">{order.status.replace('_', ' ')}</h3>
-            <p className="mt-1">{statusInfo.message}</p>
-            <p className="text-sm mt-2 opacity-75">Next: {statusInfo.nextStep}</p>
-          </div>
-          <div className="text-right">
-            <div className="text-sm opacity-75">Order Date</div>
-            <div className="font-medium">{formatDate(order.created_at)}</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Order Information */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Order Information */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Order Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center space-x-3">
                   {order.type === 'test' ? (
                     <BeakerIcon className="h-5 w-5 text-blue-600" />
                   ) : (
                     <HeartIcon className="h-5 w-5 text-red-600" />
                   )}
-                  <div>
-                    <div className="text-sm text-gray-500">Service Type</div>
-                    <div className="font-medium">
-                      {order.test_type || (order.type === 'test' ? 'Laboratory Test' : 'Blood Service')}
-                    </div>
-                  </div>
+                      <div>
+                        <div className="text-xs sm:text-sm text-gray-500">Service Type</div>
+                        <div className="font-medium text-sm sm:text-base">
+                          {order.test_type || (order.type === 'test' ? 'Laboratory Test' : 'Blood Service')}
+                        </div>
+                      </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
                   <BuildingOffice2Icon className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <div className="text-sm text-gray-500">Medical Facility</div>
-                    <div className="font-medium">{order.facility_name}</div>
-                    {order.facility_address && (
-                      <div className="text-sm text-gray-600">{order.facility_address}</div>
-                    )}
-                  </div>
+                      <div>
+                        <div className="text-xs sm:text-sm text-gray-500">Medical Facility</div>
+                        <div className="font-medium text-sm sm:text-base">{order.facility_name}</div>
+                        {order.facility_address && (
+                          <div className="text-xs sm:text-sm text-gray-600">{order.facility_address}</div>
+                        )}
+                      </div>
                 </div>
 
                 {order.scheduled_date && (
@@ -296,35 +302,35 @@ export default function OrderDetailsClient({ orderId }: OrderDetailsClientProps)
             </div>
           </div>
 
-          {/* Biker Information */}
-          {order.status !== 'pending' && order.status !== 'cancelled' && (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Collection Agent</h3>
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="h-16 w-16 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl">
-                  {mockBiker.name.charAt(0)}
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-lg font-semibold text-gray-900">{mockBiker.name}</h4>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <StarIcon className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                      <span>{mockBiker.rating}</span>
+              {/* Biker Information */}
+              {order.status !== 'pending' && order.status !== 'cancelled' && (
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Collection Agent</h3>
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 mb-4">
+                    <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg sm:text-xl flex-shrink-0">
+                      {mockBiker.name.charAt(0)}
                     </div>
-                    <span>•</span>
-                    <span>{mockBiker.totalDeliveries} deliveries</span>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-base sm:text-lg font-semibold text-gray-900">{mockBiker.name}</h4>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-xs sm:text-sm text-gray-600 space-y-1 sm:space-y-0">
+                        <div className="flex items-center">
+                          <StarIcon className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current mr-1" />
+                          <span>{mockBiker.rating}</span>
+                        </div>
+                        <span className="hidden sm:inline">•</span>
+                        <span>{mockBiker.totalDeliveries} deliveries</span>
+                      </div>
+                      <div className="mt-2">
+                        <a 
+                          href={`tel:${mockBiker.phone}`}
+                          className="flex items-center text-blue-600 hover:text-blue-700 text-sm"
+                        >
+                          <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                          {mockBiker.phone}
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-4 mt-2">
-                    <a 
-                      href={`tel:${mockBiker.phone}`}
-                      className="flex items-center text-blue-600 hover:text-blue-700"
-                    >
-                      <PhoneIcon className="w-4 h-4 mr-1" />
-                      {mockBiker.phone}
-                    </a>
-                  </div>
-                </div>
-              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div className="bg-gray-50 rounded-lg p-3">
@@ -471,6 +477,8 @@ export default function OrderDetailsClient({ orderId }: OrderDetailsClientProps)
                 <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
                 <span>support@dhrspace.ng</span>
               </div>
+            </div>
+          </div>
             </div>
           </div>
         </div>
